@@ -1,10 +1,6 @@
 ---
 title: Test
 date: 2023-11-26 22:58:00 Z
-categories:
-- testcat
-tags:
-- test1
 description: "[link](http://https://m.media-amazon.com/images/I/91IxQ8FgZrL._AC_UY218_.jpg)"
 ---
 
