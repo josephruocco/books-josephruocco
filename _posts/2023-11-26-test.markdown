@@ -5,6 +5,6 @@ description: "test regarding the post \n[link](http://https://m.media-amazon.com
 layout: default
 ---
 
-tags: 
+![montaigne.jpg](/uploads/montaigne.jpg)tags: 
 author: 
 [image]( http://https://m.media-amazon.com/images/I/91IxQ8FgZrL._AC_UY218_.jpg)
