@@ -5,9 +5,9 @@ layout: default
 {% capture content %}
 <div class='posts main-content'>
   {% for post in posts %}
-  {% render 'includes/post' %}
+  {% include 'post' %}
   {% endfor %}
 </div>
 {% endcapture %}
 
-{% render 'layouts/default' %}
+{% include 'layouts/default' %}
