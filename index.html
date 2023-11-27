@@ -31,7 +31,7 @@
           {% for post in site.posts %}
               <article class='post'>
         <a class='thumbnail' href='{{ post.url }}'>
-          <img class='shadow' src='{{ post.assets.first }}' alt="{{ post.title | escape }}">
+          <img class='shadow' src='{{ post.assets }}' alt="{{ post.title | escape }}">
         </a>
         <a class='header' href='{{ post.url }}'>
           <h1 class='title'>{{ post.title }}</h1>
