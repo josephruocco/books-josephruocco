@@ -20,7 +20,20 @@
   </head>
 
   <body class='is-'>
-      
+
+     <header class='main-header'>
+        <a class='avatar' href='/'>Paul Otlet</a>
+        <h1 class='title'>
+          <a href='/'>{{ site.title }}</a>
+        </h1>
+        <div class='description'>
+          {{ site.meta.description | md }}
+          <p>
+            <a href='/about'>About</a>
+          </p>
+        </div>
+      </header>
+
         <div class='posts main-content'>
           {% for post in site.posts %}
               <article class='post'>
@@ -34,6 +47,8 @@
            {% endfor %}
         </div>
 
-    </div>
+      <footer class='main-footer'>
+        <a href='http://otletsshelf.siteleaf.com'>Otlet's Shelf theme</a> by <a href='http://www.andrewleclair.com'>Andrew LeClair</a> &amp; <a href='http://www.linedandunlined.com'>Rob Giampietro</a>.
+      </footer>
   </body>
 </html>
