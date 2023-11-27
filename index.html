@@ -1,3 +1,5 @@
+---
+---
 <!DOCTYPE html>
 <html>
   <head>
@@ -23,6 +25,21 @@
         <h1 class='title'>
           <a href='/'>books-josephruocco</a>
         </h1>
+
+        <div class='posts main-content'>
+          {% for post in posts %}
+              <article class='post'>
+        <a class='thumbnail' href='{{ post.url }}'>
+          <img class='shadow' src='{{ post.assets.first }}' alt="{{ post.title | escape }}">
+        </a>
+        <a class='header' href='{{ post.url }}'>
+          <h1 class='title'>{{ post.title }}</h1>
+        </a>
+      </article>
+           {% endfor %}
+        </div>
+
+        
         <div class='description'>
           
           <p>
