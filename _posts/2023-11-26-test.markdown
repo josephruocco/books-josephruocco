@@ -2,7 +2,7 @@
 title: Test
 date: 2023-11-26 22:58:00 Z
 description: "test regarding the post \n[link](http://https://m.media-amazon.com/images/I/91IxQ8FgZrL._AC_UY218_.jpg)"
-assets.first: "/uploads/montaigne.jpg"
+assets: "/uploads/montaigne.jpg"
 layout: default
 ---
 
