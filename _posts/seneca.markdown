@@ -1,9 +1,7 @@
 ---
-<<<<<<< HEAD
-title: Da Vita Beatae
-date: 2023-11-28 02:42:00 Z
-assets: "/uploads/seneca.jpg"
+title: 2023 11 28 Seneca
 ---
+
 =======
 title: Seneca
 date: 2023-11-28 00:00:00 Z
