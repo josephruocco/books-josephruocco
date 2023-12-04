@@ -1,4 +1,5 @@
 ---
-title: 2023 11 28 Jerzy Steps
+title: Jerzy Steps
+assets: "/uploads/jerzy-steps.jpg"
 ---
 

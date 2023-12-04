@@ -1,10 +1,6 @@
 ---
-title: 2023 11 28 Jesus Son
----
-
-=======
 title: Jesus Son
 date: 2023-11-28 00:00:00 Z
+assets: "/uploads/jesus-son.jpg"
 ---
 
->>>>>>> 2a4515d1355c989029af1ac299f38ae2c5648476
