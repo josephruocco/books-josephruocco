@@ -349,3 +349,98 @@ body.books-page,
     width: 130px;
   }
 }
+
+
+/* =========================================================
+   PATCH: restore Otlet shelf/grid behavior after theme unification
+   ========================================================= */
+
+/* Main books container */
+.books-page .posts.main-content {
+  max-width: 70rem;
+  margin: 0 auto;
+  padding: 2rem 1.25rem 3rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 1.5rem 1.25rem;
+  align-items: start;
+}
+
+/* Each book card */
+.books-page .posts.main-content .post {
+  margin: 0;
+  padding: 0;
+  display: block;
+  min-width: 0;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+
+/* Cover link */
+.books-page .posts.main-content .post .thumbnail {
+  display: block;
+  text-decoration: none;
+  margin: 0;
+}
+
+/* IMPORTANT: prevent giant stretched covers */
+.books-page .posts.main-content .post .thumbnail img,
+.books-page .posts.main-content .post img.book-cover,
+.books-page .posts.main-content .post img {
+  display: block;
+  width: 100% !important;
+  max-width: 100% !important;
+  height: auto !important;
+  object-fit: cover;
+  border-radius: 4px;
+  box-shadow: 0 8px 24px rgba(0,0,0,.12);
+  margin: 0;
+}
+
+/* Book title link under cover */
+.books-page .posts.main-content .post > a.header {
+  display: block;
+  margin-top: 0.55rem;
+  text-decoration: none;
+}
+
+/* Otlet theme uses h1.title inside each card — make it card-sized, not page-sized */
+.books-page .posts.main-content .post > a.header .title,
+.books-page .posts.main-content .post h1.title,
+.books-page .posts.main-content .post h2.book-title {
+  margin: 0;
+  font-size: 0.95rem !important;
+  line-height: 1.25;
+  color: #3f3f3f;
+  font-weight: 600;
+  letter-spacing: 0;
+}
+
+/* Optional author text */
+.books-page .posts.main-content .post .book-author {
+  margin: 0.2rem 0 0;
+  font-size: 0.82rem;
+  color: #777;
+}
+
+/* Kill old Otlet header/footer spacing if still present */
+.books-page .main-header,
+.books-page .main-footer {
+  display: none !important;
+}
+
+/* Mobile */
+@media (max-width: 48em) {
+  .books-page .posts.main-content {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.1rem 0.9rem;
+    padding: 1rem 1rem 2rem;
+  }
+
+  .books-page .posts.main-content .post > a.header .title,
+  .books-page .posts.main-content .post h1.title,
+  .books-page .posts.main-content .post h2.book-title {
+    font-size: 0.9rem !important;
+  }
+}
