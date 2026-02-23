@@ -1,0 +1,351 @@
+/* =========================================================
+   books-theme-override.css
+   Load LAST (after poole/lanyon/syntax/books css)
+   ========================================================= */
+
+:root {
+  --jr-bg: #ffffff;
+  --jr-text: #515151;
+  --jr-heading: #313131;
+  --jr-muted: #6a6a6a;
+  --jr-border: #e9e9e9;
+  --jr-link: #268bd2;
+  --jr-max: 70rem;
+  --jr-radius: 6px;
+  --jr-shadow: 0 8px 24px rgba(0,0,0,.12);
+}
+
+/* Page scope */
+body.books-page,
+.books-page {
+  background: var(--jr-bg);
+  color: var(--jr-text);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Neutralize GitHub/Primer markdown look if present */
+.books-page .markdown-body {
+  background: transparent !important;
+  color: inherit !important;
+  font-family: inherit !important;
+  max-width: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+
+/* ---------------------------------------------------------
+   Shared masthead (styled like your main site)
+   --------------------------------------------------------- */
+.books-page .books-masthead {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(255,255,255,.94);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--jr-border);
+}
+
+.books-page .books-masthead-inner {
+  max-width: var(--jr-max);
+  margin: 0 auto;
+  padding: 1.15rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.books-page .books-site-title {
+  color: #505050;
+  text-decoration: none;
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.books-page .books-site-title:hover {
+  color: var(--jr-link);
+}
+
+.books-page .books-nav {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.books-page .books-nav a {
+  color: #555;
+  text-decoration: none;
+  font-size: .95rem;
+}
+
+.books-page .books-nav a:hover {
+  color: var(--jr-link);
+}
+
+.books-page .books-nav a.active {
+  color: #333;
+  font-weight: 600;
+}
+
+/* ---------------------------------------------------------
+   Title card / intro section (replace giant gray hero)
+   --------------------------------------------------------- */
+.books-page .books-title-card {
+  border-bottom: 1px solid var(--jr-border);
+  background: #fff;
+}
+
+.books-page .books-title-card-inner {
+  max-width: var(--jr-max);
+  margin: 0 auto;
+  padding: 2.5rem 1.25rem 2rem;
+}
+
+.books-page .books-title-card h1 {
+  margin: 0 0 .35rem;
+  color: var(--jr-heading);
+  font-size: 2rem;
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+}
+
+.books-page .books-title-card p {
+  margin: 0;
+  color: var(--jr-muted);
+  font-size: 1rem;
+  max-width: 42rem;
+}
+
+/* ---------------------------------------------------------
+   Kill / override legacy books header blocks
+   (your screenshot shows a tall gray area with centered text)
+   --------------------------------------------------------- */
+
+/* Aggressive but scoped */
+.books-page .pagehead,
+.books-page .page-header,
+.books-page .hero,
+.books-page .Header,
+.books-page .header,
+.books-page .jumbotron,
+.books-page .top-banner,
+.books-page .title-banner {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  min-height: auto !important;
+}
+
+/* If the old header content still appears above the books,
+   hide it by targeting common title/nav combos */
+.books-page .legacy-books-header,
+.books-page .books-hero-old {
+  display: none !important;
+}
+
+/* Optional nuclear option (use ONLY if needed):
+   hides the first large empty section before the shelf
+.books-page main > section:first-child {
+  display: none !important;
+}
+*/
+
+/* ---------------------------------------------------------
+   Main content wrapper
+   --------------------------------------------------------- */
+.books-page .books-content {
+  max-width: var(--jr-max);
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem 3rem;
+}
+
+/* Normalize headings inside books page */
+.books-page h1,
+.books-page h2,
+.books-page h3,
+.books-page h4 {
+  color: var(--jr-heading);
+  font-family: Arial, Helvetica, sans-serif;
+  letter-spacing: -0.01em;
+}
+
+.books-page a {
+  color: var(--jr-link);
+}
+
+.books-page a:hover {
+  text-decoration: underline;
+}
+
+/* ---------------------------------------------------------
+   BOOK LAYOUT OPTIONS
+   Pick ONE look:
+   A) shelf/rows (similar to screenshot)
+   B) clean grid
+   --------------------------------------------------------- */
+
+/* =========================================================
+   A) SHELF / HORIZONTAL ROW STYLE
+   (good if your current books page is row-based)
+   ========================================================= */
+
+/* Container guesses */
+.books-page .books-row,
+.books-page .shelf-row,
+.books-page .reading-row {
+  display: flex;
+  gap: 1.5rem;
+  align-items: flex-end;
+  overflow-x: auto;
+  padding: 1rem 0 1.25rem;
+  margin: 0 0 1.5rem;
+  border-bottom: 1px solid var(--jr-border);
+  scrollbar-width: thin;
+}
+
+/* subtle shelf line under books */
+.books-page .books-row::after,
+.books-page .shelf-row::after,
+.books-page .reading-row::after {
+  content: "";
+  display: block;
+}
+
+/* book items in shelf */
+.books-page .books-row > *,
+.books-page .shelf-row > *,
+.books-page .reading-row > * {
+  flex: 0 0 auto;
+  width: 150px;
+}
+
+/* =========================================================
+   B) GRID STYLE (uncomment if you want grid instead)
+   ========================================================= */
+/*
+.books-page .books-grid,
+.books-page .book-grid,
+.books-page .reading-grid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(145px, 1fr));
+  gap: 1.4rem 1.1rem;
+  align-items: start;
+}
+*/
+
+/* ---------------------------------------------------------
+   Book cards / images
+   --------------------------------------------------------- */
+
+.books-page .book,
+.books-page .book-card,
+.books-page .reading-item,
+.books-page li[class*="book"] {
+  list-style: none;
+}
+
+/* image styling (preserve covers, just polish) */
+.books-page img.book-cover,
+.books-page .book img,
+.books-page .book-card img,
+.books-page .reading-item img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 3px;
+  background: #f2f2f2;
+  box-shadow: var(--jr-shadow);
+  transition: transform .12s ease, box-shadow .12s ease;
+}
+
+.books-page a:hover img.book-cover,
+.books-page .book a:hover img,
+.books-page .book-card a:hover img,
+.books-page .reading-item a:hover img {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(0,0,0,.16);
+}
+
+/* captions/title text under covers */
+.books-page .book-title,
+.books-page .reading-title,
+.books-page figcaption,
+.books-page .book-card .title {
+  margin-top: .55rem;
+  color: #3f3f3f;
+  font-size: .9rem;
+  line-height: 1.25;
+}
+
+.books-page .book-author,
+.books-page .reading-author,
+.books-page .book-card .author {
+  color: #777;
+  font-size: .82rem;
+  margin-top: .15rem;
+}
+
+/* ---------------------------------------------------------
+   Sections between rows (e.g., categories)
+   --------------------------------------------------------- */
+.books-page .books-section,
+.books-page section[class*="books"] {
+  margin: 0 0 2rem;
+}
+
+.books-page .books-section h2,
+.books-page .books-content > h2 {
+  margin: 0 0 .6rem;
+  padding-top: .3rem;
+  font-size: 1.15rem;
+  color: #3b3b3b;
+  border-top: 0;
+}
+
+/* ---------------------------------------------------------
+   Make spacing less gigantic on desktop (your screenshot issue)
+   --------------------------------------------------------- */
+.books-page .container,
+.books-page .wrapper,
+.books-page .content {
+  max-width: var(--jr-max);
+}
+
+/* Common gray block fix */
+.books-page [style*="background: rgb(241, 241, 241)"],
+.books-page [style*="background-color: rgb(241, 241, 241)"],
+.books-page [style*="background:#f1f1f1"],
+.books-page [style*="background: #f1f1f1"] {
+  background: transparent !important;
+}
+
+/* ---------------------------------------------------------
+   Mobile
+   --------------------------------------------------------- */
+@media (max-width: 48em) {
+  .books-page .books-masthead-inner {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: .5rem;
+  }
+
+  .books-page .books-title-card-inner {
+    padding: 2rem 1rem 1.5rem;
+  }
+
+  .books-page .books-title-card h1 {
+    font-size: 1.5rem;
+  }
+
+  .books-page .books-content {
+    padding: 1rem 1rem 2.25rem;
+  }
+
+  .books-page .books-row > *,
+  .books-page .shelf-row > *,
+  .books-page .reading-row > * {
+    width: 130px;
+  }
+}
