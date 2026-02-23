@@ -444,3 +444,115 @@ body.books-page,
     font-size: 0.9rem !important;
   }
 }
+
+
+
+/* =========================================================
+   HARD FIX for Otlet's Shelf layout conflicts
+   Put this at the VERY END of books-theme-override.css
+   ========================================================= */
+
+/* kill old page shell */
+body.books-page .main-header,
+body.books-page .main-footer {
+  display: none !important;
+}
+
+/* main grid wrapper */
+body.books-page .posts.main-content {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)) !important;
+  gap: 24px 20px !important;
+
+  max-width: 1120px !important;
+  margin: 0 auto !important;
+  padding: 32px 24px 48px !important;
+
+  width: 100% !important;
+}
+
+/* reset each Otlet post card */
+body.books-page .posts.main-content .post {
+  display: block !important;
+  float: none !important;
+  position: static !important;
+  width: auto !important;
+  max-width: none !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+/* cover link */
+body.books-page .posts.main-content .post .thumbnail {
+  display: block !important;
+  float: none !important;
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  text-decoration: none !important;
+}
+
+/* cover image (prevent giant stretched image) */
+body.books-page .posts.main-content .post .thumbnail img,
+body.books-page .posts.main-content .post img {
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  height: auto !important;
+  margin: 0 !important;
+
+  border-radius: 4px !important;
+  box-shadow: 0 8px 24px rgba(0,0,0,.12) !important;
+}
+
+/* title link */
+body.books-page .posts.main-content .post > a.header {
+  display: block !important;
+  margin-top: 10px !important;
+  text-decoration: none !important;
+}
+
+/* Otlet uses h1.title inside each card — force card sizing */
+body.books-page .posts.main-content .post > a.header .title,
+body.books-page .posts.main-content .post h1.title {
+  font-size: 15px !important;
+  line-height: 1.25 !important;
+  font-weight: 600 !important;
+  letter-spacing: 0 !important;
+  margin: 0 !important;
+  color: #3f3f3f !important;
+}
+
+/* if any stray p/desc from theme appears inside cards */
+body.books-page .posts.main-content .post p {
+  margin: 6px 0 0 !important;
+  font-size: 13px !important;
+  line-height: 1.3 !important;
+}
+
+/* stop old clearfix/column helpers from messing with grid */
+body.books-page .posts.main-content::before,
+body.books-page .posts.main-content::after,
+body.books-page .posts.main-content .post::before,
+body.books-page .posts.main-content .post::after {
+  content: none !important;
+  display: none !important;
+}
+
+/* mobile */
+@media (max-width: 700px) {
+  body.books-page .posts.main-content {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 18px 14px !important;
+    padding: 20px 16px 32px !important;
+  }
+
+  body.books-page .posts.main-content .post > a.header .title,
+  body.books-page .posts.main-content .post h1.title {
+    font-size: 14px !important;
+  }
+}
