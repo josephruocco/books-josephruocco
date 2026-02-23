@@ -2,7 +2,7 @@
 ---
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <meta charset="UTF-8">
     <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
@@ -15,30 +15,22 @@
     <link rel="icon" type="image/png" href="/assets/images/favicon.png">
     <link rel="shortcut icon" type="image/png" href="/assets/images/favicon.png">
 
+    <!-- Optional RSS (leave empty or wire later) -->
     <link type="application/rss+xml" rel="alternate" title="books-josephruocco" href="">
 
-    <!-- Existing books stylesheet -->
-    <link href="/assets/styles/screen.css" rel="stylesheet">
-
-    <!-- Your site styles (if available in this books site path) -->
-    <!-- If these paths differ in your repo, adjust them -->
-    <link href="/assets/css/poole.css" rel="stylesheet">
-    <link href="/assets/css/lanyon.css" rel="stylesheet">
-    <link href="/assets/css/syntax.css" rel="stylesheet">
-
-    <!-- New override file (LOAD LAST) -->
-    <link href="/assets/css/books-theme-override.css" rel="stylesheet">
+    <!-- ONE stylesheet only (prevents cascade conflicts) -->
+    <link href="/assets/css/books-unified.css" rel="stylesheet">
   </head>
 
   <body class="books-page">
     <div class="books-page">
 
-      <!-- Unified masthead -->
+      <!-- Unified site header -->
       <header class="books-masthead">
         <div class="books-masthead-inner">
           <a class="books-site-title" href="/">Joseph Ruocco</a>
 
-          <nav class="books-nav">
+          <nav class="books-nav" aria-label="Primary">
             <a href="/books/" class="active">Recommended Reading</a>
             <a href="/about/">About</a>
             <a href="/projects/">Projects</a>
@@ -47,33 +39,29 @@
       </header>
 
       <!-- Title card -->
-      <section class="books-title-card">
+      <section class="books-title-card" aria-labelledby="books-page-title">
         <div class="books-title-card-inner">
-          <h1>Recommended Reading</h1>
+          <h1 id="books-page-title">Recommended Reading</h1>
           <p>Books that changed how I think, write, and build.</p>
         </div>
       </section>
 
-      <!-- Books content -->
-      <main class="books-content">
-
-        <!-- Optional: if you still want a short description from config -->
-        {% if site.meta and site.meta.description %}
-        <div class="books-section books-intro">
-          <p>{{ site.meta.description | md }}</p>
-        </div>
-        {% endif %}
-
-        <!-- Grid container -->
-        <div class="books-grid">
-          {% for post in site.posts %}
-            <article class="book-card">
-              <a class="thumbnail" href="{{ post.url }}">
-                <img class="shadow book-cover" src="{{ post.assets }}" alt="{{ post.title | escape }}">
+      <!-- Books grid -->
+      <main class="books-content" id="main-content">
+        <div class="posts main-content">
+          {% assign sorted_posts = site.posts %}
+          {% for post in sorted_posts %}
+            <article class="post">
+              <a class="thumbnail" href="{{ post.url | relative_url }}" aria-label="{{ post.title | escape }}">
+                <img
+                  src="{{ post.assets | relative_url }}"
+                  alt="{{ post.title | escape }}"
+                  loading="lazy"
+                  decoding="async">
               </a>
 
-              <a class="header" href="{{ post.url }}">
-                <h2 class="book-title">{{ post.title }}</h2>
+              <a class="header" href="{{ post.url | relative_url }}">
+                <h1 class="title">{{ post.title }}</h1>
               </a>
 
               {% if post.author %}
@@ -82,14 +70,13 @@
             </article>
           {% endfor %}
         </div>
-
       </main>
 
-      <!-- Optional footer (make it yours, not Otlet theme credit) -->
+      <!-- Optional footer -->
       <footer class="books-footer">
-        <div class="books-content">
+        <div class="books-footer-inner">
           <p>
-            <a href="/">Joseph Ruocco</a> ·
+            <a href="/">Home</a> ·
             <a href="/projects/">Projects</a> ·
             <a href="/about/">About</a>
           </p>
