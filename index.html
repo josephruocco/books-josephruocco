@@ -4,51 +4,98 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset='UTF-8'>
-    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
-    <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+    <meta charset="UTF-8">
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
     <title>Recommended Reading</title>
 
-    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
-    <link rel='icon' type='image/png' href='/assets/images/favicon.png'>
-    <link rel='shortcut icon' type='image/png' href='/assets/images/favicon.png'>
+    <link rel="icon" type="image/png" href="/assets/images/favicon.png">
+    <link rel="shortcut icon" type="image/png" href="/assets/images/favicon.png">
 
-    <link type='application/rss+xml' rel='alternate' title="books-josephruocco" href=''>
-    <link href='/assets/styles/screen.css' rel='stylesheet'>
+    <link type="application/rss+xml" rel="alternate" title="books-josephruocco" href="">
+
+    <!-- Existing books stylesheet -->
+    <link href="/assets/styles/screen.css" rel="stylesheet">
+
+    <!-- Your site styles (if available in this books site path) -->
+    <!-- If these paths differ in your repo, adjust them -->
+    <link href="/assets/css/poole.css" rel="stylesheet">
+    <link href="/assets/css/lanyon.css" rel="stylesheet">
+    <link href="/assets/css/syntax.css" rel="stylesheet">
+
+    <!-- New override file (LOAD LAST) -->
+    <link href="/assets/css/books-theme-override.css" rel="stylesheet">
   </head>
 
-  <body class='is-'>
+  <body class="books-page">
+    <div class="books-page">
 
-     <header class='main-header'>
-        <a class='avatar' href='/'>Paul Otlet</a>
-        <h1 class='title'>
-          <a href='/'>{{ site.title }}</a>
-        </h1>
-        <div class='description'>
-          {{ site.meta.description | md }}
-          <p>
-            <a href='/about'>About</a>
-          </p>
+      <!-- Unified masthead -->
+      <header class="books-masthead">
+        <div class="books-masthead-inner">
+          <a class="books-site-title" href="/">Joseph Ruocco</a>
+
+          <nav class="books-nav">
+            <a href="/books/" class="active">Recommended Reading</a>
+            <a href="/about/">About</a>
+            <a href="/projects/">Projects</a>
+          </nav>
         </div>
       </header>
 
-        <div class='posts main-content'>
+      <!-- Title card -->
+      <section class="books-title-card">
+        <div class="books-title-card-inner">
+          <h1>Recommended Reading</h1>
+          <p>Books that changed how I think, write, and build.</p>
+        </div>
+      </section>
+
+      <!-- Books content -->
+      <main class="books-content">
+
+        <!-- Optional: if you still want a short description from config -->
+        {% if site.meta and site.meta.description %}
+        <div class="books-section books-intro">
+          <p>{{ site.meta.description | md }}</p>
+        </div>
+        {% endif %}
+
+        <!-- Grid container -->
+        <div class="books-grid">
           {% for post in site.posts %}
-              <article class='post'>
-        <a class='thumbnail' href='{{ post.url }}'>
-          <img class='shadow' src='{{ post.assets }}' alt="{{ post.title | escape }}">
-        </a>
-        <a class='header' href='{{ post.url }}'>
-          <h1 class='title'>{{ post.title }}</h1>
-        </a>
-      </article>
-           {% endfor %}
+            <article class="book-card">
+              <a class="thumbnail" href="{{ post.url }}">
+                <img class="shadow book-cover" src="{{ post.assets }}" alt="{{ post.title | escape }}">
+              </a>
+
+              <a class="header" href="{{ post.url }}">
+                <h2 class="book-title">{{ post.title }}</h2>
+              </a>
+
+              {% if post.author %}
+                <p class="book-author">{{ post.author }}</p>
+              {% endif %}
+            </article>
+          {% endfor %}
         </div>
 
-      <footer class='main-footer'>
-        <a href='http://otletsshelf.siteleaf.com'>Otlet's Shelf theme</a> by <a href='http://www.andrewleclair.com'>Andrew LeClair</a> &amp; <a href='http://www.linedandunlined.com'>Rob Giampietro</a>.
+      </main>
+
+      <!-- Optional footer (make it yours, not Otlet theme credit) -->
+      <footer class="books-footer">
+        <div class="books-content">
+          <p>
+            <a href="/">Joseph Ruocco</a> ·
+            <a href="/projects/">Projects</a> ·
+            <a href="/about/">About</a>
+          </p>
+        </div>
       </footer>
+
+    </div>
   </body>
 </html>
