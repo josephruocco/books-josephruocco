@@ -1,0 +1,535 @@
+/* =========================================================
+   books-unified.css
+   One stylesheet for Joseph Ruocco's Recommended Reading page
+   - Uses your site visual language (clean, Lanyon-ish)
+   - Preserves Otlet markup compatibility (.posts/.post/.thumbnail)
+   - Avoids layout conflicts from layered themes
+   ========================================================= */
+
+/* -------------------------
+   Reset / base
+   ------------------------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 1.5;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: #fff;
+  color: #515151;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Scope helper */
+body.books-page {
+  background: #fff;
+  color: #515151;
+}
+
+/* Media defaults */
+img {
+  max-width: 100%;
+  border: 0;
+  display: block;
+}
+
+a {
+  color: #268bd2;
+  text-decoration: none;
+}
+
+a:hover,
+a:focus {
+  text-decoration: underline;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 0 0 .5rem;
+  color: #313131;
+  line-height: 1.2;
+  font-weight: 700;
+}
+
+p {
+  margin: 0 0 1rem;
+}
+
+/* Utility container width */
+:root {
+  --jr-max: 1120px;
+  --jr-pad: 24px;
+  --jr-border: #e9e9e9;
+  --jr-text: #515151;
+  --jr-head: #313131;
+  --jr-muted: #6a6a6a;
+  --jr-link: #268bd2;
+  --jr-shadow: 0 8px 24px rgba(0,0,0,.12);
+  --jr-radius: 4px;
+}
+
+/* =========================
+   Hide legacy Otlet shell if still present
+   (we're replacing with your own shell)
+   ========================= */
+body.books-page .main-header,
+body.books-page .main-footer {
+  display: none !important;
+}
+
+/* =========================
+   New shared shell
+   ========================= */
+
+/* top nav */
+body.books-page .books-masthead {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--jr-border);
+}
+
+body.books-page .books-masthead-inner {
+  max-width: var(--jr-max);
+  margin: 0 auto;
+  padding: 1.15rem var(--jr-pad);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+body.books-page .books-site-title {
+  color: #505050;
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  text-decoration: none;
+}
+
+body.books-page .books-site-title:hover {
+  color: var(--jr-link);
+  text-decoration: none;
+}
+
+body.books-page .books-nav {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+body.books-page .books-nav a {
+  color: #555;
+  font-size: .95rem;
+  text-decoration: none;
+}
+
+body.books-page .books-nav a:hover {
+  color: var(--jr-link);
+}
+
+body.books-page .books-nav a.active {
+  color: #333;
+  font-weight: 600;
+}
+
+/* title card */
+body.books-page .books-title-card {
+  border-bottom: 1px solid var(--jr-border);
+  background: #fff;
+}
+
+body.books-page .books-title-card-inner {
+  max-width: var(--jr-max);
+  margin: 0 auto;
+  padding: 2.5rem var(--jr-pad) 2rem;
+}
+
+body.books-page .books-title-card h1 {
+  font-size: 2rem;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0 0 .35rem;
+  color: var(--jr-head);
+}
+
+body.books-page .books-title-card p {
+  margin: 0;
+  color: var(--jr-muted);
+  font-size: 1rem;
+}
+
+/* optional wrapper main */
+body.books-page .books-content {
+  max-width: var(--jr-max);
+  margin: 0 auto;
+  padding: 1.75rem var(--jr-pad) 3rem;
+}
+
+/* footer */
+body.books-page .books-footer {
+  border-top: 1px solid var(--jr-border);
+  margin-top: 2rem;
+}
+
+body.books-page .books-footer .books-content,
+body.books-page .books-footer-inner {
+  max-width: var(--jr-max);
+  margin: 0 auto;
+  padding: 1.25rem var(--jr-pad) 2rem;
+}
+
+body.books-page .books-footer p {
+  margin: 0;
+  color: #777;
+  font-size: .92rem;
+}
+
+/* =========================
+   Otlet compatibility layer
+   Supports your current markup:
+   <div class="posts main-content">
+     <article class="post"> ... </article>
+   </div>
+   ========================= */
+
+/* Neutralize any old theme weirdness if screen.css is accidentally still loaded */
+body.books-page .posts.main-content,
+body.books-page .posts.main-content *,
+body.books-page .post,
+body.books-page .post * {
+  box-sizing: border-box;
+}
+
+/* main book grid */
+body.books-page .posts.main-content {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)) !important;
+  gap: 1.5rem 1.25rem !important;
+  align-items: start !important;
+
+  max-width: var(--jr-max) !important;
+  width: 100% !important;
+  margin: 0 auto !important;
+  padding: 2rem var(--jr-pad) 3rem !important;
+}
+
+/* If you are wrapping .posts inside .books-content, avoid double padding */
+body.books-page .books-content > .posts.main-content {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  padding-top: 0.5rem !important;
+}
+
+/* each card */
+body.books-page .posts.main-content .post {
+  display: block !important;
+  float: none !important;
+  position: static !important;
+  width: auto !important;
+  max-width: none !important;
+  min-width: 0 !important;
+
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+/* cover link */
+body.books-page .posts.main-content .post .thumbnail {
+  display: block !important;
+  float: none !important;
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  text-decoration: none !important;
+  border: 0 !important;
+}
+
+/* cover image */
+body.books-page .posts.main-content .post .thumbnail img,
+body.books-page .posts.main-content .post img {
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  height: auto !important;
+  margin: 0 !important;
+
+  border-radius: var(--jr-radius) !important;
+  box-shadow: var(--jr-shadow) !important;
+  background: #f2f2f2 !important;
+  transition: transform .12s ease, box-shadow .12s ease !important;
+}
+
+body.books-page .posts.main-content .post .thumbnail:hover img,
+body.books-page .posts.main-content .post .thumbnail:focus img {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 12px 28px rgba(0,0,0,.16) !important;
+}
+
+/* title link under cover */
+body.books-page .posts.main-content .post > a.header {
+  display: block !important;
+  margin: .55rem 0 0 !important;
+  text-decoration: none !important;
+  color: inherit !important;
+}
+
+/* Otlet uses h1.title in cards - force card size */
+body.books-page .posts.main-content .post > a.header .title,
+body.books-page .posts.main-content .post h1.title {
+  margin: 0 !important;
+  padding: 0 !important;
+  font-size: .95rem !important;
+  line-height: 1.25 !important;
+  font-weight: 600 !important;
+  letter-spacing: 0 !important;
+  color: #3f3f3f !important;
+  text-transform: none !important;
+}
+
+/* optional author if you add it */
+body.books-page .posts.main-content .post .book-author {
+  margin: .15rem 0 0 !important;
+  font-size: .82rem !important;
+  color: #777 !important;
+}
+
+/* prevent old clearfix / pseudo layout junk */
+body.books-page .posts.main-content::before,
+body.books-page .posts.main-content::after,
+body.books-page .posts.main-content .post::before,
+body.books-page .posts.main-content .post::after {
+  content: none !important;
+  display: none !important;
+}
+
+/* =========================
+   Newer markup support (if you move off Otlet classes)
+   ========================= */
+body.books-page .books-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 1.5rem 1.25rem;
+  align-items: start;
+}
+
+body.books-page .book-card {
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+}
+
+body.books-page .book-card .thumbnail {
+  display: block;
+}
+
+body.books-page .book-card .book-cover {
+  width: 100%;
+  height: auto;
+  border-radius: var(--jr-radius);
+  box-shadow: var(--jr-shadow);
+  background: #f2f2f2;
+}
+
+body.books-page .book-card .header {
+  display: block;
+  margin-top: .55rem;
+  color: inherit;
+  text-decoration: none;
+}
+
+body.books-page .book-card .book-title {
+  margin: 0;
+  font-size: .95rem;
+  line-height: 1.25;
+  font-weight: 600;
+  color: #3f3f3f;
+}
+
+body.books-page .book-card .book-author {
+  margin: .15rem 0 0;
+  font-size: .82rem;
+  color: #777;
+}
+
+/* =========================
+   Legacy content neutralizers
+   (for giant gray hero / old theme artifacts)
+   ========================= */
+body.books-page .pagehead,
+body.books-page .page-header,
+body.books-page .hero,
+body.books-page .Header,
+body.books-page .header-banner,
+body.books-page .jumbotron,
+body.books-page .legacy-books-header {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  min-height: auto !important;
+}
+
+/* If a markdown wrapper exists from copied theme content */
+body.books-page .markdown-body {
+  max-width: none !important;
+  width: auto !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  color: inherit !important;
+  font: inherit !important;
+  box-shadow: none !important;
+}
+
+/* =========================
+   Optional prose styles (for intro/about snippets on page)
+   ========================= */
+body.books-page .books-section {
+  margin: 0 0 1.5rem;
+}
+
+body.books-page .books-section h2 {
+  margin: 0 0 .5rem;
+  font-size: 1.15rem;
+  color: #3b3b3b;
+}
+
+body.books-page .books-section p {
+  color: var(--jr-text);
+}
+
+/* =========================
+   Minimal syntax highlighting (if a post page has code)
+   ========================= */
+.highlight {
+  background: #f8f8f8;
+  border: 1px solid #eee;
+  border-radius: 4px;
+  padding: .75rem 1rem;
+  overflow-x: auto;
+  margin: 1rem 0;
+}
+
+.highlight pre {
+  margin: 0;
+  background: transparent;
+  border: 0;
+  padding: 0;
+}
+
+.highlight .c { color: #999; }
+.highlight .cm { color: #09f; font-style: italic; }
+.highlight .c1 { color: #999; }
+.highlight .cp { color: #099; }
+.highlight .cs { color: #999; }
+.highlight .err { color: #a00; background: #faa; }
+.highlight .gd { background: #fcc; border: 1px solid #c00; }
+.highlight .ge { font-style: italic; }
+.highlight .gr { color: #f00; }
+.highlight .gh { color: #030; }
+.highlight .gi { background: #cfc; border: 1px solid #0c0; }
+.highlight .go { color: #aaa; }
+.highlight .gp { color: #009; }
+.highlight .gs { font-weight: bold; }
+.highlight .gu { color: #030; }
+.highlight .gt { color: #9c6; }
+.highlight .kc,
+.highlight .kd,
+.highlight .kn,
+.highlight .kp,
+.highlight .kr { color: #069; }
+.highlight .kt { color: #078; }
+.highlight .m { color: #f60; }
+.highlight .s { color: #d44950; }
+.highlight .na { color: #4f9fcf; }
+.highlight .nb { color: #366; }
+.highlight .nc { color: #0a8; }
+.highlight .no { color: #360; }
+.highlight .nd { color: #99f; }
+.highlight .ni { color: #999; }
+.highlight .ne { color: #c00; }
+.highlight .nf { color: #c0f; }
+.highlight .nl { color: #99f; }
+.highlight .nn { color: #0cf; }
+.highlight .nt { color: #2f6f9f; }
+.highlight .nv { color: #033; }
+.highlight .o { color: #555; }
+
+/* =========================
+   Responsive
+   ========================= */
+@media (max-width: 900px) {
+  body.books-page .books-title-card h1 {
+    font-size: 1.75rem;
+  }
+
+  body.books-page .books-masthead-inner {
+    padding: 1rem 18px;
+  }
+
+  body.books-page .books-title-card-inner,
+  body.books-page .books-content,
+  body.books-page .books-footer .books-content,
+  body.books-page .posts.main-content {
+    padding-left: 18px !important;
+    padding-right: 18px !important;
+  }
+}
+
+@media (max-width: 700px) {
+  body.books-page .books-masthead-inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: .45rem;
+  }
+
+  body.books-page .books-nav {
+    gap: .85rem;
+  }
+
+  body.books-page .books-title-card-inner {
+    padding-top: 2rem;
+    padding-bottom: 1.5rem;
+  }
+
+  body.books-page .books-title-card h1 {
+    font-size: 1.5rem;
+  }
+
+  body.books-page .posts.main-content,
+  body.books-page .books-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 1.05rem .85rem !important;
+  }
+
+  body.books-page .posts.main-content .post > a.header .title,
+  body.books-page .posts.main-content .post h1.title,
+  body.books-page .book-card .book-title {
+    font-size: .9rem !important;
+  }
+}
+
+@media (max-width: 420px) {
+  body.books-page .posts.main-content,
+  body.books-page .books-grid {
+    gap: .95rem .75rem !important;
+  }
+
+  body.books-page .books-nav a {
+    font-size: .9rem;
+  }
+}
