@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ page.title }} · Recommended Reading</title>
+  <link href="/assets/css/books-unified.css" rel="stylesheet">
+</head>
+<body class="books-page">
+  <div class="books-page">
+
+    <header class="books-masthead">
+      <div class="books-masthead-inner">
+        <a class="books-site-title" href="/">Joseph Ruocco</a>
+        <nav class="books-nav" aria-label="Primary">
+          <a href="/books/" class="active">Recommended Reading</a>
+          <a href="/about/">About</a>
+          <a href="/projects/">Projects</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="books-content" style="padding-top:2rem;">
+      <article class="book-detail">
+        <div class="book-detail-grid">
+          {% if page.assets %}
+          <div class="book-detail-cover">
+            <img src="{{ page.assets | relative_url }}" alt="{{ page.title | escape }}">
+          </div>
+          {% endif %}
+
+          <div class="book-detail-body">
+            <h1>{{ page.title }}</h1>
+
+            {% if page.author %}
+              <p class="book-detail-author">{{ page.author }}</p>
+            {% endif %}
+
+            <div class="book-meta-row" style="margin: .75rem 0 1rem;">
+              {% if page.year %}<span class="book-chip">{{ page.year }}</span>{% endif %}
+              {% if page.rank %}<span class="book-chip">Rank {{ page.rank }}</span>{% endif %}
+              {% if page.status %}<span class="book-chip">{{ page.status }}</span>{% endif %}
+              {% if page.isbn %}<span class="book-chip">ISBN {{ page.isbn }}</span>{% endif %}
+            </div>
+
+            {% if page.mood %}
+              <p><strong>Mood:</strong> {{ page.mood | join: ", " }}</p>
+            {% endif %}
+
+            {% if page.tags %}
+              <p><strong>Tags:</strong> {{ page.tags | join: ", " }}</p>
+            {% endif %}
+
+            <p class="book-links-row" style="margin-top: .75rem;">
+              {% if page.amazon_url %}
+                <a href="{{ page.amazon_url }}" target="_blank" rel="noopener noreferrer">Amazon</a>
+              {% endif %}
+              {% if page.goodreads_url %}
+                <a href="{{ page.goodreads_url }}" target="_blank" rel="noopener noreferrer">Goodreads</a>
+              {% endif %}
+            </p>
+
+            {% assign body_stripped = content | strip %}
+            {% if body_stripped != "" %}
+              <hr style="margin:1rem 0;border:0;border-top:1px solid #e9e9e9;">
+              <div class="book-notes">
+                {{ content }}
+              </div>
+            {% else %}
+              <hr style="margin:1rem 0;border:0;border-top:1px solid #e9e9e9;">
+              <p style="color:#777;">No notes yet.</p>
+            {% endif %}
+          </div>
+        </div>
+      </article>
+    </main>
+
+  </div>
+</body>
+</html>
