@@ -1,4 +1,6 @@
 ---
+title: Recommended Reading
+permalink: /books/
 ---
 
 <!DOCTYPE html>
@@ -7,29 +9,19 @@
     <meta charset="UTF-8">
     <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-
     <title>Recommended Reading</title>
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-
     <link rel="icon" type="image/png" href="/assets/images/favicon.png">
     <link rel="shortcut icon" type="image/png" href="/assets/images/favicon.png">
-
-    <!-- Optional RSS (leave empty or wire later) -->
-    <link type="application/rss+xml" rel="alternate" title="books-josephruocco" href="">
-
-    <!-- ONE stylesheet only (prevents cascade conflicts) -->
     <link href="/assets/css/books-unified.css" rel="stylesheet">
   </head>
 
   <body class="books-page">
     <div class="books-page">
 
-      <!-- Unified site header -->
       <header class="books-masthead">
         <div class="books-masthead-inner">
           <a class="books-site-title" href="/">Joseph Ruocco</a>
-
           <nav class="books-nav" aria-label="Primary">
             <a href="/books/" class="active">Recommended Reading</a>
             <a href="/about/">About</a>
@@ -38,7 +30,6 @@
         </div>
       </header>
 
-      <!-- Title card -->
       <section class="books-title-card" aria-labelledby="books-page-title">
         <div class="books-title-card-inner">
           <h1 id="books-page-title">Recommended Reading</h1>
@@ -46,43 +37,67 @@
         </div>
       </section>
 
-      <!-- Books grid -->
       <main class="books-content" id="main-content">
-        <div class="posts main-content">
-          {% assign sorted_posts = site.posts %}
-          {% for post in sorted_posts %}
-            <article class="post">
-              <a class="thumbnail" href="{{ post.url | relative_url }}" aria-label="{{ post.title | escape }}">
+        <div class="posts main-content" id="books-grid">
+          {% assign books_sorted = site.books | sort: "rank" | reverse %}
+          {% for book in books_sorted %}
+            {% assign pub_year = book.year | default: 0 %}
+            {% assign rank_val = book.rank | default: 0 %}
+            {% assign added_val = book.added_at | default: book.date %}
+            {% assign status_val = book.status | default: "" %}
+            {% assign isbn_val = book.isbn | default: "" %}
+            {% assign tags_joined = book.tags | join: "|" %}
+            {% assign moods_joined = book.mood | join: "|" %}
+
+            <article
+              class="post"
+              data-title="{{ book.title | downcase | escape }}"
+              data-author="{{ book.author | downcase | escape }}"
+              data-rank="{{ rank_val }}"
+              data-year="{{ pub_year }}"
+              data-added="{{ added_val | date: '%s' }}"
+              data-status="{{ status_val | downcase }}"
+              data-isbn="{{ isbn_val }}"
+              data-tags="{{ tags_joined | downcase | escape }}"
+              data-moods="{{ moods_joined | downcase | escape }}"
+            >
+              <a class="thumbnail" href="{{ book.url | relative_url }}" aria-label="{{ book.title | escape }}">
                 <img
-                  src="{{ post.assets | relative_url }}"
-                  alt="{{ post.title | escape }}"
+                  src="{{ book.cover | relative_url }}"
+                  alt="{{ book.title | escape }}"
                   loading="lazy"
                   decoding="async">
               </a>
 
-              <a class="header" href="{{ post.url | relative_url }}">
-                <h1 class="title">{{ post.title }}</h1>
+              <a class="header" href="{{ book.url | relative_url }}">
+                <h1 class="title">{{ book.title }}</h1>
               </a>
 
-              {% if post.author %}
-                <p class="book-author">{{ post.author }}</p>
+              {% if book.author %}
+                <p class="book-author">{{ book.author }}</p>
               {% endif %}
+
+              <div class="book-meta-row">
+                {% if book.year %}<span class="book-chip">{{ book.year }}</span>{% endif %}
+                {% if book.rank %}<span class="book-chip">Rank {{ book.rank }}</span>{% endif %}
+                {% if book.status %}<span class="book-chip">{{ book.status }}</span>{% endif %}
+              </div>
+
+              <div class="book-links-row">
+                {% if book.amazon_url %}
+                  <a href="{{ book.amazon_url }}" target="_blank" rel="noopener noreferrer">Amazon</a>
+                {% endif %}
+                {% if book.isbn %}
+                  <button type="button" class="isbn-copy-btn" data-isbn="{{ book.isbn }}">ISBN</button>
+                {% endif %}
+              </div>
             </article>
           {% endfor %}
         </div>
       </main>
 
-      <!-- Optional footer -->
-      <footer class="books-footer">
-        <div class="books-footer-inner">
-          <p>
-            <a href="/">Home</a> ·
-            <a href="/projects/">Projects</a> ·
-            <a href="/about/">About</a>
-          </p>
-        </div>
-      </footer>
-
     </div>
+
+    <!-- your sort/filter JS can stay here -->
   </body>
 </html>
