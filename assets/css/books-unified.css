@@ -533,3 +533,51 @@ body.books-page .books-section p {
     font-size: .9rem;
   }
 }
+
+.books-controls {
+  margin: 0 0 1rem;
+}
+
+.books-controls-row {
+  display: flex;
+  justify-content: flex-end;
+  align-items: end;
+  gap: 0.75rem;
+}
+
+.books-control {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  min-width: 220px;
+}
+
+.books-control span {
+  font-size: 0.8rem;
+  color: #666;
+  line-height: 1.2;
+}
+
+.books-control select {
+  font: inherit;
+  border: 1px solid #ddd;
+  background: #fff;
+  color: #333;
+  border-radius: 4px;
+  padding: 0.45rem 0.6rem;
+}
+
+.book-status {
+  margin: 0.15rem 0 0.2rem;
+}
+
+@media (max-width: 700px) {
+  .books-controls-row {
+    justify-content: stretch;
+  }
+
+  .books-control {
+    min-width: 0;
+    width: 100%;
+  }
+}
