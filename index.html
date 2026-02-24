@@ -1,6 +1,6 @@
 ---
 title: Recommended Reading
-permalink: /
+permalink: /books/
 ---
 
 <!DOCTYPE html>
@@ -9,19 +9,25 @@ permalink: /
     <meta charset="UTF-8">
     <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
     <title>Recommended Reading</title>
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
     <link rel="icon" type="image/png" href="/assets/images/favicon.png">
     <link rel="shortcut icon" type="image/png" href="/assets/images/favicon.png">
+
     <link href="/assets/css/books-unified.css" rel="stylesheet">
   </head>
 
   <body class="books-page">
     <div class="books-page">
 
+      <!-- Header -->
       <header class="books-masthead">
         <div class="books-masthead-inner">
           <a class="books-site-title" href="/">Joseph Ruocco</a>
+
           <nav class="books-nav" aria-label="Primary">
             <a href="/books/" class="active">Recommended Reading</a>
             <a href="/about/">About</a>
@@ -30,6 +36,7 @@ permalink: /
         </div>
       </header>
 
+      <!-- Title card -->
       <section class="books-title-card" aria-labelledby="books-page-title">
         <div class="books-title-card-inner">
           <h1 id="books-page-title">Recommended Reading</h1>
@@ -38,32 +45,53 @@ permalink: /
       </section>
 
       <main class="books-content" id="main-content">
+
+        <!-- Sort controls -->
+        <div class="books-controls" aria-label="Sort books">
+          <div class="books-controls-row">
+            <label for="sort-select" class="books-control">
+              <span>Sort</span>
+              <select id="sort-select">
+                <option value="position-asc">Shelf order</option>
+                <option value="rank-desc">Rank (high → low)</option>
+                <option value="rank-asc">Rank (low → high)</option>
+                <option value="year-asc">Publication year (old → new)</option>
+                <option value="year-desc">Publication year (new → old)</option>
+                <option value="title-asc">Title (A → Z)</option>
+                <option value="author-asc">Author (A → Z)</option>
+                <option value="added-desc">Recently added</option>
+                <option value="added-asc">Oldest added</option>
+              </select>
+            </label>
+          </div>
+        </div>
+
+        <!-- Grid -->
+        {% assign books_list = site.books | default: empty %}
+        {% assign books_sorted = books_list | sort: "position" %}
+
         <div class="posts main-content" id="books-grid">
-          {% assign books_sorted = site.books | sort: "rank" | reverse %}
           {% for book in books_sorted %}
-            {% assign pub_year = book.year | default: 0 %}
+            {% assign pos_val = book.position | default: 9999 %}
             {% assign rank_val = book.rank | default: 0 %}
+            {% assign year_val = book.year | default: 0 %}
             {% assign added_val = book.added_at | default: book.date %}
+            {% assign author_val = book.author | default: "" %}
             {% assign status_val = book.status | default: "" %}
             {% assign isbn_val = book.isbn | default: "" %}
-            {% assign tags_joined = book.tags | join: "|" %}
-            {% assign moods_joined = book.mood | join: "|" %}
 
             <article
               class="post"
-              data-title="{{ book.title | downcase | escape }}"
-              data-author="{{ book.author | downcase | escape }}"
+              data-position="{{ pos_val }}"
               data-rank="{{ rank_val }}"
-              data-year="{{ pub_year }}"
+              data-year="{{ year_val }}"
               data-added="{{ added_val | date: '%s' }}"
-              data-status="{{ status_val | downcase }}"
-              data-isbn="{{ isbn_val }}"
-              data-tags="{{ tags_joined | downcase | escape }}"
-              data-moods="{{ moods_joined | downcase | escape }}"
+              data-title="{{ book.title | downcase | escape }}"
+              data-author="{{ author_val | downcase | escape }}"
             >
               <a class="thumbnail" href="{{ book.url | relative_url }}" aria-label="{{ book.title | escape }}">
                 <img
-                  src="{{ book.cover | relative_url }}"
+                  src="{{ book.cover | default: book.assets | relative_url }}"
                   alt="{{ book.title | escape }}"
                   loading="lazy"
                   decoding="async">
@@ -77,27 +105,106 @@ permalink: /
                 <p class="book-author">{{ book.author }}</p>
               {% endif %}
 
-              <div class="book-meta-row">
-                {% if book.year %}<span class="book-chip">{{ book.year }}</span>{% endif %}
-                {% if book.rank %}<span class="book-chip">Rank {{ book.rank }}</span>{% endif %}
-                {% if book.status %}<span class="book-chip">{{ book.status }}</span>{% endif %}
-              </div>
+              {% if status_val != "" %}
+                <p class="book-status">{{ status_val }}</p>
+              {% endif %}
 
               <div class="book-links-row">
-                {% if book.amazon_url %}
+                {% if book.amazon_url and book.amazon_url != "" %}
                   <a href="{{ book.amazon_url }}" target="_blank" rel="noopener noreferrer">Amazon</a>
                 {% endif %}
-                {% if book.isbn %}
-                  <button type="button" class="isbn-copy-btn" data-isbn="{{ book.isbn }}">ISBN</button>
+
+                {% if isbn_val != "" %}
+                  <button type="button" class="isbn-copy-btn" data-isbn="{{ isbn_val }}">ISBN</button>
                 {% endif %}
               </div>
             </article>
           {% endfor %}
         </div>
       </main>
-
     </div>
 
-    <!-- your sort/filter JS can stay here -->
+    <script>
+      (function () {
+        const grid = document.getElementById('books-grid');
+        const sortSelect = document.getElementById('sort-select');
+
+        if (!grid || !sortSelect) return;
+
+        const cards = Array.from(grid.querySelectorAll('.post'));
+
+        function num(card, key, fallback) {
+          const raw = card.dataset[key];
+          const n = Number(raw);
+          return Number.isFinite(n) ? n : (fallback ?? 0);
+        }
+
+        function str(card, key) {
+          return (card.dataset[key] || '').toLowerCase();
+        }
+
+        function sortCards(mode) {
+          const sorted = [...cards];
+
+          sorted.sort((a, b) => {
+            switch (mode) {
+              case 'position-asc':
+                return num(a, 'position', 9999) - num(b, 'position', 9999);
+
+              case 'rank-desc':
+                return num(b, 'rank', 0) - num(a, 'rank', 0);
+              case 'rank-asc':
+                return num(a, 'rank', 0) - num(b, 'rank', 0);
+
+              case 'year-desc':
+                return num(b, 'year', 0) - num(a, 'year', 0);
+              case 'year-asc':
+                return num(a, 'year', 0) - num(b, 'year', 0);
+
+              case 'title-asc':
+                return str(a, 'title').localeCompare(str(b, 'title'));
+
+              case 'author-asc':
+                return str(a, 'author').localeCompare(str(b, 'author'));
+
+              case 'added-desc':
+                return num(b, 'added', 0) - num(a, 'added', 0);
+              case 'added-asc':
+                return num(a, 'added', 0) - num(b, 'added', 0);
+
+              default:
+                return 0;
+            }
+          });
+
+          sorted.forEach(card => grid.appendChild(card));
+        }
+
+        sortSelect.addEventListener('change', function () {
+          sortCards(this.value);
+        });
+
+        // ISBN copy button (keeps your little easter egg useful)
+        grid.addEventListener('click', async function (e) {
+          const btn = e.target.closest('.isbn-copy-btn');
+          if (!btn) return;
+
+          const isbn = btn.dataset.isbn || '';
+          if (!isbn) return;
+
+          try {
+            await navigator.clipboard.writeText(isbn);
+            const original = btn.textContent;
+            btn.textContent = 'Copied';
+            setTimeout(() => { btn.textContent = original; }, 800);
+          } catch (err) {
+            // no-op if clipboard blocked
+          }
+        });
+
+        // initialize on load
+        sortCards(sortSelect.value);
+      })();
+    </script>
   </body>
 </html>
