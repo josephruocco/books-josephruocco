@@ -1,12 +1,60 @@
----
-title: Recommended Reading
-timezone: UTC
-collections:
-  posts:
-    title: Posts
-    output: true
-  uploads:
-    title: Uploads
-    output: true
+title: Joseph Ruocco
+email: ""
+description: "Recommended reading shelf and notes"
+baseurl: ""
+url: "https://bookshelf.josephruocco.net"
+
+# Build settings
+markdown: kramdown
+highlighter: rouge
 permalink: pretty
-description: Test of description metadata field
+
+# Time / locale
+timezone: America/New_York
+
+# Collections
+collections:
+  books:
+    output: true
+    permalink: /books/:slug/
+
+# Default front matter values
+defaults:
+  - scope:
+      path: ""
+      type: books
+    values:
+      layout: book
+
+# Keep posts disabled from surfacing if you’re migrating fully to _books
+# (Jekyll still knows what posts are, but your site will use site.books)
+# You can remove this if you still want a blog.
+collections_dir: ""
+
+# Sass (safe defaults if you add SCSS later)
+sass:
+  sass_dir: _sass
+  style: compressed
+
+# Files/folders to exclude from build
+exclude:
+  - README.md
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor
+  - vendor/bundle
+  - vendor/cache
+  - vendor/gems
+  - vendor/ruby
+  - .DS_Store
+  - .sass-cache
+
+# Optional site metadata (useful in templates)
+author:
+  name: Joseph Ruocco
+
+# Optional custom vars for the books page header/intro
+bookshelf:
+  title: "Recommended Reading"
+  subtitle: "Books that changed how I think, write, and build."
