@@ -120,8 +120,59 @@ permalink: /
               </div>
             </article>
           {% endfor %}
-        </div>
-      </main>
+              </div>
+
+        <section class="books-signup" aria-labelledby="books-signup-title">
+          <div class="books-signup-card">
+            <div class="books-signup-copy">
+              <h2 id="books-signup-title">Get reading notes by email</h2>
+              <p>Occasional updates on books worth reading, notes, and new additions to the shelf. No spam.</p>
+            </div>
+
+            <form
+              name="email-signup-books"
+              method="POST"
+              data-netlify="true"
+              netlify-honeypot="bot-field"
+              action="/thanks/"
+              class="books-signup-form"
+            >
+              <input type="hidden" name="form-name" value="email-signup-books">
+              <input type="hidden" name="source" value="bookshelf">
+              <input type="hidden" name="list" value="reading">
+
+              <p class="sr-only">
+                <label>Don’t fill this out if you're human:
+                  <input name="bot-field">
+                </label>
+              </p>
+
+              <label for="signup-name" class="sr-only">Name (optional)</label>
+              <input
+                id="signup-name"
+                type="text"
+                name="name"
+                placeholder="Name (optional)"
+                autocomplete="name">
+
+              <label for="signup-email" class="sr-only">Email</label>
+              <input
+                id="signup-email"
+                type="email"
+                name="email"
+                placeholder="Email"
+                autocomplete="email"
+                required>
+
+              <button type="submit">Subscribe</button>
+            </form>
+
+            <p class="books-signup-note">
+              Occasional reading notes and updates. You can unsubscribe anytime.
+            </p>
+          </div>
+        </section>
+      </main>   
     </div>
 
     <script>
