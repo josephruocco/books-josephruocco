@@ -581,3 +581,168 @@ body.books-page .books-section p {
     width: 100%;
   }
 }
+
+
+/* Signup block at bottom of bookshelf */
+.books-signup {
+  margin-top: 2rem;
+  padding-top: 0.5rem;
+}
+
+.books-signup-card {
+  border-top: 1px solid #e9e9e9;
+  padding-top: 1.25rem;
+}
+
+.books-signup-copy h2 {
+  margin: 0 0 0.35rem;
+  font-size: 1.05rem;
+  color: #333;
+}
+
+.books-signup-copy p {
+  margin: 0 0 0.85rem;
+  color: #666;
+  font-size: 0.95rem;
+}
+
+.books-signup-form {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr auto;
+  gap: 0.6rem;
+  align-items: center;
+}
+
+.books-signup-form input,
+.books-signup-form button {
+  font: inherit;
+  border-radius: 4px;
+  padding: 0.55rem 0.7rem;
+}
+
+.books-signup-form input {
+  border: 1px solid #ddd;
+  background: #fff;
+  color: #333;
+}
+
+.books-signup-form button {
+  border: 1px solid #d0d0d0;
+  background: #fff;
+  color: #333;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.books-signup-form button:hover {
+  border-color: #bbb;
+}
+
+.books-signup-note {
+  margin: 0.6rem 0 0;
+  font-size: 0.82rem;
+  color: #777;
+}
+
+.sr-only {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+@media (max-width: 700px) {
+  .books-signup-form {
+    grid-template-columns: 1fr;
+  }
+
+  .books-signup-form button {
+    width: 100%;
+  }
+}/* Signup block at bottom of bookshelf */
+.books-signup {
+  margin-top: 2rem;
+  padding-top: 0.5rem;
+}
+
+.books-signup-card {
+  border-top: 1px solid #e9e9e9;
+  padding-top: 1.25rem;
+}
+
+.books-signup-copy h2 {
+  margin: 0 0 0.35rem;
+  font-size: 1.05rem;
+  color: #333;
+}
+
+.books-signup-copy p {
+  margin: 0 0 0.85rem;
+  color: #666;
+  font-size: 0.95rem;
+}
+
+.books-signup-form {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr auto;
+  gap: 0.6rem;
+  align-items: center;
+}
+
+.books-signup-form input,
+.books-signup-form button {
+  font: inherit;
+  border-radius: 4px;
+  padding: 0.55rem 0.7rem;
+}
+
+.books-signup-form input {
+  border: 1px solid #ddd;
+  background: #fff;
+  color: #333;
+}
+
+.books-signup-form button {
+  border: 1px solid #d0d0d0;
+  background: #fff;
+  color: #333;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.books-signup-form button:hover {
+  border-color: #bbb;
+}
+
+.books-signup-note {
+  margin: 0.6rem 0 0;
+  font-size: 0.82rem;
+  color: #777;
+}
+
+.sr-only {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+@media (max-width: 700px) {
+  .books-signup-form {
+    grid-template-columns: 1fr;
+  }
+
+  .books-signup-form button {
+    width: 100%;
+  }
+}
