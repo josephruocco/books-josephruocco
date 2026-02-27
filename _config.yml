@@ -12,6 +12,23 @@ permalink: pretty
 # Time / locale
 timezone: America/New_York
 
+# Plugins
+plugins:
+  - jekyll-sitemap
+  - jekyll-gist
+  - jekyll-mentions
+  - jekyll-feed
+  - jekyll-paginate-v2
+
+# Pagination (for the books collection)
+pagination:
+  enabled: true
+  per_page: 36
+  collection: books
+  sort_field: position
+  sort_reverse: false
+  permalink: "/page/:num/"
+
 # Collections
 collections:
   books:
@@ -26,9 +43,6 @@ defaults:
     values:
       layout: book
 
-# Keep posts disabled from surfacing if you’re migrating fully to _books
-# (Jekyll still knows what posts are, but your site will use site.books)
-# You can remove this if you still want a blog.
 collections_dir: ""
 
 # Sass (safe defaults if you add SCSS later)
