@@ -1,8 +1,10 @@
 ---
 title: Recommended Reading
 permalink: /
+pagination:
+  enabled: true
+  collection: books
 ---
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -66,9 +68,8 @@ permalink: /
           </div>
         </div>
 
-        <!-- Grid -->
-        {% assign books_list = site.books | default: empty %}
-        {% assign books_sorted = books_list | sort: "position" %}
+        <!-- Grid (paginated) -->
+        {% assign books_sorted = paginator.posts | default: empty %}
 
         <div class="posts main-content" id="books-grid">
           {% for book in books_sorted %}
@@ -120,7 +121,20 @@ permalink: /
               </div>
             </article>
           {% endfor %}
-              </div>
+        </div>
+
+        <!-- Pagination -->
+        <nav class="books-pagination" aria-label="Pagination">
+          {% if paginator.previous_page %}
+            <a href="{{ paginator.previous_page_path | relative_url }}">Prev</a>
+          {% endif %}
+
+          <span>Page {{ paginator.page }} / {{ paginator.total_pages }}</span>
+
+          {% if paginator.next_page %}
+            <a href="{{ paginator.next_page_path | relative_url }}">Next</a>
+          {% endif %}
+        </nav>
 
         <section class="books-signup" aria-labelledby="books-signup-title">
           <div class="books-signup-card">
@@ -172,7 +186,7 @@ permalink: /
             </p>
           </div>
         </section>
-      </main>   
+      </main>
     </div>
 
     <script>
@@ -182,6 +196,7 @@ permalink: /
 
         if (!grid || !sortSelect) return;
 
+        // IMPORTANT: only sorts the CURRENT PAGE (pagination is server-side)
         const cards = Array.from(grid.querySelectorAll('.post'));
 
         function num(card, key, fallback) {
@@ -235,7 +250,7 @@ permalink: /
           sortCards(this.value);
         });
 
-        // ISBN copy button (keeps your little easter egg useful)
+        // ISBN copy
         grid.addEventListener('click', async function (e) {
           const btn = e.target.closest('.isbn-copy-btn');
           if (!btn) return;
@@ -248,12 +263,9 @@ permalink: /
             const original = btn.textContent;
             btn.textContent = 'Copied';
             setTimeout(() => { btn.textContent = original; }, 800);
-          } catch (err) {
-            // no-op if clipboard blocked
-          }
+          } catch (err) {}
         });
 
-        // initialize on load
         sortCards(sortSelect.value);
       })();
     </script>
