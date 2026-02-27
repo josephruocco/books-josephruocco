@@ -23,7 +23,7 @@ plugins:
 # Pagination (for the books collection)
 pagination:
   enabled: true
-  per_page: 36
+  per_page: 18
   collection: books
   sort_field: position
   sort_reverse: false
