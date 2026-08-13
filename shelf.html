@@ -1,0 +1,399 @@
+---
+layout: default
+title: The Shelf
+permalink: /shelf/
+---
+
+<div class="shelf-page">
+  <h2 class="shelf-heading">The Shelf</h2>
+  <p class="shelf-intro">
+    Every book in the library, drawn as a physical shelf — spine thickness set by
+    the book's real page count. A random handful at a time, because the whole
+    library is far too much to browse. Tap a spine to see what it is.
+  </p>
+
+  <div class="shelf-frame" id="shelf" role="img" aria-label="A bookshelf of randomly selected books"></div>
+
+  <div class="shelf-bar">
+    <button type="button" class="shelf-shuffle" id="shuffle">Pull a new handful</button>
+    <span class="shelf-caption" id="caption">Reshuffles every hour.</span>
+  </div>
+</div>
+
+<style>
+  .shelf-page { margin: 2em 0 3em; }
+  .shelf-heading { margin-bottom: .3em; }
+  .shelf-intro { max-width: 34em; margin-bottom: 1.4em; line-height: 1.5; }
+
+  .shelf-frame {
+    width: 100%;
+    border-radius: 6px;
+    overflow: hidden;
+    background: #14100c;
+    box-shadow: inset 0 0 40px rgba(0,0,0,.55);
+    /* Rows are added by script; height follows content. */
+  }
+
+  /* overflow guard: a mis-measured row should clip, never spill out of the frame */
+  .shelf-row { position: relative; display: flex; align-items: flex-end; overflow: hidden; }
+  .shelf-row .board {
+    position: absolute; left: 0; right: 0; bottom: 0; height: 10px;
+    background: linear-gradient(to bottom, #6b4a2d, #4c3320);
+    box-shadow: 0 3px 6px rgba(0,0,0,.55);
+  }
+
+  .spine {
+    position: relative;
+    box-sizing: border-box;
+    margin-right: 2px;
+    border-radius: 2px;
+    border: .5px solid rgba(0,0,0,.35);
+    box-shadow: 2px 0 3px rgba(0,0,0,.4);
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+    flex: none;
+    transition: transform .12s ease;
+  }
+  .spine:hover, .spine:focus-visible { transform: translateY(-7px); outline: none; }
+  .spine.is-active { transform: translateY(-11px); }
+
+  /* Vertical type, the way a real spine reads. */
+  .spine .label {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    font-family: Georgia, "Times New Roman", serif;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-height: 78%;
+    pointer-events: none;
+  }
+  .spine .rule {
+    position: absolute; left: 3px; right: 3px; height: 1px; opacity: .38;
+  }
+
+  .pile { display: flex; flex-direction: column; justify-content: flex-end; flex: none; margin-right: 2px; }
+  .pile .flat {
+    box-sizing: border-box;
+    border-radius: 2px;
+    border: .5px solid rgba(0,0,0,.35);
+    box-shadow: 0 1px 3px rgba(0,0,0,.4);
+    cursor: pointer;
+    /* Left-aligned with an ellipsis: centring clips a long title at both ends,
+       which reads as a rendering fault rather than a long title. */
+    display: flex; align-items: center; justify-content: flex-start;
+    padding: 0 8px;
+    overflow: hidden;
+    font-family: Georgia, "Times New Roman", serif;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  .pile .flat > span { overflow: hidden; text-overflow: ellipsis; }
+
+  .shelf-bar {
+    display: flex; align-items: baseline; gap: 1em;
+    margin-top: 1em; flex-wrap: wrap;
+  }
+  .shelf-shuffle {
+    font: inherit; font-size: .9em;
+    padding: .5em 1.1em;
+    border: 1px solid currentColor; border-radius: 4px;
+    background: none; color: inherit; cursor: pointer;
+  }
+  .shelf-shuffle:hover { background: rgba(0,0,0,.06); }
+  .shelf-caption { font-size: .9em; line-height: 1.4; }
+  .shelf-caption a { text-decoration: underline; }
+
+  @media (max-width: 600px) {
+    .spine .label { font-size: 9px !important; }
+  }
+</style>
+
+<script>
+(function () {
+  var shelf = document.getElementById('shelf');
+  var caption = document.getElementById('caption');
+  var shuffleBtn = document.getElementById('shuffle');
+
+  // Books that have a write-up on this site get a link from their spine.
+  var CURATED = { {% for b in site.books %}{{ b.title | jsonify }}: {{ b.url | jsonify }}{% unless forloop.last %}, {% endunless %}{% endfor %} };
+
+  var PALETTE = [
+    [.43,.17,.17],[.18,.28,.22],[.15,.22,.31],[.65,.46,.23],
+    [.85,.81,.71],[.35,.19,.29],[.17,.35,.35],[.55,.29,.18],
+    [.29,.31,.35],[.37,.42,.22],[.49,.25,.18],[.22,.22,.23],
+    [.69,.54,.24],[.56,.23,.23]
+  ];
+
+  var SCALE = 1.7;                 // widget points -> web pixels
+  var ROW_H = 118 * SCALE;
+  var BOARD = 10;
+  var LEAN = 9;
+  var COS = Math.cos(LEAN * Math.PI / 180), SIN = Math.sin(LEAN * Math.PI / 180);
+
+  // Same stable hash as the app: colour and height must not change between
+  // renders, and JS string hashing isn't standardised.
+  function fnv1a(s) {
+    var h = 0x811c9dc5;
+    for (var i = 0; i < s.length; i++) {
+      h ^= s.charCodeAt(i);
+      h = (h + ((h << 1) + (h << 4) + (h << 7) + (h << 8) + (h << 24))) >>> 0;
+    }
+    return h >>> 0;
+  }
+  function hashOf(book, salt) { return fnv1a(book.id + '#' + salt); }
+
+  function rgb(c, shift) {
+    shift = shift || 0;
+    return 'rgb(' + PALETTE[c].map(function (v) {
+      return Math.round(Math.max(0, Math.min(1, v + shift)) * 255);
+    }).join(',') + ')';
+  }
+  function luminance(c) { var p = PALETTE[c]; return .2126*p[0] + .7152*p[1] + .0722*p[2]; }
+
+  function spineWidth(b) { return Math.min(44, Math.max(9, b.pages * 0.075)) * SCALE; }
+  function heightFactor(b) { return 0.84 + 0.16 * ((hashOf(b, 1) % 10000) / 10000); }
+  function clothOf(b) { return hashOf(b, 2) % PALETTE.length; }
+  function shortTitle(b) { return b.title.split(':')[0]; }
+
+  // SplitMix32 — a seeded RNG so a given hour always draws the same shelf.
+  function rngFrom(seed) {
+    var s = seed >>> 0;
+    return function () {
+      s = (s + 0x9E3779B9) >>> 0;
+      var z = s;
+      z = (Math.imul(z ^ (z >>> 16), 0x21f0aaad)) >>> 0;
+      z = (Math.imul(z ^ (z >>> 15), 0x735a2d97)) >>> 0;
+      return ((z ^ (z >>> 15)) >>> 0) / 4294967296;
+    };
+  }
+  function shuffled(arr, rand) {
+    var a = arr.slice();
+    for (var i = a.length - 1; i > 0; i--) {
+      var j = Math.floor(rand() * (i + 1));
+      var t = a[i]; a[i] = a[j]; a[j] = t;
+    }
+    return a;
+  }
+
+  /* Greedy fill, best of a few shuffles — the arrangement with the smallest
+     trailing gap is what stops the shelf looking half-empty. */
+  function bestFit(books, width, seed) {
+    var best = [], bestGap = Infinity;
+    for (var attempt = 0; attempt < 8; attempt++) {
+      var rand = rngFrom(seed + attempt * 977);
+      var used = 0, picked = [];
+      var pool = shuffled(books, rand);
+      for (var i = 0; i < pool.length; i++) {
+        var next = used + spineWidth(pool[i]) + 2;
+        if (next > width) continue;
+        picked.push(pool[i]);
+        used = next;
+        if (width - used < 16) break;
+      }
+      if (width - used < bestGap) { bestGap = width - used; best = picked; }
+      if (bestGap < 10) break;
+    }
+    return best;
+  }
+
+  function buildRow(pool, width, spineSpace, seed) {
+    var rand = rngFrom(seed);
+    var items = [], remaining = pool.slice();
+
+    // A flat pile is as wide as the books are tall, so narrow screens skip it.
+    var pile = null;
+    if (width >= 420 && rand() < 0.5) {
+      var want = 2 + Math.floor(rand() * 3), picked = [], stackH = 0;
+      for (var i = 0; i < remaining.length && picked.length < want; i++) {
+        var b = remaining[i];
+        var flat = spineSpace * heightFactor(b);
+        if (flat > width * 0.5) continue;
+        if (stackH + spineWidth(b) > spineSpace * 0.55) continue;
+        picked.push(b); stackH += spineWidth(b);
+      }
+      if (picked.length >= 2) {
+        pile = picked;
+        remaining = remaining.filter(function (x) { return picked.indexOf(x) < 0; });
+      }
+    }
+    var pileWidth = pile ? Math.max.apply(null, pile.map(function (b) {
+      return spineSpace * heightFactor(b);
+    })) : 0;
+
+    // Leave slack most of the time, or the last book has nothing to lean into.
+    // The allowance has to cover the footprint a tilted book gains
+    // (height * sin) or the row overflows once the pile is appended.
+    var wantsLean = rand() < 0.7;
+    var slack = wantsLean ? spineSpace * SIN + 12 + rand() * 20 : 0;
+    var standing = bestFit(remaining, Math.max(0, width - pileWidth - slack - 4), seed);
+
+    standing.forEach(function (b) { items.push({ kind: 'upright', book: b }); });
+    if (wantsLean && items.length >= 2) items[items.length - 1].kind = 'leaning';
+    if (pile) items.push({ kind: 'pile', books: pile });
+    return items;
+  }
+
+  function spineEl(book, height, leaning) {
+    var c = clothOf(book);
+    var light = luminance(c) > 0.5;
+    var ink = light ? 'rgba(46,33,23,.92)' : 'rgba(237,227,199,.92)';
+    var w = spineWidth(book);
+
+    var el = document.createElement(leaning ? 'div' : 'div');
+    el.className = 'spine';
+    el.tabIndex = 0;
+    el.style.width = w + 'px';
+    el.style.height = (leaning ? height * 0.97 : height) + 'px';
+    el.style.background = 'linear-gradient(to right, ' + rgb(c, .06) + ', ' + rgb(c) + ' 45%, ' + rgb(c, -.26) + ')';
+
+    if (leaning) {
+      el.style.transformOrigin = 'bottom left';
+      el.style.transform = 'rotate(' + LEAN + 'deg)';
+      // Rotation doesn't change layout width, so reserve the real footprint.
+      el.style.marginRight = (w * COS + height * SIN - w + 2) + 'px';
+    }
+
+    [0.12, 0.16, 0.84].forEach(function (t) {
+      var r = document.createElement('span');
+      r.className = 'rule';
+      r.style.top = (t * 100) + '%';
+      r.style.background = ink;
+      el.appendChild(r);
+    });
+
+    if (w >= 20) {
+      var label = document.createElement('span');
+      label.className = 'label';
+      label.textContent = shortTitle(book);
+      label.style.color = ink;
+      label.style.fontSize = Math.min(13, Math.max(8, w * 0.40)) + 'px';
+      el.appendChild(label);
+    }
+    wire(el, book);
+    return el;
+  }
+
+  function pileEl(books, spineSpace) {
+    var wrap = document.createElement('div');
+    wrap.className = 'pile';
+    books.forEach(function (book) {
+      var c = clothOf(book);
+      var light = luminance(c) > 0.5;
+      var ink = light ? 'rgba(46,33,23,.92)' : 'rgba(237,227,199,.92)';
+      var flat = document.createElement('div');
+      flat.className = 'flat';
+      flat.tabIndex = 0;
+      flat.style.width = (spineSpace * heightFactor(book)) + 'px';
+      flat.style.height = spineWidth(book) + 'px';
+      flat.style.background = 'linear-gradient(to bottom, ' + rgb(c, .06) + ', ' + rgb(c) + ' 45%, ' + rgb(c, -.26) + ')';
+      flat.style.color = ink;
+      flat.style.fontSize = Math.min(12, Math.max(7, spineWidth(book) * 0.42)) + 'px';
+      if (spineWidth(book) >= 18) {
+        var t = document.createElement('span');
+        t.textContent = shortTitle(book);
+        flat.appendChild(t);
+      }
+      wire(flat, book);
+      wrap.appendChild(flat);
+    });
+    return wrap;
+  }
+
+  var active = null;
+  function wire(el, book) {
+    function show() {
+      if (active) active.classList.remove('is-active');
+      el.classList.add('is-active');
+      active = el;
+      var pages = book.pagesEstimated ? '~' + book.pages : book.pages;
+      var text = book.title + (book.author ? ' — ' + book.author : '') + ' · ' + pages + ' pages';
+      caption.textContent = text;
+      var link = CURATED[book.title];
+      if (link) {
+        caption.appendChild(document.createTextNode(' · '));
+        var a = document.createElement('a');
+        a.href = link;
+        a.textContent = 'notes →';
+        caption.appendChild(a);
+      }
+    }
+    el.addEventListener('click', show);
+    el.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); show(); }
+    });
+  }
+
+  var library = [];
+  var manualSeed = null;
+
+  function render() {
+    if (!library.length) return;
+    var width = shelf.clientWidth;
+    if (width < 40) return;
+    shelf.innerHTML = '';
+    active = null;
+
+    var rows = width < 560 ? 4 : 3;
+    var seed = manualSeed !== null ? manualSeed : Math.floor(Date.now() / 3600000);
+    var pool = shuffled(library, rngFrom(seed)).slice(0, 120);
+    var spineSpace = ROW_H - BOARD - 10;
+    var used = {};
+
+    for (var r = 0; r < rows; r++) {
+      var available = pool.filter(function (b) { return !used[b.id]; });
+      if (available.length < 6) { available = pool; }
+      var items = buildRow(available, width - 12, spineSpace, seed + r * 7919);
+
+      var row = document.createElement('div');
+      row.className = 'shelf-row';
+      row.style.height = ROW_H + 'px';
+      row.style.padding = '0 6px ' + BOARD + 'px';
+
+      items.forEach(function (item) {
+        if (item.kind === 'pile') {
+          item.books.forEach(function (b) { used[b.id] = true; });
+          row.appendChild(pileEl(item.books, spineSpace));
+        } else {
+          used[item.book.id] = true;
+          row.appendChild(spineEl(item.book, spineSpace * heightFactor(item.book),
+                                  item.kind === 'leaning'));
+        }
+      });
+
+      var board = document.createElement('div');
+      board.className = 'board';
+      row.appendChild(board);
+      shelf.appendChild(row);
+    }
+  }
+
+  shuffleBtn.addEventListener('click', function () {
+    manualSeed = Math.floor(Math.random() * 2147483647);
+    caption.textContent = 'A fresh handful. Tap a spine to see what it is.';
+    render();
+  });
+
+  var resizeTimer;
+  window.addEventListener('resize', function () {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(render, 150);
+  });
+
+  fetch('{{ "/assets/books.json" | relative_url }}')
+    .then(function (r) { return r.json(); })
+    .then(function (data) {
+      library = data.filter(function (b) { return b.title && b.pages; });
+      caption.textContent = library.length + ' books in the library. Reshuffles every hour.';
+      render();
+    })
+    .catch(function () {
+      caption.textContent = 'Could not load the library.';
+    });
+})();
+</script>

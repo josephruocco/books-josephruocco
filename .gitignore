@@ -42,4 +42,4 @@ __pycache__/
 env/
 
 # Netlify local
-.netlify/
+.netlify/assets/books.json
