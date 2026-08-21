@@ -42,4 +42,7 @@ __pycache__/
 env/
 
 # Netlify local
-.netlify/assets/books.json
+.netlify/
+
+# Personal library export — never publish this
+assets/books.json
