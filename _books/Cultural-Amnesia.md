@@ -1,10 +1,11 @@
 ---
 title: Cultural Amnesia
+pages: 896
 date: 2023-12-09 02:42:00 Z
 assets: "/uploads/Cultural-Amnesia.jpg"
 layout: book
 cover: "/uploads/Cultural-Amnesia.jpg"
-author: ""
+author: "Clive James"
 year:
 rank:
 status: "read"

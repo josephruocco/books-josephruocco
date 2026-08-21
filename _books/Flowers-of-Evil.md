@@ -1,10 +1,11 @@
 ---
 title: Flowers Of Evil
+pages: 202
 date: 2023-11-27 02:43:00 Z
 assets: "/uploads/flowers-of-evil.jpg"
 layout: book
 cover: "/uploads/flowers-of-evil.jpg"
-author: ""
+author: "押見修造"
 year:
 rank:
 status: "read"

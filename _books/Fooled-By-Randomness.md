@@ -1,10 +1,11 @@
 ---
 title: Fooled By Randomness
+pages: 312
 date: 2023-12-15 00:00:00 Z
 assets: "/uploads/Fooled-By-Randomness.jpg"
 layout: book
 cover: "/uploads/Fooled-By-Randomness.jpg"
-author: ""
+author: "Nassim Nicholas Taleb"
 year:
 rank:
 status: "read"

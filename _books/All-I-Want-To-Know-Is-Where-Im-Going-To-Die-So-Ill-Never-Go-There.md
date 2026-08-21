@@ -1,10 +1,11 @@
 ---
 title: All I Want To Know Is Where Im Going To Die So Ill Never Go There
+pages: 288
 date: 2023-12-15 03:09:26 Z
 assets: "/uploads/All-I-Want-To-Know-Is-Where-Im-Going-To-Die-So-Ill-Never-Go-There.jpg"
 layout: book
 cover: "/uploads/All-I-Want-To-Know-Is-Where-Im-Going-To-Die-So-Ill-Never-Go-There.jpg"
-author: ""
+author: "Peter Bevelin"
 year:
 rank:
 status: "read"

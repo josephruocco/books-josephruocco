@@ -1,10 +1,11 @@
 ---
 title: Straw Dogs
+pages: 246
 date: 2023-12-15 00:00:00 Z
 assets: "/uploads/Straw-Dogs.jpg"
 layout: book
 cover: "/uploads/Straw-Dogs.jpg"
-author: ""
+author: "John Gray"
 year:
 rank:
 status: "read"

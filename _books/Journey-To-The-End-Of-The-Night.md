@@ -1,10 +1,11 @@
 ---
 title: Journey To The End of The Night
+pages: 97
 date: 2023-11-27 02:42:00 Z
 assets: "/uploads/celine2.jpg"
 layout: book
 cover: "/uploads/celine2.jpg"
-author: ""
+author: "John Sturrock"
 year:
 rank:
 status: "read"

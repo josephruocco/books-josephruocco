@@ -1,10 +1,11 @@
 ---
 title: Skin In The Game
+pages: 292
 date: 2023-12-09 02:42:00 Z
 assets: "/uploads/Skin-In-The-Game.jpg"
 layout: book
 cover: "/uploads/Skin-In-The-Game.jpg"
-author: ""
+author: "Nassim Nicholas Taleb"
 year:
 rank:
 status: "read"

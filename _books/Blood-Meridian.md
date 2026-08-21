@@ -1,10 +1,11 @@
 ---
 title: Blood Meridian
+pages: 353
 date: 2023-11-28 02:42:00 Z
 assets: "/uploads/blood-meridian.jpg"
 layout: book
 cover: "/uploads/blood-meridian.jpg"
-author: ""
+author: "Cormac McCarthy"
 year:
 rank:
 status: "read"

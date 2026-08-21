@@ -1,10 +1,11 @@
 ---
 title: Steps
+pages: 116
 date: 2023-11-28 00:00:00 Z
 assets: "/uploads/jerzy-steps.jpg"
 layout: book
 cover: "/uploads/jerzy-steps.jpg"
-author: ""
+author: "John Buchan"
 year:
 rank:
 status: "read"

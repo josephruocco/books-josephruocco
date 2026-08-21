@@ -1,5 +1,6 @@
 ---
 title: Collected Works of C.P. Cavafy
+pages: 288
 date: 2023-11-27 02:38:00 Z
 assets: "/uploads/cavafy.jpg"
 layout: book

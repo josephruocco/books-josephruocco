@@ -1,10 +1,11 @@
 ---
 title: Crime And Punishment
+pages: 551
 date: 2023-11-28 02:42:00 Z
 assets: "/uploads/dostoevsky-crime-and-punnishment.jpg"
 layout: book
 cover: "/uploads/dostoevsky-crime-and-punnishment.jpg"
-author: ""
+author: "Fyodor Dostoyevsky"
 year:
 rank:
 status: "read"

@@ -1,10 +1,11 @@
 ---
 title: Brighton Rock
+pages: 311
 date: 2023-11-27 02:42:00 Z
 assets: "/uploads/brighton-rock.jpg"
 layout: book
 cover: "/uploads/brighton-rock.jpg"
-author: ""
+author: "Graham Greene"
 year:
 rank:
 status: "read"

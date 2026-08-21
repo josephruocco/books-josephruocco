@@ -1,10 +1,11 @@
 ---
 title: An Enquiry Concerning Human Understanding
+pages: 125
 date: 2023-12-15 00:00:00 Z
 assets: "/uploads/An-Enquiry-Concerning-Human-Understanding.jpg"
 layout: book
 cover: "/uploads/An-Enquiry-Concerning-Human-Understanding.jpg"
-author: ""
+author: "David Hume"
 year:
 rank:
 status: "read"

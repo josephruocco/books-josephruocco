@@ -1,10 +1,11 @@
 ---
 title: Amerika
+pages: 299
 date: 2023-12-15 00:00:00 Z
 assets: "/uploads/Amerika.jpg"
 layout: book
 cover: "/uploads/Amerika.jpg"
-author: ""
+author: "Franz Kafka"
 year:
 rank:
 status: "read"

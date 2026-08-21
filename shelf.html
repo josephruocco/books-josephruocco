@@ -7,9 +7,8 @@ permalink: /shelf/
 <div class="shelf-page">
   <h2 class="shelf-heading">The Shelf</h2>
   <p class="shelf-intro">
-    Every book in the library, drawn as a physical shelf — spine thickness set by
-    the book's real page count. A random handful at a time, because the whole
-    library is far too much to browse. Tap a spine to see what it is.
+    The reading list, drawn as a physical shelf — each spine as thick as the book
+    really is. Tap one to see what it is, or pull a new handful off the shelf.
   </p>
 
   <div class="shelf-frame" id="shelf" role="img" aria-label="A bookshelf of randomly selected books"></div>
@@ -120,8 +119,14 @@ permalink: /shelf/
   var caption = document.getElementById('caption');
   var shuffleBtn = document.getElementById('shuffle');
 
-  // Books that have a write-up on this site get a link from their spine.
-  var CURATED = { {% for b in site.books %}{{ b.title | jsonify }}: {{ b.url | jsonify }}{% unless forloop.last %}, {% endunless %}{% endfor %} };
+  // The shelf is built from the reading list itself, at build time.
+  var LIBRARY = [{% for b in site.books %}
+    {"id": {{ b.title | jsonify }},
+     "title": {{ b.title | jsonify }},
+     "author": {{ b.author | default: "" | jsonify }},
+     "pages": {{ b.pages | default: 288 }},
+     "url": {{ b.url | jsonify }}}{% unless forloop.last %},{% endunless %}{% endfor %}
+  ];
 
   var PALETTE = [
     [.43,.17,.17],[.18,.28,.22],[.15,.22,.31],[.65,.46,.23],
@@ -311,14 +316,12 @@ permalink: /shelf/
       if (active) active.classList.remove('is-active');
       el.classList.add('is-active');
       active = el;
-      var pages = book.pagesEstimated ? '~' + book.pages : book.pages;
-      var text = book.title + (book.author ? ' — ' + book.author : '') + ' · ' + pages + ' pages';
+      var text = book.title + (book.author ? ' — ' + book.author : '') + ' · ' + book.pages + ' pages';
       caption.textContent = text;
-      var link = CURATED[book.title];
-      if (link) {
+      if (book.url) {
         caption.appendChild(document.createTextNode(' · '));
         var a = document.createElement('a');
-        a.href = link;
+        a.href = book.url;
         a.textContent = 'notes →';
         caption.appendChild(a);
       }
@@ -339,15 +342,19 @@ permalink: /shelf/
     shelf.innerHTML = '';
     active = null;
 
-    var rows = width < 560 ? 4 : 3;
+    // Two rows on desktop: a 40-book list can't stock three without repeating.
+    var rows = width < 560 ? 3 : 2;
     var seed = manualSeed !== null ? manualSeed : Math.floor(Date.now() / 3600000);
-    var pool = shuffled(library, rngFrom(seed)).slice(0, 120);
+    var pool = shuffled(library, rngFrom(seed));
     var spineSpace = ROW_H - BOARD - 10;
     var used = {};
 
     for (var r = 0; r < rows; r++) {
+      // Prefer books not already shown, but a short list has to repeat rather
+      // than leave half a shelf bare — the packer needs surplus to choose from.
       var available = pool.filter(function (b) { return !used[b.id]; });
-      if (available.length < 6) { available = pool; }
+      var capacity = available.reduce(function (s, b) { return s + spineWidth(b) + 2; }, 0);
+      if (capacity < (width - 12) * 1.5) { available = pool; }
       var items = buildRow(available, width - 12, spineSpace, seed + r * 7919);
 
       var row = document.createElement('div');
@@ -385,15 +392,8 @@ permalink: /shelf/
     resizeTimer = setTimeout(render, 150);
   });
 
-  fetch('{{ "/assets/books.json" | relative_url }}')
-    .then(function (r) { return r.json(); })
-    .then(function (data) {
-      library = data.filter(function (b) { return b.title && b.pages; });
-      caption.textContent = library.length + ' books in the library. Reshuffles every hour.';
-      render();
-    })
-    .catch(function () {
-      caption.textContent = 'Could not load the library.';
-    });
+  library = LIBRARY.filter(function (b) { return b.title && b.pages; });
+  caption.textContent = library.length + ' books on the list. Reshuffles every hour.';
+  render();
 })();
 </script>

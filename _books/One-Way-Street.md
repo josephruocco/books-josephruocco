@@ -1,10 +1,11 @@
 ---
 title: One Way Street
+pages: 127
 date: 2023-12-15 00:00:00 Z
 assets: "/uploads/One-Way-Street.jpg"
 layout: book
 cover: "/uploads/One-Way-Street.jpg"
-author: ""
+author: "Joan Aiken"
 year:
 rank:
 status: "read"

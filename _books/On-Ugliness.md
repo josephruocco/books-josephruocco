@@ -1,10 +1,11 @@
 ---
 title: On Ugliness
+pages: 456
 date: 2023-12-15 00:00:00 Z
 assets: "/uploads/On-Ugliness.jpg"
 layout: book
 cover: "/uploads/On-Ugliness.jpg"
-author: ""
+author: "Umberto Eco"
 year:
 rank:
 status: "read"

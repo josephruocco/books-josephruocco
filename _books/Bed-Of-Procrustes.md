@@ -1,10 +1,11 @@
 ---
 title: Bed Of Procrustes
+pages: 128
 date: 2023-12-15 00:00:00 Z
 assets: "/uploads/Bed-Of-Procrustes.jpg"
 layout: book
 cover: "/uploads/Bed-Of-Procrustes.jpg"
-author: ""
+author: "Nassim Nicholas Taleb"
 year:
 rank:
 status: "read"

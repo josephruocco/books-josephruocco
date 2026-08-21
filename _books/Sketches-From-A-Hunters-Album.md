@@ -1,10 +1,11 @@
 ---
 title: Sketches From A Hunter's Album
+pages: 274
 date: 2023-12-15 00:00:00 Z
 assets: "/uploads/Sketches-From-A-Hunters-Album.jpg"
 layout: book
 cover: "/uploads/Sketches-From-A-Hunters-Album.jpg"
-author: ""
+author: "Ivan Sergeevich Turgenev"
 year:
 rank:
 status: "read"

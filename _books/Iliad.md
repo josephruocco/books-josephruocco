@@ -1,10 +1,11 @@
 ---
 title: The Iliad
+pages: 564
 date: 2023-11-28 02:42:00 Z
 assets: "/uploads/iliad.jpg"
 layout: book
 cover: "/uploads/iliad.jpg"
-author: ""
+author: "Όμηρος"
 year:
 rank:
 status: "read"

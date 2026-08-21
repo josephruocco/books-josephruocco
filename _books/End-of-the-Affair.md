@@ -1,10 +1,11 @@
 ---
 title: End Of The Affair
+pages: 644
 date: 2023-11-27 02:42:00 Z
 assets: "/uploads/end-of-the-affair.jpg"
 layout: book
 cover: "/uploads/end-of-the-affair.jpg"
-author: ""
+author: "Eleanor M. Gates"
 year:
 rank:
 status: "read"
