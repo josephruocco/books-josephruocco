@@ -1,5 +1,6 @@
 ---
 title: The Poems of Emily Dickinson
+pages: 255
 date: 2026-02-27 00:00:00 UTC
 assets: https://covers.openlibrary.org/b/olid/OL360774M-L.jpg
 layout: book

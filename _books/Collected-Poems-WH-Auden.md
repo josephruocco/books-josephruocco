@@ -1,5 +1,6 @@
 ---
 title: Collected Poems
+pages: 351
 date: 2026-02-27 00:00:00 UTC
 assets: https://covers.openlibrary.org/b/olid/OL4884386M-L.jpg
 layout: book

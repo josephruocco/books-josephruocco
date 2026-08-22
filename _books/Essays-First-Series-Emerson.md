@@ -1,5 +1,6 @@
 ---
 title: Essays (First Series)
+pages: 376
 date: 2026-02-27 00:00:00 UTC
 assets: https://covers.openlibrary.org/b/olid/OL23436753M-L.jpg
 layout: book
