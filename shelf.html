@@ -70,48 +70,65 @@ permalink: /shelf/
   .shelf-heading { margin-bottom: .3em; }
   .shelf-intro { max-width: 34em; margin-bottom: 1.4em; line-height: 1.5; }
 
-  /* Themes mirror the iOS app's moods. Everything below reads from these. */
+  /* The web shelf uses the same proportions and materials as the iOS shelf. */
   .shelf-case[data-theme="classic"] {
     --back: linear-gradient(#20180f, #0f0b07);
     --board: linear-gradient(to bottom, #6b4a2d, #4c3320);
     --case: #2a1e13; --edge: rgba(0,0,0,.35); --drop: rgba(0,0,0,.45);
   }
   .shelf-case[data-theme="oak"] {
-    --back: linear-gradient(#1a1209, #0a0704);
-    --board: linear-gradient(to bottom, #4a3115, #2b1c0c);
-    --case: #1c1409; --edge: rgba(0,0,0,.5); --drop: rgba(0,0,0,.6);
+    --case: #172219; --edge: rgba(0,0,0,.55); --drop: rgba(0,0,0,.6);
+    background-image: url('/assets/images/woodwork/dark-oak.png');
+    background-size: 114% 100%;
+    background-position: center;
+    background-repeat: no-repeat;
   }
   .shelf-case[data-theme="builtin"] {
-    --back: linear-gradient(#d9d6cd, #c3bfb4);
-    --board: linear-gradient(to bottom, #fbfaf7, #ddd9cf);
-    --case: #eae7df; --edge: rgba(0,0,0,.22); --drop: rgba(0,0,0,.28);
+    --case: #d9d4c8; --edge: rgba(0,0,0,.22); --drop: rgba(0,0,0,.28);
+    background-image: url('/assets/images/woodwork/white-built-in.png');
+    background-size: 105.5% 100%;
+    background-position: center;
+    background-repeat: no-repeat;
   }
   .shelf-case[data-theme="artsy"] {
-    --back: linear-gradient(#f0e9db, #e2d9c6);
+    --back:
+      repeating-linear-gradient(0deg, rgba(80,66,44,.045) 0 1px, transparent 1px 5px),
+      linear-gradient(#f4efe4, #e7decb);
     --board: linear-gradient(to bottom, #cbb188, #b2966b);
     --case: #efe7d7; --edge: rgba(60,50,40,.45); --drop: rgba(90,75,60,.28);
   }
 
   .shelf-case {
     width: 100%;
-    padding: 10px;
-    border-radius: 8px;
+    max-width: 760px;
+    aspect-ratio: 1;
+    position: relative;
+    box-sizing: border-box;
+    border-radius: 28px;
     overflow: hidden;
-    background: var(--case);
+    background-color: var(--case);
     box-shadow: 0 10px 30px rgba(0,0,0,.22);
   }
 
-  /* overflow guard: a mis-measured row should clip, never spill out of the case */
+  .shelf-case[data-theme="oak"],
+  .shelf-case[data-theme="builtin"] { border-radius: 36px; }
+
   .shelf-row {
-    position: relative; display: flex; align-items: flex-end; overflow: hidden;
-    background: var(--back);
+    position: absolute;
+    display: flex;
+    align-items: flex-end;
+    box-sizing: border-box;
+    overflow: hidden;
   }
-  .shelf-row + .shelf-row { margin-top: 2px; }
+  .shelf-case[data-theme="classic"] .shelf-row,
+  .shelf-case[data-theme="artsy"] .shelf-row { background: var(--back); }
   .shelf-row .board {
     position: absolute; left: 0; right: 0; bottom: 0; height: 9px;
     background: var(--board);
     box-shadow: 0 3px 6px var(--drop);
   }
+  .shelf-case[data-theme="oak"] .board,
+  .shelf-case[data-theme="builtin"] .board { display: none; }
 
   .shelf-themes {
     display: flex; flex-wrap: wrap; gap: .4em;
@@ -128,7 +145,6 @@ permalink: /shelf/
   .spine {
     position: relative;
     box-sizing: border-box;
-    margin-right: 2px;
     border-radius: 2px;
     border: .5px solid var(--edge);
     box-shadow: 2px 0 3px var(--drop);
@@ -140,6 +156,13 @@ permalink: /shelf/
   }
   .spine:hover, .spine:focus-visible { transform: translateY(-7px); outline: none; }
   .spine.is-active { transform: translateY(-11px); }
+  .spine, .pile .flat, .book-cover {
+    background-blend-mode: soft-light, luminosity;
+  }
+  .shelf-case[data-theme="artsy"] .spine {
+    background-image: repeating-linear-gradient(0deg, rgba(255,255,255,.1) 0 1px, transparent 1px 4px) !important;
+    box-shadow: 1px 0 2px rgba(75,58,40,.26);
+  }
 
   /* Vertical type, the way a real spine reads. */
   .spine .label {
@@ -154,11 +177,14 @@ permalink: /shelf/
     max-height: 78%;
     pointer-events: none;
   }
+  .spine.type-modern .label { font-family: "Avenir Next", "Helvetica Neue", sans-serif; letter-spacing: .02em; }
+  .spine.type-scholarly .label { font-family: Menlo, Monaco, monospace; letter-spacing: 0; }
+  .spine.type-literary .label { font-family: Baskerville, Georgia, serif; font-style: italic; text-transform: none; }
   .spine .rule {
     position: absolute; left: 3px; right: 3px; height: 1px; opacity: .38;
   }
 
-  .pile { display: flex; flex-direction: column; justify-content: flex-end; flex: none; margin-right: 2px; }
+  .pile { display: flex; flex-direction: column; justify-content: flex-end; flex: none; }
   .pile .flat {
     box-sizing: border-box;
     border-radius: 2px;
@@ -178,6 +204,27 @@ permalink: /shelf/
   }
   .pile .flat > span { overflow: hidden; text-overflow: ellipsis; }
 
+  .book-cover {
+    position: relative;
+    flex: none;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 8% 7%;
+    border: .5px solid var(--edge);
+    border-radius: 3px;
+    box-shadow: 3px 2px 5px var(--drop);
+    overflow: hidden;
+    cursor: pointer;
+  }
+  .book-cover:hover, .book-cover:focus-visible { transform: translateY(-7px); outline: none; }
+  .book-cover .cover-author { font: 600 .66em/1.15 Georgia, serif; letter-spacing: .08em; text-transform: uppercase; }
+  .book-cover .cover-rule { width: 42%; height: 1px; margin: 8% 0; opacity: .42; background: currentColor; }
+  .book-cover .cover-title { font: 400 1em/1.08 Georgia, serif; }
+  .book-cover .cover-mark { margin-top: auto; opacity: .62; }
+
   .shelf-bar {
     display: flex; align-items: baseline; gap: 1em;
     margin-top: 1em; flex-wrap: wrap;
@@ -194,6 +241,9 @@ permalink: /shelf/
 
   @media (max-width: 600px) {
     .spine .label { font-size: 9px !important; }
+    .shelf-case { border-radius: 18px; }
+    .shelf-case[data-theme="oak"], .shelf-case[data-theme="builtin"] { border-radius: 22px; }
+    .book-cover { padding: 7% 5%; }
   }
 </style>
 
@@ -221,11 +271,10 @@ permalink: /shelf/
     [.69,.54,.24],[.56,.23,.23]
   ];
 
-  var SCALE = 1.7;                 // widget points -> web pixels
-  var ROW_H = 118 * SCALE;
-  var BOARD = 10;
+  var SCALE = 1;
   var LEAN = 9;
   var COS = Math.cos(LEAN * Math.PI / 180), SIN = Math.sin(LEAN * Math.PI / 180);
+  var LAYOUTS = ['balanced', 'stacked', 'gallery'];
 
   // Same stable hash as the app: colour and height must not change between
   // renders, and JS string hashing isn't standardised.
@@ -250,7 +299,19 @@ permalink: /shelf/
   function spineWidth(b) { return Math.min(44, Math.max(9, b.pages * 0.075)) * SCALE; }
   function heightFactor(b) { return 0.84 + 0.16 * ((hashOf(b, 1) % 10000) / 10000); }
   function clothOf(b) { return hashOf(b, 2) % PALETTE.length; }
+  function textureOf(b) { return (hashOf(b, 3) % 12) + 1; }
   function shortTitle(b) { return b.title.split(':')[0]; }
+  function typographyOf(b) {
+    var text = (b.title + ' ' + (b.author || '')).toLowerCase();
+    if (/meditations|plato|aristotle|virgil|homer|aurelius|dickens|tolstoy|woolf|eliot|odyssey|middlemarch/.test(text)) return 'classic';
+    if (/habit|mindset|success|self|productivity|guide|how to|startup|improve|leadership|daily|work/.test(text)) return 'modern';
+    if (/analysis|statistics|calculus|mathematics|probability|physics|econometrics|journal|science|theory|models/.test(text)) return 'scholarly';
+    return 'literary';
+  }
+  function textureURL(book) {
+    var n = textureOf(book);
+    return "url('/assets/images/woodwork/spine-" + (n < 10 ? '0' : '') + n + ".png')";
+  }
 
   // SplitMix32 — a seeded RNG so a given hour always draws the same shelf.
   function rngFrom(seed) {
@@ -281,7 +342,7 @@ permalink: /shelf/
       var used = 0, picked = [];
       var pool = shuffled(books, rand);
       for (var i = 0; i < pool.length; i++) {
-        var next = used + spineWidth(pool[i]) + 2;
+        var next = used + spineWidth(pool[i]) + 1.5 * SCALE;
         if (next > width) continue;
         picked.push(pool[i]);
         used = next;
@@ -293,14 +354,15 @@ permalink: /shelf/
     return best;
   }
 
-  function buildRow(pool, width, spineSpace, seed) {
+  function buildRow(pool, width, spineSpace, seed, variant) {
     var rand = rngFrom(seed);
     var items = [], remaining = pool.slice();
 
-    // A flat pile is as wide as the books are tall, so narrow screens skip it.
+    var pileChance = variant === 'stacked' ? 0.9 : (variant === 'gallery' ? 0.2 : 0.5);
     var pile = null;
-    if (width >= 420 && rand() < 0.5) {
-      var want = 2 + Math.floor(rand() * 3), picked = [], stackH = 0;
+    if (width >= 240 * SCALE && rand() < pileChance) {
+      var want = variant === 'stacked' ? 3 + Math.floor(rand() * 2) : 2 + Math.floor(rand() * 2);
+      var picked = [], stackH = 0;
       for (var i = 0; i < remaining.length && picked.length < want; i++) {
         var b = remaining[i];
         var flat = spineSpace * heightFactor(b);
@@ -317,11 +379,11 @@ permalink: /shelf/
       return spineSpace * heightFactor(b);
     })) : 0;
 
-    // Leave slack most of the time, or the last book has nothing to lean into.
-    // The allowance has to cover the footprint a tilted book gains
-    // (height * sin) or the row overflows once the pile is appended.
-    var wantsLean = rand() < 0.7;
-    var slack = wantsLean ? spineSpace * SIN + 12 + rand() * 20 : 0;
+    var leanChance = variant === 'stacked' ? 0.3 : (variant === 'gallery' ? 0.9 : 0.7);
+    var slackBase = variant === 'stacked' ? 8 : (variant === 'gallery' ? 14 : 16);
+    var slackRange = variant === 'stacked' ? 8 : (variant === 'gallery' ? 10 : 14);
+    var wantsLean = rand() < leanChance;
+    var slack = wantsLean ? spineSpace * SIN + (slackBase + rand() * slackRange) * SCALE : 0;
     var standing = bestFit(remaining, Math.max(0, width - pileWidth - slack - 4), seed);
 
     standing.forEach(function (b) { items.push({ kind: 'upright', book: b }); });
@@ -330,24 +392,28 @@ permalink: /shelf/
     return items;
   }
 
-  function spineEl(book, height, leaning) {
+  function spineEl(book, height, leaning, options) {
+    options = options || {};
     var c = clothOf(book);
     var light = luminance(c) > 0.5;
     var ink = light ? 'rgba(46,33,23,.92)' : 'rgba(237,227,199,.92)';
-    var w = spineWidth(book);
+    var w = spineWidth(book) * (options.widthScale || 1);
 
-    var el = document.createElement(leaning ? 'div' : 'div');
-    el.className = 'spine';
+    var el = document.createElement('div');
+    el.className = 'spine type-' + typographyOf(book);
     el.tabIndex = 0;
     el.style.width = w + 'px';
     el.style.height = (leaning ? height * 0.97 : height) + 'px';
-    el.style.background = 'linear-gradient(to right, ' + rgb(c, .06) + ', ' + rgb(c) + ' 45%, ' + rgb(c, -.26) + ')';
+    el.style.marginRight = options.framed ? '0' : (1.5 * SCALE) + 'px';
+    el.style.backgroundColor = rgb(c);
+    el.style.backgroundImage = 'linear-gradient(to right, rgba(255,255,255,.16), transparent 46%, rgba(0,0,0,.28)), ' + textureURL(book);
+    el.style.backgroundSize = '100% 100%, cover';
+    el.style.backgroundPosition = 'center';
 
     if (leaning) {
       el.style.transformOrigin = 'bottom left';
       el.style.transform = 'rotate(' + LEAN + 'deg)';
-      // Rotation doesn't change layout width, so reserve the real footprint.
-      el.style.marginRight = (w * COS + height * SIN - w + 2) + 'px';
+      el.style.marginRight = (w * COS + height * SIN - w + 1.5 * SCALE) + 'px';
     }
 
     [0.12, 0.16, 0.84].forEach(function (t) {
@@ -363,16 +429,19 @@ permalink: /shelf/
       label.className = 'label';
       label.textContent = shortTitle(book);
       label.style.color = ink;
-      label.style.fontSize = Math.min(13, Math.max(8, w * 0.40)) + 'px';
+      label.style.fontSize = Math.min(13 * SCALE, Math.max(8 * SCALE, w * 0.40)) + 'px';
       el.appendChild(label);
     }
     wire(el, book);
     return el;
   }
 
-  function pileEl(books, spineSpace) {
+  function pileEl(books, spineSpace, options) {
+    options = options || {};
     var wrap = document.createElement('div');
     wrap.className = 'pile';
+    wrap.style.width = options.targetWidth ? options.targetWidth + 'px' : 'auto';
+    wrap.style.marginRight = options.framed ? '0' : (1.5 * SCALE) + 'px';
     books.forEach(function (book) {
       var c = clothOf(book);
       var light = luminance(c) > 0.5;
@@ -381,10 +450,12 @@ permalink: /shelf/
       flat.className = 'flat';
       flat.tabIndex = 0;
       flat.style.width = (spineSpace * heightFactor(book)) + 'px';
-      flat.style.height = spineWidth(book) + 'px';
-      flat.style.background = 'linear-gradient(to bottom, ' + rgb(c, .06) + ', ' + rgb(c) + ' 45%, ' + rgb(c, -.26) + ')';
+      flat.style.height = (spineWidth(book) * (options.thicknessScale || 1)) + 'px';
+      flat.style.backgroundColor = rgb(c);
+      flat.style.backgroundImage = 'linear-gradient(to bottom, rgba(255,255,255,.16), transparent 46%, rgba(0,0,0,.28)), ' + textureURL(book);
+      flat.style.backgroundSize = '100% 100%, cover';
       flat.style.color = ink;
-      flat.style.fontSize = Math.min(12, Math.max(7, spineWidth(book) * 0.42)) + 'px';
+      flat.style.fontSize = Math.min(12 * SCALE, Math.max(7 * SCALE, spineWidth(book) * 0.42)) + 'px';
       if (spineWidth(book) >= 18) {
         var t = document.createElement('span');
         t.textContent = shortTitle(book);
@@ -394,6 +465,145 @@ permalink: /shelf/
       wrap.appendChild(flat);
     });
     return wrap;
+  }
+
+  function coverEl(book, width, height) {
+    var c = clothOf(book), light = luminance(c) > 0.5;
+    var ink = light ? 'rgba(46,33,23,.94)' : 'rgba(237,227,199,.94)';
+    var cover = document.createElement('div');
+    cover.className = 'book-cover';
+    cover.tabIndex = 0;
+    cover.style.width = width + 'px';
+    cover.style.height = height + 'px';
+    cover.style.fontSize = Math.max(7, Math.min(16 * SCALE, width * .13)) + 'px';
+    cover.style.color = ink;
+    cover.style.backgroundColor = rgb(c);
+    cover.style.backgroundImage = 'linear-gradient(135deg, rgba(255,255,255,.13), transparent 52%, rgba(0,0,0,.22)), ' + textureURL(book);
+    cover.style.backgroundSize = '100% 100%, cover';
+
+    var author = document.createElement('span');
+    author.className = 'cover-author';
+    author.textContent = book.author || '';
+    var rule = document.createElement('span');
+    rule.className = 'cover-rule';
+    var title = document.createElement('span');
+    title.className = 'cover-title';
+    title.textContent = shortTitle(book);
+    var mark = document.createElement('span');
+    mark.className = 'cover-mark';
+    mark.textContent = '❧';
+    cover.appendChild(author); cover.appendChild(rule); cover.appendChild(title); cover.appendChild(mark);
+    wire(cover, book);
+    return cover;
+  }
+
+  function bookAt(books, index) { return books[index % books.length]; }
+
+  function uprightRun(row, books, indexes, width, rowHeight, heights) {
+    var selected = indexes.map(function (i) { return bookAt(books, i); });
+    var natural = selected.reduce(function (sum, book) { return sum + spineWidth(book); }, 0) || 1;
+    var widthScale = width / natural;
+    selected.forEach(function (book, index) {
+      row.appendChild(spineEl(book, rowHeight * heights[index % heights.length], false, {
+        framed: true,
+        widthScale: widthScale
+      }));
+    });
+  }
+
+  function fittedPile(row, books, indexes, width, rowHeight) {
+    var selected = indexes.map(function (i) { return bookAt(books, i); });
+    var maxFactor = Math.max.apply(null, selected.map(heightFactor));
+    var naturalHeight = selected.reduce(function (sum, book) { return sum + spineWidth(book); }, 0) || 1;
+    row.appendChild(pileEl(selected, width / Math.max(.1, maxFactor), {
+      framed: true,
+      targetWidth: width,
+      thicknessScale: Math.min(.82, rowHeight * .42 / naturalHeight)
+    }));
+  }
+
+  function indexes(from, through) {
+    var result = [];
+    for (var i = from; i <= through; i++) result.push(i);
+    return result;
+  }
+
+  function composition(theme, variant, row) {
+    if (theme === 'oak') {
+      if (variant === 'balanced' && row === 0) return [
+        ['cover',[0],.17,.88], ['run',indexes(1,3),.16,[.78,.86,.81]],
+        ['pile',indexes(4,6),.23], ['run',indexes(7,9),.17,[.84,.77,.88]],
+        ['cover',[10],.18,.84], ['run',indexes(11,12),.09,[.76,.82]]
+      ];
+      if (variant === 'balanced') return [
+        ['run',indexes(0,3),.25,[.88,.82,.91,.79]], ['cover',[4],.21,.92],
+        ['run',indexes(5,12),.54,[.84,.90,.81,.86,.78,.88,.83,.89]]
+      ];
+      if (variant === 'stacked' && row === 0) return [
+        ['pile',indexes(0,2),.24], ['run',indexes(3,7),.32,[.82,.90,.77,.86,.80]],
+        ['cover',[8],.22,.90], ['run',indexes(9,13),.22,[.84,.76,.88,.81,.86]]
+      ];
+      if (variant === 'stacked') return [
+        ['cover',[0],.20,.91], ['run',indexes(1,6),.40,[.84,.90,.79,.87,.81,.88]],
+        ['pile',indexes(7,9),.24], ['run',indexes(10,13),.16,[.78,.86,.82,.89]]
+      ];
+      if (row === 0) return [
+        ['run',indexes(0,4),.34,[.79,.88,.82,.91,.76]], ['cover',[5],.20,.92],
+        ['run',indexes(6,10),.30,[.86,.80,.89,.77,.84]], ['cover',[11],.16,.84]
+      ];
+      return [
+        ['run',indexes(0,3),.24,[.88,.81,.91,.79]], ['cover',[4],.20,.91],
+        ['run',indexes(5,8),.25,[.84,.90,.78,.86]], ['cover',[9],.18,.87],
+        ['run',indexes(10,12),.13,[.82,.89,.77]]
+      ];
+    }
+
+    if (variant === 'balanced' && row === 0) return [
+      ['run',indexes(0,13),1,[.79,.91,.86,.82,.88,.76,.84,.90,.81,.87,.78,.92,.83,.86]]
+    ];
+    if (variant === 'balanced') return [
+      ['pile',indexes(0,2),.25], ['run',indexes(3,14),.75,[.83,.91,.86,.79,.88,.82,.76,.90,.84,.78,.87,.81]]
+    ];
+    if (variant === 'stacked' && row === 0) return [
+      ['pile',indexes(0,2),.27], ['run',indexes(3,14),.73,[.83,.91,.78,.86,.81,.89,.76,.88,.82,.90,.79,.85]]
+    ];
+    if (variant === 'stacked') return [
+      ['run',indexes(0,8),.58,[.80,.89,.84,.77,.91,.82,.87,.79,.86]],
+      ['pile',indexes(9,11),.25], ['run',indexes(12,14),.17,[.88,.81,.85]]
+    ];
+    if (row === 0) return [
+      ['run',indexes(0,8),.60,[.79,.90,.83,.88,.77,.86,.81,.92,.84]],
+      ['pile',indexes(9,11),.24], ['run',indexes(12,14),.16,[.80,.89,.84]]
+    ];
+    return [
+      ['pile',indexes(0,2),.24], ['run',indexes(3,8),.40,[.84,.91,.78,.87,.81,.89]],
+      ['pile',indexes(9,11),.23], ['run',indexes(12,14),.13,[.79,.88,.83]]
+    ];
+  }
+
+  function renderFramedRow(row, books, theme, variant, rowIndex, width, rowHeight) {
+    composition(theme, variant, rowIndex).forEach(function (segment) {
+      var segmentWidth = width * segment[2];
+      if (segment[0] === 'run') uprightRun(row, books, segment[1], segmentWidth, rowHeight, segment[3]);
+      if (segment[0] === 'pile') fittedPile(row, books, segment[1], segmentWidth, rowHeight);
+      if (segment[0] === 'cover') row.appendChild(coverEl(bookAt(books, segment[1][0]), segmentWidth, rowHeight * segment[3]));
+    });
+  }
+
+  function shelfMetrics(theme, width, height) {
+    if (theme === 'oak') return [
+      {x:.058 * width, y:.120 * height, width:.884 * width, height:.327 * height},
+      {x:.058 * width, y:.480 * height, width:.884 * width, height:.400 * height}
+    ];
+    if (theme === 'builtin') return [
+      {x:.083 * width, y:.110 * height, width:.834 * width, height:.388 * height},
+      {x:.083 * width, y:.535 * height, width:.834 * width, height:.355 * height}
+    ];
+    var inset = 5 * SCALE, rowHeight = height / 2;
+    return [
+      {x:inset, y:0, width:width - inset * 2, height:rowHeight},
+      {x:inset, y:rowHeight, width:width - inset * 2, height:rowHeight}
+    ];
   }
 
   var active = null;
@@ -426,44 +636,65 @@ permalink: /shelf/
     if (!library.length) return;
     var width = shelf.clientWidth;
     if (width < 40) return;
+    var height = shelf.clientHeight;
+    SCALE = width / 350;
     shelf.innerHTML = '';
     active = null;
 
-    var rows = 6;
+    var theme = shelf.getAttribute('data-theme') || 'classic';
     var seed = manualSeed !== null ? manualSeed : Math.floor(Date.now() / 3600000);
+    var variant = LAYOUTS[((seed % LAYOUTS.length) + LAYOUTS.length) % LAYOUTS.length];
+    shelf.setAttribute('data-layout', variant);
     var pool = shuffled(library, rngFrom(seed));
-    var spineSpace = ROW_H - BOARD - 10;
+    var metrics = shelfMetrics(theme, width, height);
+    var framed = theme === 'oak' || theme === 'builtin';
     var used = {};
 
-    for (var r = 0; r < rows; r++) {
-      // Prefer books not already shown, but a short list has to repeat rather
-      // than leave half a shelf bare — the packer needs surplus to choose from.
-      var available = pool.filter(function (b) { return !used[b.id]; });
-      var capacity = available.reduce(function (s, b) { return s + spineWidth(b) + 2; }, 0);
-      if (capacity < (width - 12) * 1.5) { available = pool; }
-      var items = buildRow(available, width - 12, spineSpace, seed + r * 7919);
-
+    metrics.forEach(function (metric, r) {
       var row = document.createElement('div');
-      row.className = 'shelf-row';
-      row.style.height = ROW_H + 'px';
-      row.style.padding = '0 6px ' + BOARD + 'px';
+      row.className = 'shelf-row' + (framed ? ' is-framed' : '');
+      row.style.left = metric.x + 'px';
+      row.style.top = metric.y + 'px';
+      row.style.width = metric.width + 'px';
+      row.style.height = metric.height + 'px';
 
-      items.forEach(function (item) {
-        if (item.kind === 'pile') {
-          item.books.forEach(function (b) { used[b.id] = true; });
-          row.appendChild(pileEl(item.books, spineSpace));
-        } else {
-          used[item.book.id] = true;
-          row.appendChild(spineEl(item.book, spineSpace * heightFactor(item.book),
-                                  item.kind === 'leaning'));
-        }
-      });
+      if (framed) {
+        var rowBooks = [];
+        for (var n = 0; n < 16; n++) rowBooks.push(pool[(r * 16 + n) % pool.length]);
+        renderFramedRow(row, rowBooks, theme, variant, r, metric.width, metric.height);
+      } else {
+        var boardHeight = 6 * SCALE;
+        var spineSpace = metric.height - boardHeight - 6 * SCALE;
+        var available = pool.filter(function (book) { return !used[book.id]; });
+        var capacity = available.reduce(function (sum, book) {
+          return sum + spineWidth(book) + 1.5 * SCALE;
+        }, 0);
+        if (capacity < metric.width * 1.5) available = pool;
+        var items = buildRow(available, metric.width, spineSpace, seed + r * 7919, variant);
+        row.style.paddingBottom = boardHeight + 'px';
 
-      var board = document.createElement('div');
-      board.className = 'board';
-      row.appendChild(board);
+        items.forEach(function (item) {
+          if (item.kind === 'pile') {
+            item.books.forEach(function (book) { used[book.id] = true; });
+            row.appendChild(pileEl(item.books, spineSpace));
+          } else {
+            used[item.book.id] = true;
+            row.appendChild(spineEl(item.book, spineSpace * heightFactor(item.book),
+                                    item.kind === 'leaning'));
+          }
+        });
+
+        var board = document.createElement('div');
+        board.className = 'board';
+        board.style.height = boardHeight + 'px';
+        row.appendChild(board);
+      }
+
       shelf.appendChild(row);
-    }
+    });
+
+    var layoutName = variant.charAt(0).toUpperCase() + variant.slice(1);
+    caption.textContent = library.length + ' books on the list · ' + layoutName + ' layout · reshuffles every hour.';
   }
 
   // Theme choice sticks between visits, the way it does in the app.
@@ -479,6 +710,7 @@ permalink: /shelf/
       b.classList.toggle('is-on', b.dataset.theme === name);
     });
     try { localStorage.setItem('shelfTheme', name); } catch (e) {}
+    render();
   }
 
   themeBar.addEventListener('click', function (e) {
@@ -488,7 +720,6 @@ permalink: /shelf/
 
   shuffleBtn.addEventListener('click', function () {
     manualSeed = Math.floor(Math.random() * 2147483647);
-    caption.textContent = 'A fresh handful. Tap a spine to see what it is.';
     render();
   });
 
