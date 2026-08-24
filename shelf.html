@@ -78,17 +78,19 @@ permalink: /shelf/
   }
   .shelf-case[data-theme="oak"] {
     --case: #172219; --edge: rgba(0,0,0,.55); --drop: rgba(0,0,0,.6);
-    background-image: url('/assets/images/woodwork/dark-oak.png');
-    background-size: 114% 100%;
-    background-position: center;
-    background-repeat: no-repeat;
+    --frame: linear-gradient(90deg, #3a1d0d, #70401e 38%, #4d2812 72%, #2f170b);
+    --shelf-board: linear-gradient(to bottom, #7a4924, #4b2712 55%, #2c160a);
+    background:
+      repeating-linear-gradient(7deg, rgba(255,255,255,.018) 0 1px, transparent 1px 6px),
+      radial-gradient(circle at 45% 18%, #26342a, #172219 58%, #0d1510);
   }
   .shelf-case[data-theme="builtin"] {
     --case: #d9d4c8; --edge: rgba(0,0,0,.22); --drop: rgba(0,0,0,.28);
-    background-image: url('/assets/images/woodwork/white-built-in.png');
-    background-size: 105.5% 100%;
-    background-position: center;
-    background-repeat: no-repeat;
+    --frame: repeating-linear-gradient(0deg, rgba(113,94,65,.05) 0 1px, transparent 1px 5px), linear-gradient(90deg, #d5cbb9, #f1eadc 45%, #d8cfbe);
+    --shelf-board: linear-gradient(to bottom, #f2ecdf, #d9cfbc 58%, #b8aa92);
+    background:
+      repeating-linear-gradient(0deg, rgba(105,90,65,.035) 0 1px, transparent 1px 5px),
+      linear-gradient(#ddd7ca, #d1c9b9);
   }
   .shelf-case[data-theme="artsy"] {
     --back:
@@ -100,8 +102,8 @@ permalink: /shelf/
 
   .shelf-case {
     width: 100%;
-    max-width: 760px;
-    aspect-ratio: 1;
+    max-width: none;
+    aspect-ratio: 1 / 3;
     position: relative;
     box-sizing: border-box;
     border-radius: 28px;
@@ -113,8 +115,41 @@ permalink: /shelf/
   .shelf-case[data-theme="oak"],
   .shelf-case[data-theme="builtin"] { border-radius: 36px; }
 
+  .shelf-case[data-theme="oak"]::before,
+  .shelf-case[data-theme="builtin"]::before {
+    content: "";
+    position: absolute;
+    z-index: 0;
+    inset: 1.5% 4.5%;
+    border-radius: 30px;
+    border: clamp(10px, 2vw, 22px) solid transparent;
+    background:
+      linear-gradient(#21140c, #150d08) padding-box,
+      var(--frame) border-box;
+    box-shadow:
+      inset 0 10px 24px rgba(0,0,0,.66),
+      inset 10px 0 16px rgba(0,0,0,.35),
+      inset -10px 0 16px rgba(0,0,0,.35),
+      0 12px 24px rgba(0,0,0,.35);
+  }
+  .shelf-case[data-theme="builtin"]::before {
+    inset: 1.2% 3.7%;
+    border-width: clamp(14px, 2.8vw, 32px);
+    border-radius: 34px;
+    background:
+      linear-gradient(#7d725c, #695f4c) padding-box,
+      var(--frame) border-box;
+    box-shadow:
+      inset 0 12px 26px rgba(32,24,15,.4),
+      inset 10px 0 18px rgba(32,24,15,.22),
+      inset -10px 0 18px rgba(32,24,15,.22),
+      0 12px 24px rgba(67,54,37,.24),
+      0 0 0 4px rgba(246,241,231,.55);
+  }
+
   .shelf-row {
     position: absolute;
+    z-index: 1;
     display: flex;
     align-items: flex-end;
     box-sizing: border-box;
@@ -128,7 +163,10 @@ permalink: /shelf/
     box-shadow: 0 3px 6px var(--drop);
   }
   .shelf-case[data-theme="oak"] .board,
-  .shelf-case[data-theme="builtin"] .board { display: none; }
+  .shelf-case[data-theme="builtin"] .board {
+    background: var(--shelf-board);
+    box-shadow: 0 4px 8px var(--drop), inset 0 1px rgba(255,255,255,.24);
+  }
 
   .shelf-themes {
     display: flex; flex-wrap: wrap; gap: .4em;
@@ -240,7 +278,6 @@ permalink: /shelf/
   .shelf-caption a { text-decoration: underline; }
 
   @media (max-width: 600px) {
-    .spine .label { font-size: 9px !important; }
     .shelf-case { border-radius: 18px; }
     .shelf-case[data-theme="oak"], .shelf-case[data-theme="builtin"] { border-radius: 22px; }
     .book-cover { padding: 7% 5%; }
@@ -429,7 +466,9 @@ permalink: /shelf/
       label.className = 'label';
       label.textContent = shortTitle(book);
       label.style.color = ink;
-      label.style.fontSize = Math.min(13 * SCALE, Math.max(8 * SCALE, w * 0.40)) + 'px';
+      var titleLength = Math.max(1, shortTitle(book).length);
+      var fittedSize = height * .56 / titleLength;
+      label.style.fontSize = Math.max(4.5, Math.min(11 * SCALE, w * .3, fittedSize)) + 'px';
       el.appendChild(label);
     }
     wire(el, book);
@@ -455,7 +494,10 @@ permalink: /shelf/
       flat.style.backgroundImage = 'linear-gradient(to bottom, rgba(255,255,255,.16), transparent 46%, rgba(0,0,0,.28)), ' + textureURL(book);
       flat.style.backgroundSize = '100% 100%, cover';
       flat.style.color = ink;
-      flat.style.fontSize = Math.min(12 * SCALE, Math.max(7 * SCALE, spineWidth(book) * 0.42)) + 'px';
+      var flatTitle = shortTitle(book);
+      var flatWidth = spineSpace * heightFactor(book);
+      var flatFit = flatWidth / Math.max(1, flatTitle.length * .62);
+      flat.style.fontSize = Math.max(5.5, Math.min(9 * SCALE, spineWidth(book) * .3, flatFit)) + 'px';
       if (spineWidth(book) >= 18) {
         var t = document.createElement('span');
         t.textContent = shortTitle(book);
@@ -475,7 +517,7 @@ permalink: /shelf/
     cover.tabIndex = 0;
     cover.style.width = width + 'px';
     cover.style.height = height + 'px';
-    cover.style.fontSize = Math.max(7, Math.min(16 * SCALE, width * .13)) + 'px';
+    cover.style.fontSize = Math.max(7, Math.min(11 * SCALE, width * .085)) + 'px';
     cover.style.color = ink;
     cover.style.backgroundColor = rgb(c);
     cover.style.backgroundImage = 'linear-gradient(135deg, rgba(255,255,255,.13), transparent 52%, rgba(0,0,0,.22)), ' + textureURL(book);
@@ -591,19 +633,28 @@ permalink: /shelf/
   }
 
   function shelfMetrics(theme, width, height) {
-    if (theme === 'oak') return [
-      {x:.058 * width, y:.120 * height, width:.884 * width, height:.327 * height},
-      {x:.058 * width, y:.480 * height, width:.884 * width, height:.400 * height}
-    ];
-    if (theme === 'builtin') return [
-      {x:.083 * width, y:.110 * height, width:.834 * width, height:.388 * height},
-      {x:.083 * width, y:.535 * height, width:.834 * width, height:.355 * height}
-    ];
-    var inset = 5 * SCALE, rowHeight = height / 2;
-    return [
-      {x:inset, y:0, width:width - inset * 2, height:rowHeight},
-      {x:inset, y:rowHeight, width:width - inset * 2, height:rowHeight}
-    ];
+    var metrics = [];
+    if (theme === 'oak' || theme === 'builtin') {
+      var inset = (theme === 'oak' ? .064 : .074) * width;
+      var top = .022 * height;
+      var usableHeight = height - top * 2;
+      var framedRowHeight = usableHeight / 6;
+      for (var framedRow = 0; framedRow < 6; framedRow++) {
+        metrics.push({
+          x: inset,
+          y: top + framedRow * framedRowHeight,
+          width: width - inset * 2,
+          height: framedRowHeight
+        });
+      }
+      return metrics;
+    }
+
+    var inset = 5 * SCALE, rowHeight = height / 6;
+    for (var row = 0; row < 6; row++) {
+      metrics.push({x:inset, y:row * rowHeight, width:width - inset * 2, height:rowHeight});
+    }
+    return metrics;
   }
 
   var active = null;
@@ -658,12 +709,14 @@ permalink: /shelf/
       row.style.width = metric.width + 'px';
       row.style.height = metric.height + 'px';
 
+      var boardHeight = (framed ? 5 : 6) * SCALE;
+      row.style.paddingBottom = boardHeight + 'px';
+
       if (framed) {
         var rowBooks = [];
         for (var n = 0; n < 16; n++) rowBooks.push(pool[(r * 16 + n) % pool.length]);
-        renderFramedRow(row, rowBooks, theme, variant, r, metric.width, metric.height);
+        renderFramedRow(row, rowBooks, theme, variant, r % 2, metric.width, metric.height);
       } else {
-        var boardHeight = 6 * SCALE;
         var spineSpace = metric.height - boardHeight - 6 * SCALE;
         var available = pool.filter(function (book) { return !used[book.id]; });
         var capacity = available.reduce(function (sum, book) {
@@ -671,8 +724,6 @@ permalink: /shelf/
         }, 0);
         if (capacity < metric.width * 1.5) available = pool;
         var items = buildRow(available, metric.width, spineSpace, seed + r * 7919, variant);
-        row.style.paddingBottom = boardHeight + 'px';
-
         items.forEach(function (item) {
           if (item.kind === 'pile') {
             item.books.forEach(function (book) { used[book.id] = true; });
@@ -684,11 +735,12 @@ permalink: /shelf/
           }
         });
 
-        var board = document.createElement('div');
-        board.className = 'board';
-        board.style.height = boardHeight + 'px';
-        row.appendChild(board);
       }
+
+      var board = document.createElement('div');
+      board.className = 'board';
+      board.style.height = boardHeight + 'px';
+      row.appendChild(board);
 
       shelf.appendChild(row);
     });
