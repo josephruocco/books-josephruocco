@@ -1,5 +1,5 @@
 ---
-title: The Shelf
+title: WoodWork
 permalink: /shelf/
 ---
 <!DOCTYPE html>
@@ -9,7 +9,7 @@ permalink: /shelf/
     <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-    <title>The Shelf</title>
+    <title>WoodWork</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
@@ -28,8 +28,7 @@ permalink: /shelf/
           <a class="books-site-title" href="/">Joseph Ruocco</a>
 
           <nav class="books-nav" aria-label="Primary">
-            <a href="/books/">Recommended Reading</a>
-            <a href="/shelf/" class="active">The Shelf</a>
+            <a href="/shelf/" class="active">WoodWork</a>
             <a href="/about/">About</a>
             <a href="/projects/">Projects</a>
           </nav>
@@ -39,7 +38,7 @@ permalink: /shelf/
       <!-- Title card -->
       <section class="books-title-card" aria-labelledby="shelf-page-title">
         <div class="books-title-card-inner">
-          <h1 id="shelf-page-title">The Shelf</h1>
+          <h1 id="shelf-page-title">WoodWork</h1>
           <p>Every book, drawn as a physical shelf — each spine as thick as the book really is.</p>
         </div>
       </section>
@@ -169,16 +168,37 @@ permalink: /shelf/
 
   /* Vertical type, the way a real spine reads. */
   .spine .label {
+    position: absolute;
+    top: 13%;
+    bottom: 19%;
+    left: 4px;
+    right: 4px;
     writing-mode: vertical-rl;
     text-orientation: mixed;
     font-family: Georgia, "Times New Roman", serif;
     font-weight: 600;
     letter-spacing: .025em;
     text-transform: uppercase;
-    white-space: nowrap;
+    white-space: normal;
     overflow: hidden;
-    text-overflow: ellipsis;
-    max-height: 78%;
+    text-overflow: clip;
+    line-height: 1.05;
+    text-align: center;
+    pointer-events: none;
+  }
+  .spine .spine-author {
+    position: absolute;
+    left: 3px;
+    right: 3px;
+    bottom: 5.5%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-align: center;
+    text-transform: uppercase;
+    font-family: "Avenir Next", "Helvetica Neue", sans-serif;
+    font-weight: 700;
+    letter-spacing: .04em;
+    line-height: 1;
     pointer-events: none;
   }
   .spine.type-modern .label { font-family: "Avenir Next", "Helvetica Neue", sans-serif; letter-spacing: .02em; }
@@ -204,9 +224,9 @@ permalink: /shelf/
     letter-spacing: .04em;
     text-transform: uppercase;
     white-space: nowrap;
-    text-overflow: ellipsis;
+    text-overflow: clip;
   }
-  .pile .flat > span { overflow: hidden; text-overflow: ellipsis; }
+  .pile .flat > span { overflow: hidden; text-overflow: clip; }
 
   .book-cover {
     position: relative;
@@ -304,21 +324,19 @@ permalink: /shelf/
   function clothOf(b) { return hashOf(b, 2) % PALETTE.length; }
   function textureOf(b) { return (hashOf(b, 3) % 12) + 1; }
   function shortTitle(b) { return b.title.split(':')[0]; }
-  function compactTitle(book, maxLength) {
-    var title = shortTitle(book)
+  function coreTitle(book) {
+    return shortTitle(book)
       .replace(/\s*\([^)]*\)\s*/g, ' ')
+      .replace(/\s+[—–-]\s+.*$/, '')
       .replace(/\s+/g, ' ')
       .trim();
-    if (title.length <= maxLength) return title;
-
-    var words = title.split(' '), result = '';
-    for (var i = 0; i < words.length; i++) {
-      var candidate = result ? result + ' ' + words[i] : words[i];
-      if (candidate.length > maxLength - 1) break;
-      result = candidate;
-    }
-    if (!result) result = title.slice(0, maxLength - 1);
-    return result + '…';
+  }
+  function authorSurname(book) {
+    var author = (book.author || '').trim();
+    if (!author) return '';
+    if (author.indexOf(',') >= 0) return author.split(',')[0].trim();
+    var words = author.split(/\s+/);
+    return words[words.length - 1];
   }
   function typographyOf(b) {
     var text = (b.title + ' ' + (b.author || '')).toLowerCase();
@@ -446,15 +464,27 @@ permalink: /shelf/
     if (w >= 20) {
       var label = document.createElement('span');
       label.className = 'label';
-      var maxLabelLength = Math.max(10, Math.floor(height / (4 + 2.5 * SCALE)));
-      var labelTitle = compactTitle(book, maxLabelLength);
+      var labelTitle = coreTitle(book);
       label.textContent = labelTitle;
       label.style.color = ink;
       label.style.textShadow = light ? '0 1px rgba(255,255,255,.3)' : '0 1px 2px rgba(0,0,0,.8)';
       var titleLength = Math.max(1, labelTitle.length);
-      var fittedSize = height * .8 / titleLength;
-      label.style.fontSize = Math.max(7, Math.min(13 * SCALE, w * .34, fittedSize)) + 'px';
+      var titleArea = height * .66 * Math.max(8, w - 8);
+      var fittedSize = Math.sqrt(titleArea / (titleLength * 1.25));
+      label.style.fontSize = Math.max(6, Math.min(13 * SCALE, w * .34, fittedSize)) + 'px';
       el.appendChild(label);
+    }
+
+    var surname = authorSurname(book);
+    if (surname && w >= 18) {
+      var author = document.createElement('span');
+      author.className = 'spine-author';
+      author.textContent = surname;
+      author.style.color = ink;
+      author.style.textShadow = light ? '0 1px rgba(255,255,255,.28)' : '0 1px 1px rgba(0,0,0,.8)';
+      var authorFit = (w - 6) / Math.max(1, surname.length * .63);
+      author.style.fontSize = Math.max(4.5, Math.min(7 * SCALE, w * .16, authorFit)) + 'px';
+      el.appendChild(author);
     }
     el.setAttribute('aria-label', book.title + (book.author ? ', ' + book.author : ''));
     wire(el, book);
@@ -480,10 +510,10 @@ permalink: /shelf/
       flat.style.backgroundImage = 'linear-gradient(to bottom, rgba(255,255,255,.16), transparent 46%, rgba(0,0,0,.28)), ' + textureURL(book);
       flat.style.backgroundSize = '100% 100%, cover';
       flat.style.color = ink;
-      var flatTitle = compactTitle(book, 34);
+      var flatTitle = coreTitle(book);
       var flatWidth = spineSpace * heightFactor(book);
       var flatFit = flatWidth / Math.max(1, flatTitle.length * .62);
-      flat.style.fontSize = Math.max(7.5, Math.min(10 * SCALE, spineWidth(book) * .34, flatFit)) + 'px';
+      flat.style.fontSize = Math.max(5, Math.min(10 * SCALE, spineWidth(book) * .34, flatFit)) + 'px';
       flat.style.fontWeight = '600';
       flat.style.textShadow = light ? '0 1px rgba(255,255,255,.3)' : '0 1px 2px rgba(0,0,0,.75)';
       if (spineWidth(book) >= 18) {
@@ -519,7 +549,7 @@ permalink: /shelf/
     rule.className = 'cover-rule';
     var title = document.createElement('span');
     title.className = 'cover-title';
-    title.textContent = shortTitle(book);
+    title.textContent = coreTitle(book);
     var mark = document.createElement('span');
     mark.className = 'cover-mark';
     mark.textContent = '❧';
