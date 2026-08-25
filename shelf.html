@@ -78,19 +78,11 @@ permalink: /shelf/
   }
   .shelf-case[data-theme="oak"] {
     --case: #172219; --edge: rgba(0,0,0,.55); --drop: rgba(0,0,0,.6);
-    --frame: linear-gradient(90deg, #3a1d0d, #70401e 38%, #4d2812 72%, #2f170b);
-    --shelf-board: linear-gradient(to bottom, #7a4924, #4b2712 55%, #2c160a);
-    background:
-      repeating-linear-gradient(7deg, rgba(255,255,255,.018) 0 1px, transparent 1px 6px),
-      radial-gradient(circle at 45% 18%, #26342a, #172219 58%, #0d1510);
+    background: #172219 url('/assets/images/woodwork/dark-oak-six.webp') center / 124% 100% no-repeat;
   }
   .shelf-case[data-theme="builtin"] {
     --case: #d9d4c8; --edge: rgba(0,0,0,.22); --drop: rgba(0,0,0,.28);
-    --frame: repeating-linear-gradient(0deg, rgba(113,94,65,.05) 0 1px, transparent 1px 5px), linear-gradient(90deg, #d5cbb9, #f1eadc 45%, #d8cfbe);
-    --shelf-board: linear-gradient(to bottom, #f2ecdf, #d9cfbc 58%, #b8aa92);
-    background:
-      repeating-linear-gradient(0deg, rgba(105,90,65,.035) 0 1px, transparent 1px 5px),
-      linear-gradient(#ddd7ca, #d1c9b9);
+    background: #d9d4c8 url('/assets/images/woodwork/white-built-in-six.webp') center / 134% 100% no-repeat;
   }
   .shelf-case[data-theme="artsy"] {
     --back:
@@ -118,34 +110,7 @@ permalink: /shelf/
 
   .shelf-case[data-theme="oak"]::before,
   .shelf-case[data-theme="builtin"]::before {
-    content: "";
-    position: absolute;
-    z-index: 0;
-    inset: 1.5% 4.5%;
-    border-radius: 30px;
-    border: clamp(10px, 2vw, 22px) solid transparent;
-    background:
-      linear-gradient(#21140c, #150d08) padding-box,
-      var(--frame) border-box;
-    box-shadow:
-      inset 0 10px 24px rgba(0,0,0,.66),
-      inset 10px 0 16px rgba(0,0,0,.35),
-      inset -10px 0 16px rgba(0,0,0,.35),
-      0 12px 24px rgba(0,0,0,.35);
-  }
-  .shelf-case[data-theme="builtin"]::before {
-    inset: 1.2% 3.7%;
-    border-width: clamp(14px, 2.8vw, 32px);
-    border-radius: 34px;
-    background:
-      linear-gradient(#7d725c, #695f4c) padding-box,
-      var(--frame) border-box;
-    box-shadow:
-      inset 0 12px 26px rgba(32,24,15,.4),
-      inset 10px 0 18px rgba(32,24,15,.22),
-      inset -10px 0 18px rgba(32,24,15,.22),
-      0 12px 24px rgba(67,54,37,.24),
-      0 0 0 4px rgba(246,241,231,.55);
+    display: none;
   }
 
   .shelf-row {
@@ -165,8 +130,7 @@ permalink: /shelf/
   }
   .shelf-case[data-theme="oak"] .board,
   .shelf-case[data-theme="builtin"] .board {
-    background: var(--shelf-board);
-    box-shadow: 0 4px 8px var(--drop), inset 0 1px rgba(255,255,255,.24);
+    display: none;
   }
 
   .shelf-themes {
@@ -660,16 +624,19 @@ permalink: /shelf/
   function shelfMetrics(theme, width, height) {
     var metrics = [];
     if (theme === 'oak' || theme === 'builtin') {
-      var inset = (theme === 'oak' ? .064 : .074) * width;
-      var top = .022 * height;
-      var usableHeight = height - top * 2;
-      var framedRowHeight = usableHeight / 6;
-      for (var framedRow = 0; framedRow < 6; framedRow++) {
+      var inset = (theme === 'oak' ? .075 : .076) * width;
+      var tops = theme === 'oak'
+        ? [.034, .195, .351, .511, .670, .829]
+        : [.041, .194, .342, .495, .645, .797];
+      var baselines = theme === 'oak'
+        ? [.181, .338, .496, .657, .815, .968]
+        : [.174, .324, .477, .628, .780, .939];
+      for (var framedRow = 0; framedRow < tops.length; framedRow++) {
         metrics.push({
           x: inset,
-          y: top + framedRow * framedRowHeight,
+          y: tops[framedRow] * height,
           width: width - inset * 2,
-          height: framedRowHeight
+          height: (baselines[framedRow] - tops[framedRow]) * height
         });
       }
       return metrics;
@@ -734,7 +701,7 @@ permalink: /shelf/
       row.style.width = metric.width + 'px';
       row.style.height = metric.height + 'px';
 
-      var boardHeight = (framed ? 5 : 6) * SCALE;
+      var boardHeight = (framed ? 0 : 6) * SCALE;
       row.style.paddingBottom = boardHeight + 'px';
 
       if (framed) {
