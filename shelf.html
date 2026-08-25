@@ -208,7 +208,8 @@ permalink: /shelf/
     writing-mode: vertical-rl;
     text-orientation: mixed;
     font-family: Georgia, "Times New Roman", serif;
-    letter-spacing: .04em;
+    font-weight: 600;
+    letter-spacing: .025em;
     text-transform: uppercase;
     white-space: nowrap;
     overflow: hidden;
@@ -339,6 +340,22 @@ permalink: /shelf/
   function clothOf(b) { return hashOf(b, 2) % PALETTE.length; }
   function textureOf(b) { return (hashOf(b, 3) % 12) + 1; }
   function shortTitle(b) { return b.title.split(':')[0]; }
+  function compactTitle(book, maxLength) {
+    var title = shortTitle(book)
+      .replace(/\s*\([^)]*\)\s*/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+    if (title.length <= maxLength) return title;
+
+    var words = title.split(' '), result = '';
+    for (var i = 0; i < words.length; i++) {
+      var candidate = result ? result + ' ' + words[i] : words[i];
+      if (candidate.length > maxLength - 1) break;
+      result = candidate;
+    }
+    if (!result) result = title.slice(0, maxLength - 1);
+    return result + '…';
+  }
   function typographyOf(b) {
     var text = (b.title + ' ' + (b.author || '')).toLowerCase();
     if (/meditations|plato|aristotle|virgil|homer|aurelius|dickens|tolstoy|woolf|eliot|odyssey|middlemarch/.test(text)) return 'classic';
@@ -465,13 +482,17 @@ permalink: /shelf/
     if (w >= 20) {
       var label = document.createElement('span');
       label.className = 'label';
-      label.textContent = shortTitle(book);
+      var maxLabelLength = Math.max(10, Math.floor(height / (4 + 2.5 * SCALE)));
+      var labelTitle = compactTitle(book, maxLabelLength);
+      label.textContent = labelTitle;
       label.style.color = ink;
-      var titleLength = Math.max(1, shortTitle(book).length);
-      var fittedSize = height * .56 / titleLength;
-      label.style.fontSize = Math.max(4.5, Math.min(11 * SCALE, w * .3, fittedSize)) + 'px';
+      label.style.textShadow = light ? '0 1px rgba(255,255,255,.3)' : '0 1px 2px rgba(0,0,0,.8)';
+      var titleLength = Math.max(1, labelTitle.length);
+      var fittedSize = height * .8 / titleLength;
+      label.style.fontSize = Math.max(7, Math.min(13 * SCALE, w * .34, fittedSize)) + 'px';
       el.appendChild(label);
     }
+    el.setAttribute('aria-label', book.title + (book.author ? ', ' + book.author : ''));
     wire(el, book);
     return el;
   }
@@ -495,15 +516,18 @@ permalink: /shelf/
       flat.style.backgroundImage = 'linear-gradient(to bottom, rgba(255,255,255,.16), transparent 46%, rgba(0,0,0,.28)), ' + textureURL(book);
       flat.style.backgroundSize = '100% 100%, cover';
       flat.style.color = ink;
-      var flatTitle = shortTitle(book);
+      var flatTitle = compactTitle(book, 34);
       var flatWidth = spineSpace * heightFactor(book);
       var flatFit = flatWidth / Math.max(1, flatTitle.length * .62);
-      flat.style.fontSize = Math.max(5.5, Math.min(9 * SCALE, spineWidth(book) * .3, flatFit)) + 'px';
+      flat.style.fontSize = Math.max(7.5, Math.min(10 * SCALE, spineWidth(book) * .34, flatFit)) + 'px';
+      flat.style.fontWeight = '600';
+      flat.style.textShadow = light ? '0 1px rgba(255,255,255,.3)' : '0 1px 2px rgba(0,0,0,.75)';
       if (spineWidth(book) >= 18) {
         var t = document.createElement('span');
-        t.textContent = shortTitle(book);
+        t.textContent = flatTitle;
         flat.appendChild(t);
       }
+      flat.setAttribute('aria-label', book.title + (book.author ? ', ' + book.author : ''));
       wire(flat, book);
       wrap.appendChild(flat);
     });
