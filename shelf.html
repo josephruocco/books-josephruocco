@@ -304,7 +304,6 @@ permalink: /shelf/
 
   var SCALE = 1;
   var LEAN = 9;
-  var COS = Math.cos(LEAN * Math.PI / 180), SIN = Math.sin(LEAN * Math.PI / 180);
   var LAYOUTS = ['balanced', 'stacked', 'gallery'];
 
   // Same stable hash as the app: colour and height must not change between
@@ -426,11 +425,8 @@ permalink: /shelf/
     })) : 0;
 
     var leanChance = variant === 'stacked' ? 0.3 : (variant === 'gallery' ? 0.9 : 0.7);
-    var slackBase = variant === 'stacked' ? 8 : (variant === 'gallery' ? 14 : 16);
-    var slackRange = variant === 'stacked' ? 8 : (variant === 'gallery' ? 10 : 14);
     var wantsLean = rand() < leanChance;
-    var slack = wantsLean ? spineSpace * SIN + (slackBase + rand() * slackRange) * SCALE : 0;
-    var standing = bestFit(remaining, Math.max(0, width - pileWidth - slack - 4), seed);
+    var standing = bestFit(remaining, Math.max(0, width - pileWidth - 4), seed);
 
     standing.forEach(function (b) { items.push({ kind: 'upright', book: b }); });
     if (wantsLean && items.length >= 2) items[items.length - 1].kind = 'leaning';
@@ -457,9 +453,9 @@ permalink: /shelf/
     el.style.backgroundPosition = 'center';
 
     if (leaning) {
-      el.style.transformOrigin = 'bottom left';
-      el.style.transform = 'rotate(' + LEAN + 'deg)';
-      el.style.marginRight = (w * COS + height * SIN - w + 1.5 * SCALE) + 'px';
+      // The leaning book ends each upright run, so it must rest on the book to its left.
+      el.style.transformOrigin = 'bottom right';
+      el.style.transform = 'rotate(-' + LEAN + 'deg)';
     }
 
     [0.12, 0.16, 0.84].forEach(function (t) {
