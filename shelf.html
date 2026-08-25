@@ -184,6 +184,8 @@ permalink: /shelf/
     text-overflow: clip;
     line-height: 1.05;
     text-align: center;
+    display: grid;
+    place-items: center;
     pointer-events: none;
   }
   .spine .spine-author {
@@ -215,9 +217,7 @@ permalink: /shelf/
     border: .5px solid var(--edge);
     box-shadow: 0 1px 3px var(--drop);
     cursor: pointer;
-    /* Left-aligned with an ellipsis: centring clips a long title at both ends,
-       which reads as a rendering fault rather than a long title. */
-    display: flex; align-items: center; justify-content: flex-start;
+    display: flex; align-items: center; justify-content: center;
     padding: 0 8px;
     overflow: hidden;
     font-family: Georgia, "Times New Roman", serif;
@@ -225,8 +225,15 @@ permalink: /shelf/
     text-transform: uppercase;
     white-space: nowrap;
     text-overflow: clip;
+    line-height: 1;
   }
-  .pile .flat > span { overflow: hidden; text-overflow: clip; }
+  .pile .flat > span {
+    width: 100%;
+    overflow: hidden;
+    text-overflow: clip;
+    white-space: nowrap;
+    text-align: center;
+  }
 
   .book-cover {
     position: relative;
@@ -326,6 +333,7 @@ permalink: /shelf/
   function shortTitle(b) { return b.title.split(':')[0]; }
   function coreTitle(book) {
     return shortTitle(book)
+      .split(',')[0]
       .replace(/\s*\([^)]*\)\s*/g, ' ')
       .replace(/\s+[—–-]\s+.*$/, '')
       .replace(/\s+/g, ' ')
@@ -502,17 +510,17 @@ permalink: /shelf/
       var light = luminance(c) > 0.5;
       var ink = light ? 'rgba(46,33,23,.92)' : 'rgba(237,227,199,.92)';
       var flat = document.createElement('div');
+      var renderedFlatWidth = options.targetWidth || (spineSpace * heightFactor(book));
       flat.className = 'flat';
       flat.tabIndex = 0;
-      flat.style.width = (spineSpace * heightFactor(book)) + 'px';
+      flat.style.width = renderedFlatWidth + 'px';
       flat.style.height = (spineWidth(book) * (options.thicknessScale || 1)) + 'px';
       flat.style.backgroundColor = rgb(c);
       flat.style.backgroundImage = 'linear-gradient(to bottom, rgba(255,255,255,.16), transparent 46%, rgba(0,0,0,.28)), ' + textureURL(book);
       flat.style.backgroundSize = '100% 100%, cover';
       flat.style.color = ink;
       var flatTitle = coreTitle(book);
-      var flatWidth = spineSpace * heightFactor(book);
-      var flatFit = flatWidth / Math.max(1, flatTitle.length * .62);
+      var flatFit = renderedFlatWidth / Math.max(1, flatTitle.length * .62);
       flat.style.fontSize = Math.max(5, Math.min(10 * SCALE, spineWidth(book) * .34, flatFit)) + 'px';
       flat.style.fontWeight = '600';
       flat.style.textShadow = light ? '0 1px rgba(255,255,255,.3)' : '0 1px 2px rgba(0,0,0,.75)';
@@ -654,7 +662,8 @@ permalink: /shelf/
   function shelfMetrics(theme, width, height) {
     var metrics = [];
     if (theme === 'oak' || theme === 'builtin') {
-      var inset = (theme === 'oak' ? .075 : .076) * width;
+      var leftInset = (theme === 'oak' ? .075 : .076) * width;
+      var rightInset = (theme === 'oak' ? .086 : .083) * width;
       var tops = theme === 'oak'
         ? [.034, .195, .351, .511, .670, .829]
         : [.041, .194, .342, .495, .645, .797];
@@ -663,9 +672,9 @@ permalink: /shelf/
         : [.174, .324, .477, .628, .780, .939];
       for (var framedRow = 0; framedRow < tops.length; framedRow++) {
         metrics.push({
-          x: inset,
+          x: leftInset,
           y: tops[framedRow] * height,
-          width: width - inset * 2,
+          width: width - leftInset - rightInset,
           height: (baselines[framedRow] - tops[framedRow]) * height
         });
       }
@@ -704,6 +713,24 @@ permalink: /shelf/
 
   var library = [];
   var manualSeed = null;
+
+  function fitRenderedType() {
+    Array.prototype.forEach.call(shelf.querySelectorAll('.spine .label'), function (label) {
+      var size = Number.parseFloat(label.style.fontSize) || 8;
+      while ((label.scrollHeight > label.clientHeight || label.scrollWidth > label.clientWidth) && size > 3) {
+        size -= .5;
+        label.style.fontSize = size + 'px';
+      }
+    });
+    Array.prototype.forEach.call(shelf.querySelectorAll('.pile .flat'), function (flat) {
+      var size = Number.parseFloat(flat.style.fontSize) || 8;
+      var text = flat.firstElementChild || flat;
+      while ((text.scrollWidth > text.clientWidth || flat.scrollHeight > flat.clientHeight) && size > 3) {
+        size -= .5;
+        flat.style.fontSize = size + 'px';
+      }
+    });
+  }
 
   function render() {
     if (!library.length) return;
@@ -769,6 +796,7 @@ permalink: /shelf/
 
     var layoutName = variant.charAt(0).toUpperCase() + variant.slice(1);
     caption.textContent = library.length + ' books on the list · ' + layoutName + ' layout · reshuffles every hour.';
+    requestAnimationFrame(fitRenderedType);
   }
 
   // Theme choice sticks between visits, the way it does in the app.
