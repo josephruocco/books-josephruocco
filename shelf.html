@@ -40,6 +40,7 @@ permalink: /shelf/
         <div class="books-title-card-inner">
           <h1 id="shelf-page-title">WoodWork</h1>
           <p>Every book, drawn as a physical shelf — each spine as thick as the book really is.</p>
+          <button type="button" class="shelf-shuffle" id="shuffle">Pull a new handful</button>
         </div>
       </section>
 
@@ -56,7 +57,6 @@ permalink: /shelf/
                aria-label="A bookshelf of randomly selected books"></div>
 
           <div class="shelf-bar">
-            <button type="button" class="shelf-shuffle" id="shuffle">Pull a new handful</button>
             <span class="shelf-caption" id="caption">Reshuffles every hour.</span>
           </div>
         </div>
@@ -267,6 +267,7 @@ permalink: /shelf/
     background: none; color: inherit; cursor: pointer;
   }
   .shelf-shuffle:hover { background: rgba(0,0,0,.06); }
+  .books-title-card .shelf-shuffle { margin-top: 1rem; }
   .shelf-caption { font-size: .9em; line-height: 1.4; }
   .shelf-caption a { text-decoration: underline; }
 
