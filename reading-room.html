@@ -37,7 +37,13 @@ permalink: /reading-room/
       </section>
 
       <main class="reading-room-main" id="main-content">
-        <section class="reading-shelf" aria-label="Two public-domain books available to read">
+        <div class="reading-theme-switcher" id="reading-themes" role="group" aria-label="Reading Room shelf style">
+          <button type="button" data-theme="classic" class="is-on" aria-pressed="true">Classic</button>
+          <button type="button" data-theme="oak" aria-pressed="false">Dark Oak</button>
+          <button type="button" data-theme="builtin" aria-pressed="false">White Built-In</button>
+          <button type="button" data-theme="artsy" aria-pressed="false">Artsy</button>
+        </div>
+        <section class="reading-shelf" id="reading-shelf" data-theme="classic" aria-label="Two public-domain books available to read">
           <div class="reading-shelf-recess">
             <div class="reading-shelf-books" id="reading-shelf-books"></div>
             <div class="reading-shelf-board" aria-hidden="true"></div>
@@ -121,6 +127,34 @@ permalink: /reading-room/
   }
   .reading-room-main { padding-bottom: 7rem; }
 
+  .reading-theme-switcher {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: .45rem;
+    margin: 0 auto 1.1rem;
+  }
+  .reading-theme-switcher button {
+    padding: .44rem .9rem;
+    border: 1px solid rgba(42,35,29,.28);
+    border-radius: 999px;
+    color: #4f4840;
+    background: rgba(255,255,255,.22);
+    font: 600 .78rem/1.2 "Avenir Next", "Helvetica Neue", sans-serif;
+    cursor: pointer;
+    transition: color .16s ease, background .16s ease, border-color .16s ease;
+  }
+  .reading-theme-switcher button:hover,
+  .reading-theme-switcher button:focus-visible {
+    border-color: var(--reading-red);
+    outline: none;
+  }
+  .reading-theme-switcher button.is-on {
+    border-color: var(--reading-ink);
+    color: #fff;
+    background: var(--reading-ink);
+  }
+
   .reading-shelf {
     position: relative;
     box-sizing: border-box;
@@ -135,6 +169,7 @@ permalink: /reading-room/
       #5c351d;
     background-blend-mode: soft-light, multiply, normal;
     box-shadow: 0 34px 55px rgba(48,31,18,.2), inset 0 1px rgba(255,255,255,.24);
+    transition: background .25s ease, border-color .25s ease, box-shadow .25s ease;
   }
   .reading-shelf::before,
   .reading-shelf::after {
@@ -191,6 +226,103 @@ permalink: /reading-room/
     font: italic .88rem/1.3 Georgia, serif;
     text-align: center;
     letter-spacing: .025em;
+  }
+
+  /* Compact versions of the four WoodWork shelf materials. */
+  .reading-shelf[data-theme="oak"] {
+    border-color: rgba(20,11,5,.82);
+    background:
+      linear-gradient(90deg, rgba(255,255,255,.08), transparent 18%, rgba(0,0,0,.22) 82%),
+      url('/assets/images/woodwork/dark-oak.png') center / cover,
+      #172219;
+    background-blend-mode: soft-light, normal, normal;
+    box-shadow: 0 34px 58px rgba(16,24,18,.31), inset 0 1px rgba(255,255,255,.13);
+  }
+  .reading-shelf[data-theme="oak"]::before,
+  .reading-shelf[data-theme="oak"]::after {
+    background:
+      linear-gradient(90deg, #291509, #75431f 44%, #321a0d),
+      url('/assets/images/woodwork/spine-10.png');
+    background-blend-mode: multiply;
+  }
+  .reading-shelf[data-theme="oak"] .reading-shelf-recess {
+    background:
+      radial-gradient(ellipse at 50% 12%, rgba(103,59,28,.32), transparent 62%),
+      linear-gradient(#211208, #0e0804);
+  }
+  .reading-shelf[data-theme="oak"] .reading-shelf-board {
+    background:
+      linear-gradient(to bottom, rgba(255,255,255,.09), transparent 28%),
+      url('/assets/images/woodwork/spine-10.png'),
+      #5a3118;
+    background-blend-mode: soft-light, multiply, normal;
+  }
+
+  .reading-shelf[data-theme="builtin"] {
+    border-color: rgba(113,101,79,.28);
+    background:
+      linear-gradient(90deg, rgba(255,255,255,.58), transparent 20%, rgba(118,98,67,.12) 82%),
+      url('/assets/images/woodwork/white-built-in.png') center / cover,
+      #ddd5c3;
+    background-blend-mode: screen, normal, normal;
+    box-shadow: 0 34px 55px rgba(77,67,50,.2), inset 0 1px rgba(255,255,255,.8);
+  }
+  .reading-shelf[data-theme="builtin"]::before,
+  .reading-shelf[data-theme="builtin"]::after {
+    width: 25px;
+    border-radius: 5px 5px 2px 2px;
+    background:
+      repeating-linear-gradient(90deg, rgba(117,99,68,.16) 0 1px, transparent 1px 6px),
+      linear-gradient(90deg, #bfb59f, #f2ead9 42%, #c8bea9);
+    box-shadow: inset 0 0 0 1px rgba(112,98,72,.18), 2px 0 7px rgba(67,55,38,.18);
+  }
+  .reading-shelf[data-theme="builtin"] .reading-shelf-recess {
+    background:
+      radial-gradient(ellipse at 50% 8%, rgba(237,227,204,.2), transparent 60%),
+      linear-gradient(#746d59, #928974);
+    box-shadow: inset 0 18px 28px rgba(57,48,35,.43), inset 12px 0 17px rgba(58,49,37,.25), inset -12px 0 17px rgba(58,49,37,.25);
+  }
+  .reading-shelf[data-theme="builtin"] .reading-shelf-board {
+    height: 25px;
+    border-color: rgba(255,255,255,.58);
+    background:
+      repeating-linear-gradient(90deg, rgba(118,98,66,.08) 0 1px, transparent 1px 7px),
+      linear-gradient(#f0e8d8, #c6bba4);
+    box-shadow: 0 -5px 11px rgba(58,48,34,.24), 0 6px 8px rgba(63,52,37,.2);
+  }
+  .reading-shelf[data-theme="builtin"] .reading-shelf-prompt { color: #51493e; }
+
+  .reading-shelf[data-theme="artsy"] {
+    border-color: rgba(91,72,49,.25);
+    background:
+      repeating-linear-gradient(0deg, rgba(80,66,44,.05) 0 1px, transparent 1px 5px),
+      linear-gradient(#f4efe4, #e4dac7);
+    box-shadow: 0 27px 43px rgba(89,73,51,.2), inset 0 1px rgba(255,255,255,.65);
+  }
+  .reading-shelf[data-theme="artsy"]::before,
+  .reading-shelf[data-theme="artsy"]::after {
+    background:
+      repeating-linear-gradient(0deg, rgba(81,61,36,.11) 0 1px, transparent 1px 6px),
+      linear-gradient(90deg, #94774f, #c3a477 42%, #8d7049);
+    box-shadow: inset 0 0 0 1px rgba(75,56,32,.22), 2px 0 4px rgba(75,56,32,.19);
+  }
+  .reading-shelf[data-theme="artsy"] .reading-shelf-recess {
+    background:
+      repeating-linear-gradient(0deg, rgba(80,66,44,.045) 0 1px, transparent 1px 5px),
+      linear-gradient(#f4efe4, #e7decb);
+    box-shadow: inset 0 12px 20px rgba(88,68,42,.16), inset 8px 0 14px rgba(88,68,42,.08), inset -8px 0 14px rgba(88,68,42,.08);
+  }
+  .reading-shelf[data-theme="artsy"] .reading-shelf-board {
+    border-color: rgba(255,255,255,.32);
+    background:
+      repeating-linear-gradient(0deg, rgba(78,58,34,.09) 0 1px, transparent 1px 5px),
+      linear-gradient(#cbb188, #ad8f65);
+    box-shadow: 0 -3px 7px rgba(75,58,40,.15), 0 5px 7px rgba(75,58,40,.2);
+  }
+  .reading-shelf[data-theme="artsy"] .reading-shelf-prompt { color: #594b3b; }
+  .reading-shelf[data-theme="artsy"] .reading-spine {
+    background-image: repeating-linear-gradient(0deg, rgba(255,255,255,.1) 0 1px, transparent 1px 4px);
+    box-shadow: 1px 1px 3px rgba(75,58,40,.26);
   }
 
   .reading-spine {
@@ -532,6 +664,8 @@ permalink: /reading-room/
   var selectedSpine = null;
 
   var shelfBooks = document.getElementById('reading-shelf-books');
+  var readingShelf = document.getElementById('reading-shelf');
+  var themeSwitcher = document.getElementById('reading-themes');
   var overlay = document.getElementById('reader-overlay');
   var closeButton = document.getElementById('reader-close');
   var readerScroll = document.getElementById('reader-scroll');
@@ -595,6 +729,17 @@ permalink: /reading-room/
       button.addEventListener('click', function () { pullBook(book, button); });
       shelfBooks.appendChild(button);
     });
+  }
+
+  function setTheme(theme) {
+    if (!themeSwitcher.querySelector('[data-theme="' + theme + '"]')) theme = 'classic';
+    readingShelf.dataset.theme = theme;
+    themeSwitcher.querySelectorAll('[data-theme]').forEach(function (button) {
+      var selected = button.dataset.theme === theme;
+      button.classList.toggle('is-on', selected);
+      button.setAttribute('aria-pressed', selected ? 'true' : 'false');
+    });
+    try { localStorage.setItem('shelfTheme', theme); } catch (storageError) {}
   }
 
   function pullBook(book, spine) {
@@ -848,6 +993,10 @@ permalink: /reading-room/
   }
 
   closeButton.addEventListener('click', closeReader);
+  themeSwitcher.addEventListener('click', function (event) {
+    var button = event.target.closest('[data-theme]');
+    if (button) setTheme(button.dataset.theme);
+  });
   document.addEventListener('keydown', function (event) {
     if (event.key === 'Escape' && !overlay.hidden) closeReader();
   });
@@ -859,6 +1008,9 @@ permalink: /reading-room/
     if (window.innerWidth > 900) requestAnimationFrame(positionMarginalia);
   }, { passive: true });
 
+  var savedTheme = 'classic';
+  try { savedTheme = localStorage.getItem('shelfTheme') || savedTheme; } catch (storageError) {}
+  setTheme(savedTheme);
   renderShelf();
 })();
 </script>
