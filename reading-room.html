@@ -1,0 +1,866 @@
+---
+title: Reading Room
+permalink: /reading-room/
+---
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reading Room · WoodWork</title>
+    <link rel="icon" type="image/png" href="/assets/images/favicon.png">
+    <link rel="shortcut icon" type="image/png" href="/assets/images/favicon.png">
+    <link href="/assets/css/books-unified.css" rel="stylesheet">
+  </head>
+
+  <body class="books-page reading-room-page">
+    <div class="books-page reading-room-shell">
+      <header class="books-masthead">
+        <div class="books-masthead-inner">
+          <a class="books-site-title" href="/">Joseph Ruocco</a>
+          <nav class="books-nav" aria-label="Primary">
+            <a href="/shelf/">Joe's Shelf</a>
+            <a href="/woodwork-demo/">WoodWork Demo</a>
+            <a href="/reading-room/" class="active">Reading Room</a>
+            <a href="/about/">About</a>
+            <a href="/projects/">Projects</a>
+          </nav>
+        </div>
+      </header>
+
+      <section class="reading-room-intro" aria-labelledby="reading-room-title">
+        <p class="reading-room-kicker">WoodWork × Summa</p>
+        <h1 id="reading-room-title">Reading Room</h1>
+        <p>Pull a book from the shelf. Read with the notes beside it.</p>
+      </section>
+
+      <main class="reading-room-main" id="main-content">
+        <section class="reading-shelf" aria-label="Two public-domain books available to read">
+          <div class="reading-shelf-recess">
+            <div class="reading-shelf-books" id="reading-shelf-books"></div>
+            <div class="reading-shelf-board" aria-hidden="true"></div>
+          </div>
+          <p class="reading-shelf-prompt">Choose a spine to begin.</p>
+        </section>
+      </main>
+    </div>
+
+    <section class="reader-overlay" id="reader-overlay" aria-labelledby="reader-title" hidden>
+      <header class="reader-toolbar">
+        <button class="reader-close" id="reader-close" type="button">
+          <span aria-hidden="true">←</span> Put back on shelf
+        </button>
+        <div class="reader-book-heading">
+          <p id="reader-author"></p>
+          <h2 id="reader-title">Reading Room</h2>
+        </div>
+        <p class="reader-chapter" id="reader-chapter"></p>
+      </header>
+
+      <div class="reader-scroll" id="reader-scroll">
+        <div class="reader-loading" id="reader-loading" role="status">Opening the book…</div>
+        <div class="reader-layout" id="reader-layout" hidden>
+          <article class="reader-text" id="reader-text"></article>
+          <aside class="reader-marginalia" id="reader-marginalia" aria-label="Reading notes"></aside>
+        </div>
+        <p class="reader-error" id="reader-error" role="alert" hidden></p>
+      </div>
+    </section>
+
+<style>
+  :root {
+    --reading-paper: #f3eee4;
+    --reading-ink: #29231d;
+    --reading-muted: #756b5f;
+    --reading-red: #8f3429;
+    --reading-green: #284438;
+    --reading-gold: #b79258;
+  }
+
+  .reading-room-page { background: var(--reading-paper); }
+  .reading-room-shell {
+    min-height: 100vh;
+    background:
+      radial-gradient(circle at 18% 8%, rgba(255,255,255,.72), transparent 31rem),
+      repeating-linear-gradient(90deg, rgba(79,58,36,.025) 0 1px, transparent 1px 6px),
+      var(--reading-paper);
+    transition: filter .35s ease, transform .35s ease;
+  }
+  body.reader-open { overflow: hidden; }
+  body.reader-open .reading-room-shell {
+    filter: brightness(.32) saturate(.7);
+    transform: scale(.992);
+  }
+
+  .reading-room-intro,
+  .reading-room-main {
+    width: min(100% - 40px, 1120px);
+    margin-inline: auto;
+  }
+  .reading-room-intro { padding: 5.2rem 0 3rem; text-align: center; }
+  .reading-room-kicker {
+    margin: 0 0 .9rem;
+    color: var(--reading-red);
+    font: 700 .72rem/1.2 Georgia, serif;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+  }
+  .reading-room-intro h1 {
+    margin: 0;
+    color: var(--reading-ink);
+    font: 400 clamp(3.5rem, 9vw, 7.2rem)/.9 Georgia, "Times New Roman", serif;
+    letter-spacing: -.065em;
+  }
+  .reading-room-intro > p:last-child {
+    max-width: 34rem;
+    margin: 1.35rem auto 0;
+    color: var(--reading-muted);
+    font: 1.08rem/1.55 Georgia, "Times New Roman", serif;
+  }
+  .reading-room-main { padding-bottom: 7rem; }
+
+  .reading-shelf {
+    position: relative;
+    box-sizing: border-box;
+    width: min(100%, 820px);
+    margin: 0 auto;
+    padding: 28px 28px 18px;
+    border: 1px solid rgba(63,38,20,.65);
+    border-radius: 26px 26px 18px 18px;
+    background:
+      linear-gradient(90deg, rgba(255,255,255,.12), transparent 16%, rgba(0,0,0,.12) 80%),
+      url('/assets/images/woodwork/spine-10.png'),
+      #5c351d;
+    background-blend-mode: soft-light, multiply, normal;
+    box-shadow: 0 34px 55px rgba(48,31,18,.2), inset 0 1px rgba(255,255,255,.24);
+  }
+  .reading-shelf::before,
+  .reading-shelf::after {
+    content: "";
+    position: absolute;
+    z-index: 2;
+    top: 18px;
+    bottom: 17px;
+    width: 19px;
+    border-radius: 9px;
+    background: linear-gradient(90deg, #3b210f, #774824 42%, #452713);
+    box-shadow: inset 0 0 0 1px rgba(27,13,5,.35), 2px 0 5px rgba(0,0,0,.32);
+  }
+  .reading-shelf::before { left: 17px; }
+  .reading-shelf::after { right: 17px; transform: scaleX(-1); }
+  .reading-shelf-recess {
+    position: relative;
+    height: 330px;
+    overflow: hidden;
+    border-radius: 10px 10px 5px 5px;
+    background:
+      radial-gradient(ellipse at 50% 12%, rgba(116,75,42,.44), transparent 62%),
+      linear-gradient(#22130c, #110a06);
+    box-shadow: inset 0 18px 28px rgba(0,0,0,.75), inset 12px 0 17px rgba(0,0,0,.5), inset -12px 0 17px rgba(0,0,0,.5);
+  }
+  .reading-shelf-books {
+    position: absolute;
+    z-index: 2;
+    inset: 26px 54px 22px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 8px;
+    perspective: 900px;
+  }
+  .reading-shelf-board {
+    position: absolute;
+    z-index: 3;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 23px;
+    border-top: 1px solid rgba(221,164,105,.25);
+    background:
+      linear-gradient(to bottom, rgba(255,255,255,.12), transparent 24%),
+      url('/assets/images/woodwork/spine-10.png'),
+      #6a3d21;
+    background-blend-mode: soft-light, multiply, normal;
+    box-shadow: 0 -6px 12px rgba(0,0,0,.44), 0 7px 9px rgba(0,0,0,.46);
+  }
+  .reading-shelf-prompt {
+    margin: 1.15rem 0 .1rem;
+    color: #eadbc4;
+    font: italic .88rem/1.3 Georgia, serif;
+    text-align: center;
+    letter-spacing: .025em;
+  }
+
+  .reading-spine {
+    position: relative;
+    flex: none;
+    overflow: hidden;
+    padding: 0;
+    border: 1px solid rgba(0,0,0,.55);
+    border-radius: 3px 3px 1px 1px;
+    color: var(--spine-ink);
+    background-color: var(--spine-color);
+    background-image:
+      linear-gradient(90deg, rgba(255,255,255,.18), transparent 36%, rgba(0,0,0,.28)),
+      var(--spine-texture);
+    background-position: center;
+    background-size: 100% 100%, cover;
+    background-blend-mode: soft-light, luminosity;
+    box-shadow: 3px 1px 5px rgba(0,0,0,.48);
+    cursor: pointer;
+    transform-origin: bottom center;
+    transition: transform .28s cubic-bezier(.2,.8,.2,1), filter .2s ease, box-shadow .2s ease;
+  }
+  .reading-spine::before,
+  .reading-spine::after {
+    content: "";
+    position: absolute;
+    right: 7px;
+    left: 7px;
+    height: 1px;
+    background: currentColor;
+    opacity: .48;
+  }
+  .reading-spine::before { top: 13%; }
+  .reading-spine::after { bottom: 15%; }
+  .reading-spine:hover,
+  .reading-spine:focus-visible {
+    z-index: 4;
+    outline: none;
+    filter: brightness(1.08);
+    transform: translateY(-11px) rotateY(-4deg);
+    box-shadow: 8px 5px 13px rgba(0,0,0,.48);
+  }
+  .reading-spine.is-pulling {
+    z-index: 5;
+    transform: translateY(-48px) translateZ(55px) rotateY(-10deg) scale(1.045);
+    filter: brightness(1.08);
+    box-shadow: 16px 17px 25px rgba(0,0,0,.55);
+  }
+  .reading-spine-title {
+    position: absolute;
+    inset: 13% 14% 21%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    font: 600 var(--title-size)/1 Georgia, "Times New Roman", serif;
+    letter-spacing: .015em;
+    text-shadow: 0 1px 2px rgba(0,0,0,.58);
+  }
+  .reading-spine-author {
+    position: absolute;
+    right: 5px;
+    bottom: 5.5%;
+    left: 5px;
+    overflow: hidden;
+    font: 700 var(--author-size)/1.1 "Avenir Next", "Helvetica Neue", sans-serif;
+    letter-spacing: .05em;
+    text-align: center;
+    text-overflow: clip;
+    text-transform: uppercase;
+    white-space: nowrap;
+    text-shadow: 0 1px 1px rgba(0,0,0,.65);
+  }
+
+  .reader-overlay {
+    position: fixed;
+    z-index: 500;
+    inset: 18px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid rgba(61,48,37,.35);
+    border-radius: 18px;
+    background:
+      repeating-linear-gradient(0deg, rgba(85,64,40,.022) 0 1px, transparent 1px 5px),
+      #f8f4ec;
+    box-shadow: 0 28px 90px rgba(0,0,0,.48);
+    animation: reader-arrive .38s cubic-bezier(.2,.8,.2,1) both;
+  }
+  .reader-overlay[hidden] { display: none; }
+  @keyframes reader-arrive {
+    from { opacity: 0; transform: translateY(24px) scale(.985); }
+    to { opacity: 1; transform: none; }
+  }
+  .reader-toolbar {
+    flex: none;
+    min-height: 78px;
+    display: grid;
+    grid-template-columns: minmax(160px, 1fr) minmax(260px, 2fr) minmax(160px, 1fr);
+    align-items: center;
+    gap: 1.5rem;
+    padding: .85rem 1.35rem;
+    border-bottom: 1px solid rgba(62,48,35,.18);
+    background: rgba(248,244,236,.94);
+    backdrop-filter: blur(12px);
+  }
+  .reader-close {
+    justify-self: start;
+    padding: .65rem .85rem;
+    border: 1px solid rgba(63,48,36,.24);
+    border-radius: 999px;
+    color: var(--reading-ink);
+    background: transparent;
+    font: 600 .78rem/1 "Avenir Next", "Helvetica Neue", sans-serif;
+    cursor: pointer;
+  }
+  .reader-close:hover,
+  .reader-close:focus-visible { border-color: var(--reading-red); outline: none; color: var(--reading-red); }
+  .reader-book-heading { min-width: 0; text-align: center; }
+  .reader-book-heading p,
+  .reader-book-heading h2,
+  .reader-chapter { margin: 0; }
+  .reader-book-heading p {
+    color: var(--reading-red);
+    font: 700 .65rem/1.2 "Avenir Next", sans-serif;
+    letter-spacing: .13em;
+    text-transform: uppercase;
+  }
+  .reader-book-heading h2 {
+    overflow: hidden;
+    color: var(--reading-ink);
+    font: 400 1.5rem/1.1 Georgia, serif;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .reader-chapter {
+    justify-self: end;
+    color: var(--reading-muted);
+    font: italic .82rem/1.35 Georgia, serif;
+    text-align: right;
+  }
+  .reader-scroll { flex: 1; overflow: auto; overscroll-behavior: contain; }
+  .reader-loading,
+  .reader-error {
+    width: min(100% - 40px, 900px);
+    margin: 8rem auto;
+    color: var(--reading-muted);
+    font: italic 1rem/1.5 Georgia, serif;
+    text-align: center;
+  }
+  .reader-error { color: var(--reading-red); }
+  .reader-layout {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 680px) minmax(220px, 280px);
+    justify-content: center;
+    align-items: start;
+    gap: clamp(3rem, 7vw, 7rem);
+    width: min(100% - 50px, 1140px);
+    margin: 0 auto;
+    padding: 5rem 0 8rem;
+  }
+  .reader-text {
+    min-width: 0;
+    color: #28231e;
+    font: 1.13rem/1.83 Georgia, "Times New Roman", serif;
+  }
+  .reader-text > h2 {
+    margin: 0 0 3.2rem;
+    color: var(--reading-ink);
+    font: 400 clamp(2.2rem, 5vw, 4.6rem)/1.03 Georgia, serif;
+    letter-spacing: -.045em;
+    text-align: left;
+  }
+  .reader-text p { margin: 0 0 1.4em; }
+  .reader-text .nind { text-indent: 0; }
+  .reader-text .letra { font-size: 1em; }
+  .reader-text i { font-style: italic; }
+  .reader-text a { color: inherit; text-decoration: none; }
+  .reading-annotation { cursor: help; }
+  .annotation-vocab {
+    text-decoration: underline dotted rgba(143,52,41,.72) 1.5px;
+    text-underline-offset: .2em;
+  }
+  .annotation-reference {
+    box-shadow: inset 0 -.32em rgba(183,146,88,.27);
+  }
+  .reader-marginalia {
+    position: relative;
+    min-height: 100%;
+    border-left: 1px solid rgba(75,58,43,.15);
+  }
+  .margin-note {
+    position: absolute;
+    left: 1.5rem;
+    width: calc(100% - 1.5rem);
+    box-sizing: border-box;
+    padding: .8rem 0 .9rem;
+    border-top: 1px solid rgba(75,58,43,.2);
+    color: #4d443b;
+    background: rgba(248,244,236,.95);
+  }
+  .margin-note::before {
+    content: "";
+    position: absolute;
+    top: -1px;
+    right: 100%;
+    width: 1.5rem;
+    border-top: 1px solid rgba(75,58,43,.2);
+  }
+  .note-kind {
+    display: block;
+    margin-bottom: .28rem;
+    color: var(--reading-red);
+    font: 700 .6rem/1.2 "Avenir Next", sans-serif;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+  }
+  .margin-note[data-kind="reference"] .note-kind,
+  .inline-note[data-kind="reference"] .note-kind { color: #7b623a; }
+  .note-title {
+    display: block;
+    margin-bottom: .22rem;
+    color: var(--reading-ink);
+    font: 700 .88rem/1.25 Georgia, serif;
+  }
+  .note-body {
+    margin: 0;
+    font: .76rem/1.45 "Avenir Next", "Helvetica Neue", sans-serif;
+  }
+  .inline-note-group { display: none; }
+  .reader-cta {
+    margin-top: 5rem;
+    padding: 2.2rem 0 0;
+    border-top: 1px solid rgba(75,58,43,.2);
+  }
+  .reader-cta strong {
+    display: block;
+    color: var(--reading-ink);
+    font: 400 1.7rem/1.2 Georgia, serif;
+  }
+  .reader-cta span {
+    display: block;
+    margin-top: .45rem;
+    color: var(--reading-muted);
+    font: .82rem/1.5 "Avenir Next", sans-serif;
+  }
+
+  @media (max-width: 900px) {
+    .reader-overlay { inset: 0; border: 0; border-radius: 0; }
+    .reader-toolbar {
+      grid-template-columns: auto 1fr;
+      min-height: 68px;
+      gap: .8rem;
+      padding: .65rem .8rem;
+    }
+    .reader-close { padding: .58rem .7rem; }
+    .reader-book-heading { text-align: left; }
+    .reader-book-heading h2 { font-size: 1.08rem; }
+    .reader-chapter { display: none; }
+    .reader-layout {
+      display: block;
+      width: min(100% - 38px, 680px);
+      padding: 3.2rem 0 6rem;
+    }
+    .reader-text { font-size: 1.04rem; line-height: 1.72; }
+    .reader-text > h2 { margin-bottom: 2.2rem; font-size: 2.5rem; }
+    .reader-marginalia { display: none; }
+    .inline-note-group {
+      display: grid;
+      gap: .65rem;
+      margin: -.35rem 0 1.65rem;
+      padding: .85rem 1rem;
+      border-left: 3px solid var(--reading-gold);
+      background: rgba(183,146,88,.1);
+    }
+    .inline-note + .inline-note {
+      padding-top: .65rem;
+      border-top: 1px solid rgba(75,58,43,.16);
+    }
+    .inline-note .note-body { font-size: .78rem; }
+  }
+
+  @media (max-width: 650px) {
+    .reading-room-intro,
+    .reading-room-main { width: min(100% - 24px, 1120px); }
+    .reading-room-intro { padding: 3.4rem 0 2.2rem; }
+    .reading-room-intro h1 { font-size: clamp(3.2rem, 17vw, 5rem); }
+    .reading-shelf { padding: 20px 20px 14px; border-radius: 20px 20px 14px 14px; }
+    .reading-shelf::before,
+    .reading-shelf::after { top: 13px; bottom: 13px; width: 14px; }
+    .reading-shelf::before { left: 12px; }
+    .reading-shelf::after { right: 12px; }
+    .reading-shelf-recess { height: 285px; }
+    .reading-shelf-books { inset: 24px 34px 21px; gap: 5px; }
+    .reading-shelf-prompt { font-size: .78rem; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reading-spine,
+    .reading-room-shell { transition: none; }
+    .reader-overlay { animation: none; }
+  }
+</style>
+
+<script>
+(function () {
+  'use strict';
+
+  var BOOKS = [
+    {
+      id: 'pp_ch01',
+      title: 'Pride and Prejudice',
+      author: 'Jane Austen',
+      pages: 432,
+      palette: 5,
+      chapter: 'Chapter I',
+      path: '/assets/reading-room/pp_ch01/'
+    },
+    {
+      id: 'md_ch42',
+      title: 'Moby-Dick',
+      author: 'Herman Melville',
+      pages: 720,
+      palette: 1,
+      chapter: 'Chapter 42 · The Whiteness of the Whale',
+      path: '/assets/reading-room/md_ch42/'
+    }
+  ];
+  var PALETTE = [
+    ['#7d2e25', '#f1dfbc'],
+    ['#173c42', '#eadbb7'],
+    ['#273a29', '#ecdfbd'],
+    ['#c9b37d', '#33261e'],
+    ['#27334a', '#eee1bd'],
+    ['#5b2737', '#ecddbd']
+  ];
+  var selectedSpine = null;
+
+  var shelfBooks = document.getElementById('reading-shelf-books');
+  var overlay = document.getElementById('reader-overlay');
+  var closeButton = document.getElementById('reader-close');
+  var readerScroll = document.getElementById('reader-scroll');
+  var readerLayout = document.getElementById('reader-layout');
+  var readerText = document.getElementById('reader-text');
+  var marginalia = document.getElementById('reader-marginalia');
+  var loading = document.getElementById('reader-loading');
+  var error = document.getElementById('reader-error');
+
+  function fnv1a(value) {
+    var hash = 0x811c9dc5;
+    for (var i = 0; i < value.length; i++) {
+      hash ^= value.charCodeAt(i);
+      hash = (hash + ((hash << 1) + (hash << 4) + (hash << 7) + (hash << 8) + (hash << 24))) >>> 0;
+    }
+    return hash >>> 0;
+  }
+
+  function hashOf(book, salt) { return fnv1a(book.id + '#' + salt); }
+  function spineWidth(book, scale) { return Math.min(44, Math.max(9, book.pages * .075)) * scale; }
+  function heightFactor(book) { return .84 + .16 * ((hashOf(book, 1) % 10000) / 10000); }
+  function textureNumber(book) { return (hashOf(book, 3) % 12) + 1; }
+  function surname(author) {
+    var bits = String(author || '').trim().split(/\s+/);
+    return bits[bits.length - 1] || '';
+  }
+
+  function renderShelf() {
+    var compact = window.innerWidth <= 650;
+    var scale = compact ? 1.45 : 2.1;
+    var usableHeight = compact ? 240 : 282;
+    shelfBooks.innerHTML = '';
+
+    BOOKS.forEach(function (book) {
+      var color = PALETTE[book.palette == null ? hashOf(book, 2) % PALETTE.length : book.palette];
+      var texture = textureNumber(book);
+      var button = document.createElement('button');
+      var title = document.createElement('span');
+      var author = document.createElement('span');
+      var width = spineWidth(book, scale);
+      var height = usableHeight * heightFactor(book);
+      var titleSize = Math.max(11, Math.min(20, width * .23));
+
+      button.type = 'button';
+      button.className = 'reading-spine';
+      button.style.width = width + 'px';
+      button.style.height = height + 'px';
+      button.style.setProperty('--spine-color', color[0]);
+      button.style.setProperty('--spine-ink', color[1]);
+      button.style.setProperty('--spine-texture', "url('/assets/images/woodwork/spine-" + (texture < 10 ? '0' : '') + texture + ".png')");
+      button.style.setProperty('--title-size', titleSize + 'px');
+      button.style.setProperty('--author-size', Math.max(7, Math.min(10, width * .12)) + 'px');
+      button.setAttribute('aria-label', 'Read ' + book.title + ' by ' + book.author);
+
+      title.className = 'reading-spine-title';
+      title.textContent = book.title;
+      author.className = 'reading-spine-author';
+      author.textContent = surname(book.author);
+      button.appendChild(title);
+      button.appendChild(author);
+      button.addEventListener('click', function () { pullBook(book, button); });
+      shelfBooks.appendChild(button);
+    });
+  }
+
+  function pullBook(book, spine) {
+    if (selectedSpine) return;
+    selectedSpine = spine;
+    spine.classList.add('is-pulling');
+    window.setTimeout(function () { openReader(book); }, 310);
+  }
+
+  async function openReader(book) {
+    document.body.classList.add('reader-open');
+    overlay.hidden = false;
+    readerLayout.hidden = true;
+    loading.hidden = false;
+    error.hidden = true;
+    readerScroll.scrollTop = 0;
+    document.getElementById('reader-title').textContent = book.title;
+    document.getElementById('reader-author').textContent = book.author;
+    document.getElementById('reader-chapter').textContent = book.chapter;
+    closeButton.focus();
+
+    try {
+      var responses = await Promise.all([
+        fetch(book.path + 'chapter.html'),
+        fetch(book.path + 'catalog.json')
+      ]);
+      if (!responses[0].ok || !responses[1].ok) throw new Error('The reading files could not be loaded.');
+      var chapterHTML = await responses[0].text();
+      var catalog = await responses[1].json();
+      mountChapter(chapterHTML, catalog.annotations || []);
+      loading.hidden = true;
+      readerLayout.hidden = false;
+      requestAnimationFrame(positionMarginalia);
+    } catch (loadError) {
+      loading.hidden = true;
+      error.hidden = false;
+      error.textContent = loadError.message || 'The book could not be opened.';
+    }
+  }
+
+  function mountChapter(html, annotations) {
+    var documentCopy = new DOMParser().parseFromString(html, 'text/html');
+    var chapter = documentCopy.querySelector('#text');
+    if (!chapter) throw new Error('This chapter has no readable text.');
+
+    chapter.querySelectorAll('script, style, img, .figcenter, .pagenum, #mood-orb-root').forEach(function (node) {
+      node.remove();
+    });
+    chapter.querySelectorAll('div[style*="height"]').forEach(function (node) { node.remove(); });
+    readerText.innerHTML = chapter.innerHTML;
+
+    var matches = applyAnnotations(readerText, annotations);
+    addInlineNotes(matches);
+
+    var callout = document.createElement('footer');
+    callout.className = 'reader-cta';
+    callout.innerHTML = '<strong>Summa does this to anything you read.</strong><span>Definitions, references, and context appear where they belong: beside the text.</span>';
+    readerText.appendChild(callout);
+    renderMarginalia(matches);
+  }
+
+  function normalizeCharacters(value) {
+    return String(value || '')
+      .replace(/[“”]/g, '"')
+      .replace(/[‘’]/g, "'")
+      .replace(/[—–]/g, '-');
+  }
+
+  function isGarbage(annotation) {
+    var surface = normalizeCharacters(annotation && annotation.surface).trim();
+    return !surface || surface.length <= 2 || /^[A-Z]{2,4}$/.test(surface) ||
+      (surface.indexOf('-') >= 0 && annotation.kind === 'reference') ||
+      Number(annotation.confidence || 0) < .68;
+  }
+
+  function escapeRegex(value) {
+    return String(value).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  }
+
+  function textNodes(root) {
+    var walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+      acceptNode: function (node) {
+        if (!node.nodeValue || !node.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
+        var parent = node.parentElement;
+        if (!parent || parent.closest('script, style, .inline-note-group')) return NodeFilter.FILTER_REJECT;
+        return NodeFilter.FILTER_ACCEPT;
+      }
+    });
+    var nodes = [];
+    var node;
+    while ((node = walker.nextNode())) nodes.push(node);
+    return nodes;
+  }
+
+  function applyAnnotations(root, annotations) {
+    var nodes = textNodes(root);
+    var reserved = new Map();
+    var selections = [];
+    var seen = new Set();
+    var candidates = annotations.filter(function (annotation) {
+      return annotation && !isGarbage(annotation);
+    }).sort(function (a, b) {
+      var lengthDifference = normalizeCharacters(b.surface).length - normalizeCharacters(a.surface).length;
+      return lengthDifference || Number(b.confidence || 0) - Number(a.confidence || 0);
+    });
+
+    candidates.forEach(function (annotation) {
+      var surface = normalizeCharacters(annotation.surface).trim();
+      var key = (annotation.kind || 'annotation') + ':' + surface.toLowerCase();
+      if (seen.has(key)) return;
+      var expression = new RegExp(escapeRegex(surface).replace(/\s+/g, '\\s+'), 'i');
+
+      for (var i = 0; i < nodes.length; i++) {
+        var node = nodes[i];
+        var normalizedText = normalizeCharacters(node.nodeValue);
+        var match = expression.exec(normalizedText);
+        if (!match) continue;
+        var start = match.index;
+        var end = start + match[0].length;
+        var ranges = reserved.get(node) || [];
+        var overlaps = ranges.some(function (range) { return start < range.end && end > range.start; });
+        if (overlaps) continue;
+        ranges.push({ start: start, end: end });
+        reserved.set(node, ranges);
+        selections.push({ node: node, start: start, end: end, annotation: annotation });
+        seen.add(key);
+        break;
+      }
+    });
+
+    var grouped = new Map();
+    selections.forEach(function (selection) {
+      var group = grouped.get(selection.node) || [];
+      group.push(selection);
+      grouped.set(selection.node, group);
+    });
+
+    var mounted = [];
+    grouped.forEach(function (group, node) {
+      group.sort(function (a, b) { return a.start - b.start; });
+      var fragment = document.createDocumentFragment();
+      var cursor = 0;
+      group.forEach(function (selection) {
+        if (selection.start > cursor) fragment.appendChild(document.createTextNode(node.nodeValue.slice(cursor, selection.start)));
+        var span = document.createElement('span');
+        span.className = 'reading-annotation annotation-' + (selection.annotation.kind || 'annotation');
+        span.textContent = node.nodeValue.slice(selection.start, selection.end);
+        fragment.appendChild(span);
+        mounted.push({ span: span, annotation: selection.annotation });
+        cursor = selection.end;
+      });
+      if (cursor < node.nodeValue.length) fragment.appendChild(document.createTextNode(node.nodeValue.slice(cursor)));
+      node.parentNode.replaceChild(fragment, node);
+    });
+
+    return mounted;
+  }
+
+  function noteData(annotation) {
+    var payload = annotation.payload || {};
+    var dictionary = payload.dictionary || {};
+    var gloss = payload.gloss || {};
+    return {
+      kind: annotation.kind || 'note',
+      title: dictionary.headword || gloss.title || payload.wikiTitle || annotation.surface || 'Note',
+      body: dictionary.definition || gloss.text || payload.summary || 'No annotation content.'
+    };
+  }
+
+  function noteContent(note) {
+    var fragment = document.createDocumentFragment();
+    var kind = document.createElement('span');
+    var title = document.createElement('strong');
+    var body = document.createElement('p');
+    kind.className = 'note-kind';
+    kind.textContent = note.kind;
+    title.className = 'note-title';
+    title.textContent = note.title;
+    body.className = 'note-body';
+    body.textContent = note.body;
+    fragment.appendChild(kind);
+    fragment.appendChild(title);
+    fragment.appendChild(body);
+    return fragment;
+  }
+
+  function renderMarginalia(matches) {
+    marginalia.innerHTML = '';
+    matches.forEach(function (match) {
+      var note = noteData(match.annotation);
+      var element = document.createElement('section');
+      element.className = 'margin-note';
+      element.dataset.kind = note.kind;
+      element._target = match.span;
+      element.appendChild(noteContent(note));
+      marginalia.appendChild(element);
+    });
+  }
+
+  function positionMarginalia() {
+    if (readerLayout.hidden || window.innerWidth <= 900) return;
+    var textRect = readerText.getBoundingClientRect();
+    var notes = Array.prototype.slice.call(marginalia.querySelectorAll('.margin-note'));
+    var previousBottom = 0;
+    marginalia.style.height = readerText.scrollHeight + 'px';
+    notes.sort(function (a, b) {
+      return a._target.getBoundingClientRect().top - b._target.getBoundingClientRect().top;
+    }).forEach(function (note) {
+      var targetTop = note._target.getBoundingClientRect().top - textRect.top;
+      var top = Math.max(targetTop, previousBottom + 10);
+      note.style.top = top + 'px';
+      previousBottom = top + note.offsetHeight;
+    });
+    marginalia.style.height = Math.max(readerText.scrollHeight, previousBottom) + 'px';
+  }
+
+  function addInlineNotes(matches) {
+    var groups = new Map();
+    matches.forEach(function (match) {
+      var paragraph = match.span.closest('p');
+      if (!paragraph) return;
+      var group = groups.get(paragraph) || [];
+      group.push(noteData(match.annotation));
+      groups.set(paragraph, group);
+    });
+    groups.forEach(function (notes, paragraph) {
+      var container = document.createElement('aside');
+      container.className = 'inline-note-group';
+      container.setAttribute('aria-label', 'Notes for this paragraph');
+      notes.forEach(function (note) {
+        var element = document.createElement('section');
+        element.className = 'inline-note';
+        element.dataset.kind = note.kind;
+        element.appendChild(noteContent(note));
+        container.appendChild(element);
+      });
+      paragraph.insertAdjacentElement('afterend', container);
+    });
+  }
+
+  function closeReader() {
+    overlay.hidden = true;
+    document.body.classList.remove('reader-open');
+    readerText.innerHTML = '';
+    marginalia.innerHTML = '';
+    if (selectedSpine) {
+      selectedSpine.classList.remove('is-pulling');
+      selectedSpine.focus();
+      selectedSpine = null;
+    }
+  }
+
+  closeButton.addEventListener('click', closeReader);
+  document.addEventListener('keydown', function (event) {
+    if (event.key === 'Escape' && !overlay.hidden) closeReader();
+  });
+  window.addEventListener('resize', function () {
+    if (overlay.hidden) renderShelf();
+    requestAnimationFrame(positionMarginalia);
+  });
+  readerScroll.addEventListener('scroll', function () {
+    if (window.innerWidth > 900) requestAnimationFrame(positionMarginalia);
+  }, { passive: true });
+
+  renderShelf();
+})();
+</script>
+  </body>
+</html>

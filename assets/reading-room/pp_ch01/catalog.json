@@ -1,0 +1,287 @@
+{
+  "annotations" : [
+    {
+      "confidence" : 0.98,
+      "id" : "g|netherfield_park",
+      "kind" : "reference",
+      "payload" : {
+        "annotationType" : "gloss",
+        "gloss" : {
+          "reason" : "This is a fictional estate in the novel, not a stable encyclopedic subject.",
+          "text" : "The nearby rented country estate in the novel; it is the setting that brings Mr. Bingley into the neighborhood.",
+          "title" : "Netherfield Park"
+        },
+        "summary" : "The nearby rented country estate in the novel; it is the setting that brings Mr. Bingley into the neighborhood."
+      },
+      "span" : {
+        "end" : 479,
+        "start" : 463
+      },
+      "surface" : "Netherfield Park"
+    },
+    {
+      "confidence" : 0.98,
+      "id" : "g|netherfield",
+      "kind" : "reference",
+      "payload" : {
+        "annotationType" : "gloss",
+        "gloss" : {
+          "reason" : "This is a fictional country house in the novel, not a stable encyclopedic subject with its own Wikipedia article.",
+          "text" : "The nearby estate in Pride and Prejudice, newly rented by a wealthy young man.",
+          "title" : "Netherfield Park"
+        },
+        "summary" : "The nearby estate in Pride and Prejudice, newly rented by a wealthy young man."
+      },
+      "span" : {
+        "end" : 474,
+        "start" : 463
+      },
+      "surface" : "Netherfield"
+    },
+    {
+      "confidence" : 0.99,
+      "id" : "r|michaelmas",
+      "kind" : "reference",
+      "payload" : {
+        "annotationType" : "wikipedia",
+        "summary" : "Michaelmas, also known as the Feast of Saints Michael, Gabriel and Raphael, the Feast of the Archangels, and the Feast of Saint Michael and All Angels, is a Christian festival observed in many Western Christian liturgical calendars on 29 September and on 8 November in the Eastern Christian traditions. Michaelmas has been one of the four quarter days of the English and Irish financial, judicial and academic year.",
+        "wikiTitle" : "Michaelmas"
+      },
+      "span" : {
+        "end" : 1212,
+        "start" : 1202
+      },
+      "surface" : "Michaelmas"
+    },
+    {
+      "confidence" : 0.99,
+      "id" : "r|lizzy",
+      "kind" : "reference",
+      "payload" : {
+        "annotationType" : "wikipedia",
+        "summary" : "Elizabeth Bennet is a fictional character and the protagonist of the 1813 novel Pride and Prejudice by Jane Austen. She is often referred to as Eliza or Lizzy by her friends and family. Elizabeth is the second child in a family of five daughters. Though the circumstances of the time and environment push her to seek a marriage of convenience for economic security, Elizabeth wishes to marry for love.",
+        "wikiTitle" : "Elizabeth Bennet"
+      },
+      "span" : {
+        "end" : 3049,
+        "start" : 3044
+      },
+      "surface" : "Lizzy"
+    },
+    {
+      "confidence" : 0.79,
+      "id" : "v|impatiently",
+      "kind" : "vocab",
+      "payload" : {
+        "dictionary" : {
+          "definition" : "impatiently | | \/ɪmˈpeɪʃəntli\/ | adverb Without patience",
+          "headword" : "impatiently"
+        }
+      },
+      "span" : {
+        "end" : 729,
+        "start" : 718
+      },
+      "surface" : "impatiently"
+    },
+    {
+      "confidence" : 0.79,
+      "id" : "v|chaise",
+      "kind" : "vocab",
+      "payload" : {
+        "dictionary" : {
+          "definition" : "chaise | | \/ʃeɪz\/ | noun An open, horse-drawn carriage for one or two people, usually with one horse and two wheels.",
+          "headword" : "chaise"
+        }
+      },
+      "span" : {
+        "end" : 1059,
+        "start" : 1053
+      },
+      "surface" : "chaise"
+    },
+    {
+      "confidence" : 0.79,
+      "id" : "v|tiresome",
+      "kind" : "vocab",
+      "payload" : {
+        "dictionary" : {
+          "definition" : "tiresome | | \/ˈtaɪəsəm\/ | adjective Causing fatigue or boredom; wearisome.",
+          "headword" : "tiresome"
+        }
+      },
+      "span" : {
+        "end" : 1581,
+        "start" : 1573
+      },
+      "surface" : "tiresome"
+    },
+    {
+      "confidence" : 0.79,
+      "id" : "v|flatter",
+      "kind" : "vocab",
+      "payload" : {
+        "dictionary" : {
+          "definition" : "flatter | | \/ˈflætə\/ | adjective Having no variations in height.",
+          "headword" : "flatter"
+        }
+      },
+      "span" : {
+        "end" : 2086,
+        "start" : 2079
+      },
+      "surface" : "flatter"
+    },
+    {
+      "confidence" : 0.79,
+      "id" : "v|grown-up",
+      "kind" : "vocab",
+      "payload" : {
+        "dictionary" : {
+          "definition" : "grown-up | noun An adult. (used especially by children)",
+          "headword" : "grown-up"
+        }
+      },
+      "span" : {
+        "end" : 2217,
+        "start" : 2209
+      },
+      "surface" : "grown-up"
+    },
+    {
+      "confidence" : 0.79,
+      "id" : "v|comers",
+      "kind" : "vocab",
+      "payload" : {
+        "dictionary" : {
+          "definition" : "comers | noun One in a race who is catching up to others and shows promise of winning.",
+          "headword" : "comers"
+        }
+      },
+      "span" : {
+        "end" : 2703,
+        "start" : 2697
+      },
+      "surface" : "comers"
+    },
+    {
+      "confidence" : 0.79,
+      "id" : "v|scrupulous",
+      "kind" : "vocab",
+      "payload" : {
+        "dictionary" : {
+          "definition" : "scrupulous | | \/ˈskɹu.pjə.ləs\/ | adjective Exactly and carefully conducted.",
+          "headword" : "scrupulous"
+        }
+      },
+      "span" : {
+        "end" : 2812,
+        "start" : 2802
+      },
+      "surface" : "scrupulous"
+    },
+    {
+      "confidence" : 0.79,
+      "id" : "v|good-humoured",
+      "kind" : "vocab",
+      "payload" : {
+        "dictionary" : {
+          "definition" : "good-humoured | adjective Happy, cheerful, amiable.",
+          "headword" : "good-humoured"
+        }
+      },
+      "span" : {
+        "end" : 3208,
+        "start" : 3195
+      },
+      "surface" : "good-humoured"
+    },
+    {
+      "confidence" : 0.79,
+      "id" : "v|quickness",
+      "kind" : "vocab",
+      "payload" : {
+        "dictionary" : {
+          "definition" : "quickness | noun Rapidity of movement or activity; agility or dexterity",
+          "headword" : "quickness"
+        }
+      },
+      "span" : {
+        "end" : 3419,
+        "start" : 3410
+      },
+      "surface" : "quickness"
+    },
+    {
+      "confidence" : 0.79,
+      "id" : "v|caprice",
+      "kind" : "vocab",
+      "payload" : {
+        "dictionary" : {
+          "definition" : "caprice | | \/kəˈpɹis\/ | noun An impulsive, seemingly unmotivated action, change of mind, or notion.",
+          "headword" : "caprice"
+        }
+      },
+      "span" : {
+        "end" : 4152,
+        "start" : 4145
+      },
+      "surface" : "caprice"
+    },
+    {
+      "confidence" : 0.79,
+      "id" : "v|discontented",
+      "kind" : "vocab",
+      "payload" : {
+        "dictionary" : {
+          "definition" : "discontented | | \/ˌdɪskənˈtɛntɛd\/ | adjective Experiencing discontent, dissatisfaction.",
+          "headword" : "discontented"
+        }
+      },
+      "span" : {
+        "end" : 4416,
+        "start" : 4404
+      },
+      "surface" : "discontented"
+    },
+    {
+      "confidence" : 0.79,
+      "id" : "v|fancied",
+      "kind" : "vocab",
+      "payload" : {
+        "dictionary" : {
+          "definition" : "fancied | | \/ˈfæn.sid\/ | adjective Imagined.",
+          "headword" : "fancied"
+        }
+      },
+      "span" : {
+        "end" : 4429,
+        "start" : 4422
+      },
+      "surface" : "fancied"
+    },
+    {
+      "confidence" : 0.79,
+      "id" : "v|solace",
+      "kind" : "vocab",
+      "payload" : {
+        "dictionary" : {
+          "definition" : "solace | | \/ˈsɒ.lɪs\/ | noun Comfort or consolation in a time of loneliness or distress.",
+          "headword" : "solace"
+        }
+      },
+      "span" : {
+        "end" : 4516,
+        "start" : 4510
+      },
+      "surface" : "solace"
+    }
+  ],
+  "schema_version" : "1.2",
+  "source" : {
+    "createdAtISO8601" : "2026-04-01T19:45:56Z",
+    "generator" : "GutenbergTest\/gutenberg-test",
+    "textLength" : 4602,
+    "title" : "Pride and Prejudice, Chapter I — Jane Austen"
+  }
+}

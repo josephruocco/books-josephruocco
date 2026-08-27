@@ -1,0 +1,912 @@
+{
+  "annotations": [
+    {
+      "id": "r|pegu",
+      "kind": "reference",
+      "surface": "Pegu",
+      "confidence": 0.9,
+      "payload": {
+        "summary": "Medieval Mon kingdom in lower Burma (modern Myanmar). Its kings styled themselves 'Lord of the White Elephants,' white elephants being sacred symbols of royal power in Southeast Asia."
+      }
+    },
+    {
+      "id": "r|lord_of_the_white_elephants",
+      "kind": "reference",
+      "surface": "Lord of the White Elephants",
+      "confidence": 0.9,
+      "payload": {
+        "summary": "Formal regnal title of Burmese and Mon monarchs; possession of a white (albino) elephant was considered divine sanction for a ruler's legitimacy."
+      }
+    },
+    {
+      "id": "r|kings_of_siam",
+      "kind": "reference",
+      "surface": "kings of Siam",
+      "confidence": 0.9,
+      "payload": {
+        "summary": "Thailand's Chakri dynasty monarchs. The white elephant appeared on the Siamese royal flag until 1917, reflecting the same Southeast Asian tradition of sacred albino elephants."
+      }
+    },
+    {
+      "id": "r|hanoverian_flag",
+      "kind": "reference",
+      "surface": "Hanoverian flag",
+      "confidence": 0.9,
+      "payload": {
+        "summary": "The House of Hanover ruled Britain 1714–1901. Their heraldic white horse (the 'White Horse of Hanover') appeared on the Hanoverian standard and English county emblems."
+      }
+    },
+    {
+      "id": "r|great_austrian_empire_c_sarian",
+      "kind": "reference",
+      "surface": "great Austrian Empire, Cæsarian",
+      "confidence": 0.9,
+      "payload": {
+        "summary": "The Habsburg emperors claimed succession from the Roman Caesars; white was the Austrian imperial military color, seen on uniforms and the imperial standard."
+      }
+    },
+    {
+      "id": "r|a_white_stone_marked_a_joyful_day",
+      "kind": "reference",
+      "surface": "a white stone marked a joyful day",
+      "confidence": 0.9,
+      "payload": {
+        "summary": "Roman custom of marking lucky days with a white chalk stone (calculus albus) on the calendar, contrasted with black stones for unlucky days. Referenced by Pliny and others."
+      }
+    },
+    {
+      "id": "r|red_men_of_america",
+      "kind": "reference",
+      "surface": "Red Men of America",
+      "confidence": 0.9,
+      "payload": {
+        "summary": "Period ethnonym for Native Americans. Melville refers specifically to the wampum belt tradition among northeastern tribes, where white shell beads signified peace and solemn pledges."
+      }
+    },
+    {
+      "id": "r|white_belt_of_wampum",
+      "kind": "reference",
+      "surface": "white belt of wampum",
+      "confidence": 0.9,
+      "payload": {
+        "summary": "Wampum belts of white shell beads (from whelk) carried diplomatic and ceremonial weight among Iroquois and Algonquian peoples; white signified peace, purple/black signified war or mourning."
+      }
+    },
+    {
+      "id": "r|persian_fire_worshippers",
+      "kind": "reference",
+      "surface": "Persian fire worshippers",
+      "confidence": 0.9,
+      "payload": {
+        "summary": "Zoroastrians, whose sacred fire altars were central to worship. The white or purest flame was considered the holiest manifestation of Ahura Mazda's divine light."
+      }
+    },
+    {
+      "id": "r|great_jove_himself_being_made_incarnate_in_a_snow_white_bull",
+      "kind": "reference",
+      "surface": "Great Jove himself being made incarnate in a snow-white bull",
+      "confidence": 0.9,
+      "payload": {
+        "summary": "Refers to the myth of Europa: Zeus transformed into a white bull to abduct her. Also echoes the white bulls sacrificed to Jupiter in Roman triumphal rites."
+      }
+    },
+    {
+      "id": "r|midwinter_sacrifice_of_the_sacred_white_dog",
+      "kind": "reference",
+      "surface": "midwinter sacrifice of the sacred White Dog",
+      "confidence": 0.9,
+      "payload": {
+        "summary": "The Iroquois (Haudenosaunee) White Dog Feast, held at midwinter, involved sacrificing a ritually strangled white dog as a pure messenger to the Creator (Great Spirit)."
+      }
+    },
+    {
+      "id": "v|alb_or_tunic",
+      "kind": "vocab",
+      "surface": "alb or tunic",
+      "confidence": 0.9,
+      "payload": {
+        "summary": "From Latin alba, 'white.' The alb is the long white liturgical vestment worn by Christian clergy; Melville correctly traces the name to the Latin root for whiteness."
+      }
+    },
+    {
+      "id": "r|vision_of_st_john",
+      "kind": "reference",
+      "surface": "Vision of St. John",
+      "confidence": 0.9,
+      "payload": {
+        "summary": "The Book of Revelation. White robes given to martyrs (Rev. 6:11), the twenty-four elders in white (Rev. 4:4), and the great white throne judgment (Rev. 20:11) are all cited here."
+      }
+    },
+    {
+      "id": "r|white_bear_of_the_poles",
+      "kind": "reference",
+      "surface": "white bear of the poles",
+      "confidence": 0.9,
+      "payload": {
+        "summary": "The polar bear (Ursus maritimus) was a fixture of 19th-century sublime natural history, frequently cited as the most formidable Arctic predator and a symbol of terrifying otherness."
+      }
+    },
+    {
+      "id": "v|heraldic_coat",
+      "kind": "vocab",
+      "surface": "heraldic coat",
+      "confidence": 0.9,
+      "payload": {
+        "summary": "Refers to the tiger's striped patterning as if it were a coat of arms; 'heraldic' evokes formal, decorative display, contrasting with the shark's and bear's plain, unmarked whiteness."
+      }
+    },
+    {
+      "id": "r|requiem_eternam",
+      "kind": "reference",
+      "surface": "Requiem eternam",
+      "confidence": 0.9,
+      "payload": {
+        "summary": "Opening words of the Roman Catholic Mass for the Dead: 'Requiem aeternam dona eis' ('Grant them eternal rest'). Melville derives the French word 'requin' (shark) from this liturgical term."
+      }
+    },
+    {
+      "id": "v|requin",
+      "kind": "vocab",
+      "surface": "Requin",
+      "confidence": 0.9,
+      "payload": {
+        "summary": "French word for shark. Melville's folk etymology linking it to 'Requiem' is fanciful; the actual etymology is disputed. The connection nonetheless serves his thematic argument about whiteness and death."
+      }
+    },
+    {
+      "id": "r|albatross",
+      "kind": "reference",
+      "surface": "albatross",
+      "confidence": 0.9,
+      "payload": {
+        "summary": "Anticipates the footnote reference to Coleridge's 'Rime of the Ancient Mariner' (1798), in which the killing of an albatross brings a curse. Melville credits not Coleridge but Nature as the original source of the bird's dread."
+      }
+    },
+    {
+      "id": "r|not_coleridge_first_threw_that_spell",
+      "kind": "reference",
+      "surface": "Not Coleridge first threw that spell",
+      "confidence": 0.9,
+      "payload": {
+        "summary": "Melville deliberately subordinates literary tradition to natural fact, arguing the albatross's terror precedes and exceeds any poet's rendering of it — a claim about the limits of art versus the sublime."
+      }
+    },
+    {
+      "id": "r|main_hatches",
+      "kind": "reference",
+      "surface": "main hatches",
+      "confidence": 0.9,
+      "payload": {
+        "summary": "Horizontal covers over the ship's main cargo openings, flush with the deck — a flat surface where a large seabird could be pinned down by wind or crew."
+      }
+    },
+    {
+      "id": "r|holy_ark",
+      "kind": "reference",
+      "surface": "holy ark",
+      "confidence": 0.9,
+      "payload": {
+        "summary": "The Ark of the Covenant, carried by the Israelites; its transport was attended by divine presence and strict ritual. The albatross's spread wings recall the cherubim atop the Ark."
+      }
+    },
+    {
+      "id": "r|as_abraham_before_the_angels",
+      "kind": "reference",
+      "surface": "As Abraham before the angels",
+      "confidence": 0.9,
+      "payload": {
+        "summary": "Genesis 18: Abraham prostrates himself before three divine visitors at Mamre. Ishmael's involuntary bow mirrors that reverent submission before the numinous."
+      }
+    },
+    {
+      "id": "r|coleridge_s_wild_rhyme",
+      "kind": "reference",
+      "surface": "Coleridge's wild Rhyme",
+      "confidence": 0.9,
+      "payload": {
+        "summary": "Coleridge's 'The Rime of the Ancient Mariner' (1798), in which a sailor kills an albatross and suffers supernatural punishment. Melville insists his awe preceded any literary influence."
+      }
+    },
+    {
+      "id": "v|goney",
+      "kind": "vocab",
+      "surface": "goney",
+      "confidence": 0.9,
+      "payload": {
+        "summary": "Sailors' dialectal name for the albatross, probably from a word meaning 'simpleton' (the bird's tameness made it easy to catch). Unknown outside maritime use."
+      }
+    },
+    {
+      "id": "v|solecism_of_terms",
+      "kind": "vocab",
+      "surface": "solecism of terms",
+      "confidence": 0.9,
+      "payload": {
+        "summary": "'Solecism' normally means a grammatical or social blunder; here Melville uses it to mean a contradiction in terms — calling a bird 'grey albatross' when whiteness is the albatross's defining quality."
+      }
+    },
+    {
+      "id": "r|leathern_tally",
+      "kind": "reference",
+      "surface": "leathern tally",
+      "confidence": 0.9,
+      "payload": {
+        "summary": "A practice of attaching a leather tag inscribed with the ship's name, date, and position to a captured seabird before releasing it, as a primitive message-in-a-bottle for tracking voyages."
+      }
+    },
+    {
+      "id": "r|wing_folding_the_invoking_and_adoring_cherubim",
+      "kind": "reference",
+      "surface": "wing-folding, the invoking, and adoring cherubim",
+      "confidence": 0.9,
+      "payload": {
+        "summary": "Isaiah 6 and Ezekiel 1 describe cherubim with multiple wings, some folded, surrounding God's throne in ceaseless adoration — the released albatross joins this celestial company."
+      }
+    },
+    {
+      "id": "r|white_steed_of_the_prairies",
+      "kind": "reference",
+      "surface": "White Steed of the Prairies",
+      "confidence": 0.9,
+      "payload": {
+        "summary": "A legendary wild white stallion reported by 19th-century travelers on the Great Plains; figures in Washington Irving and Josiah Gregg's accounts, becoming a symbol of untameable frontier freedom."
+      }
+    },
+    {
+      "id": "r|elected_xerxes",
+      "kind": "reference",
+      "surface": "elected Xerxes",
+      "confidence": 0.9,
+      "payload": {
+        "summary": "Xerxes I, Persian king who led an enormous army into Greece (480 BCE). Melville uses him as a type of supreme sovereign commanding vast hosts."
+      }
+    },
+    {
+      "id": "r|that_chosen_star_which_every_evening_leads_on_the_hosts_of_light",
+      "kind": "reference",
+      "surface": "that chosen star which every evening leads on the hosts of light",
+      "confidence": 0.9,
+      "payload": {
+        "summary": "The evening star (Venus/Hesperus), which appears to lead the stars across the sky. The image echoes Milton's description of the morning star in Paradise Lost."
+      }
+    },
+    {
+      "id": "r|unfallen_western_world",
+      "kind": "reference",
+      "surface": "unfallen, western world",
+      "confidence": 0.9,
+      "payload": {
+        "summary": "Melville frames the American West as a prelapsarian Eden, contrasting it with the corrupted Old World — a common Romantic trope that the White Steed embodies as an Adamic, sinless creature."
+      }
+    },
+    {
+      "id": "r|like_an_ohio",
+      "kind": "reference",
+      "surface": "like an Ohio",
+      "confidence": 0.9,
+      "payload": {
+        "summary": "The Ohio River, notable for its broad, steady, seemingly endless flow — used here as a simile for the unbroken stream of horse herds across the plains."
+      }
+    },
+    {
+      "id": "r|white_squall",
+      "kind": "reference",
+      "surface": "White Squall",
+      "confidence": 0.9,
+      "payload": {
+        "summary": "A sudden, violent storm in tropical or subtropical seas, named for the white foam and spray that mark its approach rather than the dark clouds typical of other squalls."
+      }
+    },
+    {
+      "id": "r|froissart",
+      "kind": "reference",
+      "surface": "Froissart",
+      "confidence": 0.9,
+      "payload": {
+        "summary": "Jean Froissart (c.1337–1405), Franco-Flemish chronicler whose *Chronicles* record the Hundred Years' War era. Melville refers to his account of the White Hoods (Chaperons Blancs) of Ghent, a 14th-century Flemish rebel faction."
+      }
+    },
+    {
+      "id": "r|white_hoods_of_ghent",
+      "kind": "reference",
+      "surface": "White Hoods of Ghent",
+      "confidence": 0.9,
+      "payload": {
+        "summary": "The Chaperons Blancs, a guild-based rebel movement in Ghent (1379–82) who wore white hoods as their emblem and violently resisted Flemish aristocratic authority."
+      }
+    },
+    {
+      "id": "r|king_of_terrors",
+      "kind": "reference",
+      "surface": "king of terrors",
+      "confidence": 0.9,
+      "payload": {
+        "summary": "Phrase from Job 18:14 (KJV), where death is called 'the king of terrors.' Melville links it to the pale rider of Revelation 6:8."
+      }
+    },
+    {
+      "id": "r|pallid_horse",
+      "kind": "reference",
+      "surface": "pallid horse",
+      "confidence": 0.9,
+      "payload": {
+        "summary": "Revelation 6:8: 'And I looked, and behold a pale horse: and his name that sat on him was Death.' The Greek *chloros* (pale/ashen) underlies 'pallid' here."
+      }
+    },
+    {
+      "id": "r|whitsuntide",
+      "kind": "reference",
+      "surface": "Whitsuntide",
+      "confidence": 0.9,
+      "payload": {
+        "summary": "Christian feast fifty days after Easter (Pentecost). In England it was a major holiday with processions, but Melville stresses its eerie, wintry associations rather than its festive ones."
+      }
+    },
+    {
+      "id": "r|white_friar",
+      "kind": "reference",
+      "surface": "White Friar",
+      "confidence": 0.9,
+      "payload": {
+        "summary": "Carmelite friar, so called from the white mantle worn over the brown habit. 'White Nun' similarly refers to certain orders such as the Cistercian or Premonstratensian nuns."
+      }
+    },
+    {
+      "id": "r|white_tower_of_london",
+      "kind": "reference",
+      "surface": "White Tower of London",
+      "confidence": 0.9,
+      "payload": {
+        "summary": "The central keep of the Tower of London, built by William the Conqueror c. 1078. Its pale Caen stone and history of royal imprisonment and execution give it its sinister reputation."
+      }
+    },
+    {
+      "id": "r|byward_tower",
+      "kind": "reference",
+      "surface": "Byward Tower",
+      "confidence": 0.9,
+      "payload": {
+        "summary": "The main outer-gate tower of the Tower of London complex, through which condemned prisoners entered. Less famous than the White Tower but equally storied."
+      }
+    },
+    {
+      "id": "r|white_mountains_of_new_hampshire",
+      "kind": "reference",
+      "surface": "White Mountains of New Hampshire",
+      "confidence": 0.9,
+      "payload": {
+        "summary": "Northeastern U.S. mountain range; its highest peak, Mt. Washington, is notorious for sudden violent weather and was already a site of sublime, death-tinged tourism in Melville's era."
+      }
+    },
+    {
+      "id": "r|white_sea",
+      "kind": "reference",
+      "surface": "White Sea",
+      "confidence": 0.9,
+      "payload": {
+        "summary": "Arctic inlet of northern Russia, ice-bound much of the year. Its name and remoteness gave it an aura of desolation for nineteenth-century readers."
+      }
+    },
+    {
+      "id": "r|hartz_forests",
+      "kind": "reference",
+      "surface": "Hartz forests",
+      "confidence": 0.9,
+      "payload": {
+        "summary": "The Harz mountains of central Germany were the legendary haunt of witches and spirits; the Blocksberg (Brocken) was their traditional sabbath-ground, familiar from Goethe's Faust and German folklore."
+      }
+    },
+    {
+      "id": "r|blocksburg",
+      "kind": "reference",
+      "surface": "Blocksburg",
+      "confidence": 0.9,
+      "payload": {
+        "summary": "The Brocken, highest peak of the Harz, site of the Walpurgisnacht witches' sabbath in German legend and in Goethe's Faust, Part I."
+      }
+    },
+    {
+      "id": "r|pizarro",
+      "kind": "reference",
+      "surface": "Pizarro",
+      "confidence": 0.9,
+      "payload": {
+        "summary": "Francisco Pizarro, Spanish conquistador who conquered the Inca Empire and founded Lima in 1535. Melville uses him as a marker of Lima's antiquity and violent colonial origins."
+      }
+    },
+    {
+      "id": "r|lead_assures_him_he_is_still_off_soundings",
+      "kind": "reference",
+      "surface": "lead assures him he is still off soundings",
+      "confidence": 0.9,
+      "payload": {
+        "summary": "A lead (sounding lead) is a weighted line dropped to measure sea depth. 'Off soundings' means the water is too deep to reach bottom — i.e., no hidden rocks below."
+      }
+    },
+    {
+      "id": "v|snow_howdahed_andes",
+      "kind": "vocab",
+      "surface": "snow-howdahed Andes",
+      "confidence": 0.9,
+      "payload": {
+        "summary": "A howdah is the canopied seat mounted on an elephant's back. Melville uses it metaphorically: the Andes wear their snow-caps like a howdah atop a great beast."
+      }
+    },
+    {
+      "id": "v|legerdemain",
+      "kind": "vocab",
+      "surface": "legerdemain",
+      "confidence": 0.9,
+      "payload": {
+        "summary": "Literally 'light of hand' (French); sleight-of-hand conjuring. Melville applies it to the uncanny optical illusions produced by Antarctic ice and atmosphere."
+      }
+    },
+    {
+      "id": "v|a_hypo_ishmael",
+      "kind": "vocab",
+      "surface": "a hypo, Ishmael",
+      "confidence": 0.9,
+      "payload": {
+        "summary": "'Hypo' is short for hypochondria, used in the period to mean melancholy or morbid depression — the same affliction Ishmael cites in Chapter 1 as driving him to sea."
+      }
+    },
+    {
+      "id": "r|buffalo_robe",
+      "kind": "reference",
+      "surface": "buffalo robe",
+      "confidence": 0.9,
+      "payload": {
+        "summary": "Tanned bison hide used as a blanket or cloak; widely traded on the American frontier. Its raw animal smell would be wholly alien to a Vermont-raised horse."
+      }
+    },
+    {
+      "id": "r|black_bisons_of_distant_oregon",
+      "kind": "reference",
+      "surface": "black bisons of distant Oregon",
+      "confidence": 0.9,
+      "payload": {
+        "summary": "Mid-19th-century Americans used 'Oregon' loosely for the vast trans-Mississippi West. Bison herds had not roamed New England for generations, making the colt's fear instinctive rather than learned."
+      }
+    },
+    {
+      "id": "v|windrowed_snows",
+      "kind": "vocab",
+      "surface": "windrowed snows",
+      "confidence": 0.9,
+      "payload": {
+        "summary": "'Windrowed' means gathered into long parallel ridges by wind, as hay is raked into rows. Transfers an agricultural term to drifted snow on open prairie."
+      }
+    },
+    {
+      "id": "r|invisible_spheres_were_formed_in_fright",
+      "kind": "reference",
+      "surface": "invisible spheres were formed in fright",
+      "confidence": 0.9,
+      "payload": {
+        "summary": "Echoes Gnostic and Calvinist cosmologies in which a fallen or malevolent demiurge shaped the hidden structure of creation, contrasting with the benevolent surface of the visible world."
+      }
+    },
+    {
+      "id": "r|veil_of_the_christian_s_deity",
+      "kind": "reference",
+      "surface": "veil of the Christian's Deity",
+      "confidence": 0.9,
+      "payload": {
+        "summary": "Alludes to Exodus 33–34, where Moses veils his face after seeing God, and to the Temple veil torn at the Crucifixion (Matthew 27:51); whiteness simultaneously reveals and conceals the divine."
+      }
+    },
+    {
+      "id": "r|visible_absence_of_colour",
+      "kind": "reference",
+      "surface": "visible absence of colour",
+      "confidence": 0.9,
+      "payload": {
+        "summary": "Melville anticipates the physics of white light: white is not a pigment colour but the presence of all wavelengths, while the absence of all light is black. The paradox—absence yet totality—drives the chapter's argument."
+      }
+    },
+    {
+      "id": "v|natural_philosophers",
+      "kind": "vocab",
+      "surface": "natural philosophers",
+      "confidence": 0.9,
+      "payload": {
+        "summary": "Period term for scientists/physicists, here invoking Newtonian optics: light appears colourless but contains all colours, revealed by a prism. Melville uses this to argue nature's colours are illusions laid over a white void."
+      }
+    },
+    {
+      "id": "r|paints_like_the_harlot",
+      "kind": "reference",
+      "surface": "paints like the harlot",
+      "confidence": 0.9,
+      "payload": {
+        "summary": "Echoes Proverbs and the Whore of Babylon (Revelation 17), the painted woman whose beauty conceals corruption. Nature as cosmetically adorned deceiver is a Calvinist trope Melville intensifies to cosmic scale."
+      }
+    },
+    {
+      "id": "r|charnel_house_within",
+      "kind": "reference",
+      "surface": "charnel-house within",
+      "confidence": 0.9,
+      "payload": {
+        "summary": "Recalls Shakespeare's Juliet refusing to enter 'a charnel-house' (Romeo and Juliet III.ii); more broadly, the charnel-house as a repository of bones underlies the harlot metaphor: beauty masking death."
+      }
+    },
+    {
+      "id": "r|travellers_in_lapland",
+      "kind": "reference",
+      "surface": "travellers in Lapland",
+      "confidence": 0.9,
+      "payload": {
+        "summary": "Arctic travellers wore tinted snow-goggles to prevent snow-blindness. Melville uses this as a figure for those who strip away nature's coloured illusions and face the blank white truth directly, at cost of their sight."
+      }
+    },
+    {
+      "id": "r|leper",
+      "kind": "reference",
+      "surface": "leper",
+      "confidence": 0.9,
+      "payload": {
+        "summary": "Leprosy in the Bible (Leviticus 13) manifests as white patches; the leper is unclean and cast out. A universe revealed as white is thus figured as diseased, cursed, and untouchable."
+      }
+    },
+    {
+      "confidence": 0.79,
+      "id": "v|unsaid",
+      "kind": "vocab",
+      "payload": {
+        "dictionary": {
+          "definition": "unsaid | adjective Unspoken.",
+          "headword": "unsaid"
+        }
+      },
+      "span": {
+        "end": 142,
+        "start": 136
+      },
+      "surface": "unsaid"
+    },
+    {
+      "confidence": 0.79,
+      "id": "v|nameless",
+      "kind": "vocab",
+      "payload": {
+        "dictionary": {
+          "definition": "nameless | adjective Not having a name; unnamed.",
+          "headword": "nameless"
+        }
+      },
+      "span": {
+        "end": 331,
+        "start": 323
+      },
+      "surface": "nameless"
+    },
+    {
+      "confidence": 0.79,
+      "id": "v|overpowered",
+      "kind": "vocab",
+      "payload": {
+        "dictionary": {
+          "definition": "overpowered | verb To subdue someone by superior force.",
+          "headword": "overpowered"
+        }
+      },
+      "span": {
+        "end": 409,
+        "start": 398
+      },
+      "surface": "overpowered"
+    },
+    {
+      "confidence": 0.79,
+      "id": "v|nigh",
+      "kind": "vocab",
+      "payload": {
+        "dictionary": {
+          "definition": "nigh | | /naɪ/ | verb To draw nigh (to); to approach; to come near",
+          "headword": "nigh"
+        }
+      },
+      "span": {
+        "end": 457,
+        "start": 453
+      },
+      "surface": "nigh"
+    },
+    {
+      "confidence": 0.79,
+      "id": "v|comprehensible",
+      "kind": "vocab",
+      "payload": {
+        "dictionary": {
+          "definition": "comprehensible | | /kɒmpɹəˈhɛnsɪbəl/ | adjective Able to be comprehended.",
+          "headword": "comprehensible"
+        }
+      },
+      "span": {
+        "end": 531,
+        "start": 517
+      },
+      "surface": "comprehensible"
+    },
+    {
+      "confidence": 0.79,
+      "id": "v|whiteness",
+      "kind": "vocab",
+      "payload": {
+        "dictionary": {
+          "definition": "whiteness | | /ˈwaɪtnəs/ | noun The state of being white (all senses).",
+          "headword": "whiteness"
+        }
+      },
+      "span": {
+        "end": 25,
+        "start": 16
+      },
+      "surface": "whiteness"
+    },
+    {
+      "confidence": 0.79,
+      "id": "v|appalled",
+      "kind": "vocab",
+      "payload": {
+        "dictionary": {
+          "definition": "appalled | verb To fill with horror; to dismay.",
+          "headword": "appalled"
+        }
+      },
+      "span": {
+        "end": 602,
+        "start": 594
+      },
+      "surface": "appalled"
+    },
+    {
+      "confidence": 0.79,
+      "id": "v|naught",
+      "kind": "vocab",
+      "payload": {
+        "dictionary": {
+          "definition": "naught | | /nɔːt/ | noun Nothingness.",
+          "headword": "naught"
+        }
+      },
+      "span": {
+        "end": 746,
+        "start": 740
+      },
+      "surface": "naught"
+    },
+    {
+      "confidence": 0.79,
+      "id": "v|marbles",
+      "kind": "vocab",
+      "payload": {
+        "dictionary": {
+          "definition": "marbles | noun A rock of crystalline limestone.",
+          "headword": "marbles"
+        }
+      },
+      "span": {
+        "end": 879,
+        "start": 872
+      },
+      "surface": "marbles"
+    },
+    {
+      "confidence": 0.79,
+      "id": "v|japonicas",
+      "kind": "vocab",
+      "payload": {
+        "dictionary": {
+          "definition": "japonicas | noun Any of several plants originally native to Japan.",
+          "headword": "japonicas"
+        }
+      },
+      "span": {
+        "end": 890,
+        "start": 881
+      },
+      "surface": "japonicas"
+    },
+    {
+      "confidence": 0.79,
+      "id": "v|preeminence",
+      "kind": "vocab",
+      "payload": {
+        "dictionary": {
+          "definition": "preeminence | noun The status of being preeminent, dominant or ascendant.",
+          "headword": "preeminence"
+        }
+      },
+      "span": {
+        "end": 986,
+        "start": 975
+      },
+      "surface": "preeminence"
+    },
+    {
+      "confidence": 0.79,
+      "id": "v|barbaric",
+      "kind": "vocab",
+      "payload": {
+        "dictionary": {
+          "definition": "barbaric | | /bɑː(ɹ)ˈbæɹɪk/ | adjective Of or relating to a barbarian; uncivilized, uncultured or uncouth",
+          "headword": "barbaric"
+        }
+      },
+      "span": {
+        "end": 1017,
+        "start": 1009
+      },
+      "surface": "barbaric"
+    },
+    {
+      "confidence": 0.79,
+      "id": "v|magniloquent",
+      "kind": "vocab",
+      "payload": {
+        "dictionary": {
+          "definition": "magniloquent | adjective Speaking pompously; using deliberately long or esoteric words.",
+          "headword": "magniloquent"
+        }
+      },
+      "span": {
+        "end": 1125,
+        "start": 1113
+      },
+      "surface": "magniloquent"
+    },
+    {
+      "confidence": 0.79,
+      "id": "v|ascriptions",
+      "kind": "vocab",
+      "payload": {
+        "dictionary": {
+          "definition": "ascriptions | noun The act, or an instance, of ascribing a quality, characteristic, quotation, artistic work or other thing to someone or something.",
+          "headword": "ascriptions"
+        }
+      },
+      "span": {
+        "end": 1137,
+        "start": 1126
+      },
+      "surface": "ascriptions"
+    },
+    {
+      "confidence": 0.79,
+      "id": "v|snow-white",
+      "kind": "vocab",
+      "payload": {
+        "dictionary": {
+          "definition": "snow-white | noun A Caucasian person, especially a woman",
+          "headword": "snow-white"
+        }
+      },
+      "span": {
+        "end": 1209,
+        "start": 1199
+      },
+      "surface": "snow-white"
+    },
+    {
+      "confidence": 0.79,
+      "id": "v|quadruped",
+      "kind": "vocab",
+      "payload": {
+        "dictionary": {
+          "definition": "quadruped | | /ˈkwɒdɹəpɛd/ | noun A four-footed or four-legged animal",
+          "headword": "quadruped"
+        }
+      },
+      "span": {
+        "end": 1219,
+        "start": 1210
+      },
+      "surface": "quadruped"
+    },
+    {
+      "confidence": 0.79,
+      "id": "v|pre-eminence",
+      "kind": "vocab",
+      "payload": {
+        "dictionary": {
+          "definition": "pre-eminence | noun The status of being preeminent, dominant or ascendant.",
+          "headword": "pre-eminence"
+        }
+      },
+      "span": {
+        "end": 1464,
+        "start": 1452
+      },
+      "surface": "pre-eminence"
+    },
+    {
+      "confidence": 0.79,
+      "id": "v|dusky",
+      "kind": "vocab",
+      "payload": {
+        "dictionary": {
+          "definition": "dusky | | /ˈdʌs.ki/ | noun A dusky shark.",
+          "headword": "dusky"
+        }
+      },
+      "span": {
+        "end": 1559,
+        "start": 1554
+      },
+      "surface": "dusky"
+    },
+    {
+      "confidence": 0.79,
+      "id": "v|sympathies",
+      "kind": "vocab",
+      "payload": {
+        "dictionary": {
+          "definition": "sympathies | | /ˈsɪmpəθiz/ | noun A feeling of pity or sorrow for the suffering or distress of another; compassion.",
+          "headword": "sympathies"
+        }
+      },
+      "span": {
+        "end": 1745,
+        "start": 1735
+      },
+      "surface": "sympathies"
+    },
+    {
+      "confidence": 0.79,
+      "id": "v|benignity",
+      "kind": "vocab",
+      "payload": {
+        "dictionary": {
+          "definition": "benignity | | /bəˈnɪɡnəti/ | noun The state of being benign.",
+          "headword": "benignity"
+        }
+      },
+      "span": {
+        "end": 1866,
+        "start": 1857
+      },
+      "surface": "benignity"
+    },
+    {
+      "confidence": 0.79,
+      "id": "v|wampum",
+      "kind": "vocab",
+      "payload": {
+        "dictionary": {
+          "definition": "wampum | | /ˈwɒmpəm/ | noun Small beads made from polished shells, especially white ones, formerly used as money and jewelry by certain Native American peoples.",
+          "headword": "wampum"
+        }
+      },
+      "span": {
+        "end": 1949,
+        "start": 1943
+      },
+      "surface": "wampum"
+    },
+    {
+      "confidence": 0.79,
+      "id": "v|climes",
+      "kind": "vocab",
+      "payload": {
+        "dictionary": {
+          "definition": "climes | | /klaɪmz/ | noun A particular region defined by its weather or climate.",
+          "headword": "climes"
+        }
+      },
+      "span": {
+        "end": 2004,
+        "start": 1998
+      },
+      "surface": "climes"
+    }
+  ],
+  "schema_version": "1.2",
+  "source": {
+    "createdAtISO8601": "2026-04-01T19:35:42Z",
+    "generator": "GutenbergTest/gutenberg-test",
+    "textLength": 21121,
+    "title": "Moby-Dick, Chapter 42 — Herman Melville"
+  }
+}
