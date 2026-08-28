@@ -63,6 +63,25 @@ permalink: /woodwork-demo/
 
     </div>
 
+    <section class="demo-reader" id="demo-reader" aria-labelledby="demo-reader-title" hidden>
+      <header class="demo-reader-toolbar">
+        <button class="demo-reader-close" id="demo-reader-close" type="button">
+          <span aria-hidden="true">&larr;</span> Put back on shelf
+        </button>
+        <div class="demo-reader-heading">
+          <p id="demo-reader-author"></p>
+          <h2 id="demo-reader-title">Reading Room</h2>
+        </div>
+        <a class="demo-reader-source" id="demo-reader-source" href="#" target="_blank" rel="noopener">Open source</a>
+      </header>
+      <div class="demo-reader-stage">
+        <p class="demo-reader-loading" id="demo-reader-loading" role="status">Opening the book&hellip;</p>
+        <iframe id="demo-reader-frame" title="Public-domain book reader" loading="eager"
+                sandbox="allow-same-origin allow-popups allow-popups-to-escape-sandbox"
+                referrerpolicy="no-referrer"></iframe>
+      </div>
+    </section>
+
 <style>
   .shelf-page { margin: 2em 0 3em; }
   .shelf-heading { margin-bottom: .3em; }
@@ -270,10 +289,114 @@ permalink: /woodwork-demo/
   .shelf-caption { font-size: .9em; line-height: 1.4; }
   .shelf-caption a { text-decoration: underline; }
 
+  body.demo-reader-open { overflow: hidden; }
+  body.demo-reader-open > .books-page {
+    filter: brightness(.38) saturate(.7);
+    transform: scale(.995);
+  }
+  body > .books-page { transition: filter .25s ease, transform .25s ease; }
+  .demo-reader {
+    position: fixed;
+    z-index: 500;
+    inset: 18px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid rgba(53,43,34,.3);
+    border-radius: 18px;
+    background: #f7f3eb;
+    box-shadow: 0 28px 90px rgba(0,0,0,.48);
+    animation: demo-reader-arrive .3s cubic-bezier(.2,.8,.2,1) both;
+  }
+  .demo-reader[hidden] { display: none; }
+  @keyframes demo-reader-arrive {
+    from { opacity: 0; transform: translateY(20px) scale(.988); }
+    to { opacity: 1; transform: none; }
+  }
+  .demo-reader-toolbar {
+    flex: none;
+    min-height: 72px;
+    display: grid;
+    grid-template-columns: minmax(150px, 1fr) minmax(240px, 2fr) minmax(150px, 1fr);
+    align-items: center;
+    gap: 1rem;
+    box-sizing: border-box;
+    padding: .75rem 1.1rem;
+    border-bottom: 1px solid rgba(53,43,34,.16);
+    background: rgba(247,243,235,.97);
+  }
+  .demo-reader-close,
+  .demo-reader-source {
+    width: max-content;
+    box-sizing: border-box;
+    padding: .62rem .82rem;
+    border: 1px solid rgba(53,43,34,.24);
+    border-radius: 999px;
+    color: #302820;
+    background: transparent;
+    font: 600 .77rem/1 "Avenir Next", "Helvetica Neue", sans-serif;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .demo-reader-close:hover,
+  .demo-reader-close:focus-visible,
+  .demo-reader-source:hover,
+  .demo-reader-source:focus-visible { border-color: #8f3429; outline: none; color: #8f3429; }
+  .demo-reader-heading { min-width: 0; text-align: center; }
+  .demo-reader-heading p,
+  .demo-reader-heading h2 { margin: 0; }
+  .demo-reader-heading p {
+    color: #8f3429;
+    font: 700 .64rem/1.2 "Avenir Next", sans-serif;
+    letter-spacing: .13em;
+    text-transform: uppercase;
+  }
+  .demo-reader-heading h2 {
+    overflow: hidden;
+    color: #29231d;
+    font: 400 1.45rem/1.15 Georgia, serif;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .demo-reader-source { justify-self: end; }
+  .demo-reader-stage { position: relative; flex: 1; min-height: 0; background: #fff; }
+  .demo-reader-stage iframe { width: 100%; height: 100%; border: 0; background: #fff; }
+  .demo-reader-loading {
+    position: absolute;
+    z-index: 2;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    margin: 0;
+    color: #756b5f;
+    background: #f7f3eb;
+    font: italic 1rem/1.5 Georgia, serif;
+  }
+  .demo-reader-loading[hidden] { display: none; }
+  .spine.is-opening,
+  .pile .flat.is-opening,
+  .book-cover.is-opening { filter: brightness(1.12); }
+
   @media (max-width: 600px) {
     .shelf-case { border-radius: 18px; }
     .shelf-case[data-theme="oak"], .shelf-case[data-theme="builtin"] { border-radius: 22px; }
     .book-cover { padding: 7% 5%; }
+    .demo-reader { inset: 0; border: 0; border-radius: 0; }
+    .demo-reader-toolbar {
+      min-height: 64px;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      gap: .55rem;
+      padding: .55rem .65rem;
+    }
+    .demo-reader-close { width: 42px; overflow: hidden; white-space: nowrap; }
+    .demo-reader-close span { margin-right: 1rem; }
+    .demo-reader-source { padding: .56rem .68rem; font-size: .7rem; }
+    .demo-reader-heading h2 { font-size: 1rem; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    body > .books-page { transition: none; }
+    .demo-reader { animation: none; }
   }
 </style>
 
@@ -282,14 +405,21 @@ permalink: /woodwork-demo/
   var shelf = document.getElementById('shelf');
   var caption = document.getElementById('caption');
   var shuffleBtn = document.getElementById('shuffle');
+  var reader = document.getElementById('demo-reader');
+  var readerClose = document.getElementById('demo-reader-close');
+  var readerTitle = document.getElementById('demo-reader-title');
+  var readerAuthor = document.getElementById('demo-reader-author');
+  var readerSource = document.getElementById('demo-reader-source');
+  var readerFrame = document.getElementById('demo-reader-frame');
+  var readerLoading = document.getElementById('demo-reader-loading');
+  var readerOrigin = null;
 
-  var NOTES = {};
-
-  var LIBRARY = [{% for b in site.data.public_domain_shelf %}
+  var LIBRARY = [{% for b in site.data.public_domain_shelf %}{% assign book_source = site.data.public_domain_sources[b.title] %}
     {"id": {{ b.title | jsonify }},
      "title": {{ b.title | jsonify }},
      "author": {{ b.author | jsonify }},
-     "pages": {{ b.pages | default: 288 }}}{% unless forloop.last %},{% endunless %}{% endfor %}
+     "pages": {{ b.pages | default: 288 }},
+     "source": {{ book_source | jsonify }}}{% unless forloop.last %},{% endunless %}{% endfor %}
   ];
 
   var PALETTE = [
@@ -692,25 +822,60 @@ permalink: /woodwork-demo/
   }
 
   var active = null;
+  function closeReader() {
+    if (reader.hidden) return;
+    reader.hidden = true;
+    document.body.classList.remove('demo-reader-open');
+    readerFrame.src = 'about:blank';
+    if (readerOrigin) {
+      readerOrigin.classList.remove('is-opening');
+      readerOrigin.focus({preventScroll: true});
+    }
+    readerOrigin = null;
+  }
+
+  function openReader(book, origin) {
+    if (!book.source) return;
+    readerOrigin = origin;
+    origin.classList.add('is-opening');
+    readerTitle.textContent = book.title;
+    readerAuthor.textContent = book.author || 'Public-domain edition';
+    readerSource.href = book.source;
+    readerLoading.hidden = false;
+    readerFrame.title = book.title + ' by ' + (book.author || 'Unknown author');
+    readerFrame.src = book.source;
+    reader.hidden = false;
+    document.body.classList.add('demo-reader-open');
+    readerClose.focus();
+  }
+
+  readerFrame.addEventListener('load', function () {
+    if (readerFrame.src !== 'about:blank') readerLoading.hidden = true;
+  });
+  readerClose.addEventListener('click', closeReader);
+  reader.addEventListener('click', function (event) {
+    if (event.target === reader) closeReader();
+  });
+  document.addEventListener('keydown', function (event) {
+    if (event.key === 'Escape' && !reader.hidden) closeReader();
+  });
+
   function wire(el, book) {
-    function show() {
+    function describe() {
       if (active) active.classList.remove('is-active');
       el.classList.add('is-active');
       active = el;
-      var text = book.title + (book.author ? ' — ' + book.author : '') + ' · ' + book.pages + ' pages';
-      book.url = NOTES[book.title] || '';
-      caption.textContent = text;
-      if (book.url) {
-        caption.appendChild(document.createTextNode(' · '));
-        var a = document.createElement('a');
-        a.href = book.url;
-        a.textContent = 'notes →';
-        caption.appendChild(a);
-      }
+      caption.textContent = book.title + (book.author ? ' — ' + book.author : '') + ' · ' + book.pages + ' pages · open book';
     }
-    el.addEventListener('click', show);
+    function open() {
+      describe();
+      openReader(book, el);
+    }
+    el.addEventListener('mouseenter', describe);
+    el.addEventListener('focus', describe);
+    el.addEventListener('click', open);
     el.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); show(); }
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); }
     });
   }
 
