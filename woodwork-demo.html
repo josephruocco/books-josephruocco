@@ -1713,7 +1713,7 @@ permalink: /woodwork-demo/
 
   function renderResolvedBook(book) {
     resolvedBook.hidden = false;
-    resolvedBookMessage.textContent = "Success, we've added " + book.title + " to your library";
+    resolvedBookMessage.textContent = "we've added " + book.title + " to your library";
     if (book.cover) {
       resolvedBookCover.src = book.cover;
       resolvedBookCover.alt = 'Cover for ' + book.title;
@@ -1900,7 +1900,7 @@ permalink: /woodwork-demo/
       mergeBook(book);
       manualSeed = Math.floor(Math.random() * 2147483647);
       renderResolvedBook(book);
-      announceStatus('Added. It is now on the shelf below.', false);
+      announceStatus('', false);
       render();
       queryInput.value = '';
       queryInput.focus();
