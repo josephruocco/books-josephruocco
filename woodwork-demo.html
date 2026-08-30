@@ -46,19 +46,10 @@ permalink: /woodwork-demo/
       <main class="books-content" id="main-content">
         <div class="shelf-page">
           <section class="demo-builder" aria-labelledby="demo-builder-title">
-            <div class="demo-builder-copy">
-              <p class="demo-builder-kicker">Make it yours</p>
-              <h2 id="demo-builder-title">Add a book to your shelf</h2>
-              <p class="demo-builder-intro">Type one title, optionally add the author, and WoodWork will pull in the closest match and drop it into the shelf.</p>
-            </div>
             <form class="demo-builder-form" id="add-book-form">
               <label class="demo-field">
-                <span>Book title</span>
-                <input id="book-title-input" name="title" type="text" placeholder="The Master and Margarita" autocomplete="off" required>
-              </label>
-              <label class="demo-field demo-field-optional">
-                <span>Author <em>optional</em></span>
-                <input id="book-author-input" name="author" type="text" placeholder="Mikhail Bulgakov" autocomplete="off">
+                <span id="demo-builder-title">Seacrh by Title or Author</span>
+                <input id="book-query-input" name="query" type="text" placeholder="The Master and Margarita or Mikhail Bulgakov" autocomplete="off" required>
               </label>
               <div class="demo-builder-actions">
                 <button type="submit" class="demo-builder-submit" id="add-book-submit">Add to shelf</button>
@@ -130,49 +121,23 @@ permalink: /woodwork-demo/
   .shelf-heading { margin-bottom: .3em; }
   .shelf-intro { max-width: 34em; margin-bottom: 1.4em; line-height: 1.5; }
   .demo-builder {
-    display: grid;
-    grid-template-columns: minmax(0, 1.2fr) minmax(300px, .9fr);
-    gap: 1.4rem 1.8rem;
-    align-items: start;
-    margin-bottom: 1.4rem;
-    padding: 1.25rem 1.35rem;
-    border: 1px solid rgba(35,26,18,.1);
-    border-radius: 22px;
-    background:
-      radial-gradient(circle at top left, rgba(183,146,88,.13), transparent 28%),
-      linear-gradient(180deg, rgba(255,255,255,.92), rgba(245,239,228,.94));
-    box-shadow: 0 12px 36px rgba(38,24,15,.08);
-  }
-  .demo-builder-kicker,
-  .demo-match-kicker {
-    margin: 0 0 .45rem;
-    color: #8f3429;
-    font: 700 .69rem/1.2 "Avenir Next", "Helvetica Neue", sans-serif;
-    letter-spacing: .14em;
-    text-transform: uppercase;
-  }
-  .demo-builder h2,
-  .demo-match h3 {
-    margin: 0;
-    color: #231a12;
-    font: 400 clamp(1.7rem, 3vw, 2.5rem)/1.02 Georgia, serif;
-    letter-spacing: -.035em;
-  }
-  .demo-builder-intro,
-  .demo-match-author,
-  .demo-match-meta,
-  .demo-match-note {
-    margin: 0;
-    color: #5d5043;
-    line-height: 1.5;
+    margin-bottom: 1rem;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
   }
   .demo-builder-form {
     display: grid;
-    gap: .8rem;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: .75rem;
+    align-items: end;
   }
   .demo-field {
     display: grid;
-    gap: .35rem;
+    gap: .4rem;
+    min-width: 0;
   }
   .demo-field span {
     color: #30271f;
@@ -180,19 +145,13 @@ permalink: /woodwork-demo/
     letter-spacing: .1em;
     text-transform: uppercase;
   }
-  .demo-field span em {
-    color: #7c6b59;
-    font-style: normal;
-    font-weight: 600;
-    letter-spacing: .06em;
-  }
   .demo-field input {
     width: 100%;
     box-sizing: border-box;
-    padding: .9rem 1rem;
-    border: 1px solid rgba(53,43,34,.2);
+    padding: 1rem 1.05rem;
+    border: 1px solid rgba(53,43,34,.18);
     border-radius: 16px;
-    background: rgba(255,255,255,.9);
+    background: rgba(255,255,255,.96);
     color: #231a12;
     font: 500 1rem/1.2 "Avenir Next", "Helvetica Neue", sans-serif;
   }
@@ -204,15 +163,15 @@ permalink: /woodwork-demo/
   .demo-builder-actions {
     display: flex;
     flex-wrap: wrap;
-    gap: .7rem;
-    margin-top: .15rem;
+    gap: .65rem;
+    align-items: center;
   }
   .demo-builder-submit,
   .demo-builder-reset,
   .demo-match-link {
     width: max-content;
     box-sizing: border-box;
-    padding: .82rem 1.1rem;
+    padding: .95rem 1.15rem;
     border-radius: 999px;
     font: 700 .76rem/1 "Avenir Next", "Helvetica Neue", sans-serif;
     letter-spacing: .06em;
@@ -251,9 +210,10 @@ permalink: /woodwork-demo/
     outline: none;
   }
   .demo-builder-status {
-    margin: 0;
-    min-height: 1.4em;
+    grid-column: 1 / -1;
+    margin-bottom: 1.4rem;
     color: #5d5043;
+    min-height: 1.4em;
     font: italic .95rem/1.45 Georgia, serif;
   }
   .demo-match {
@@ -303,13 +263,29 @@ permalink: /woodwork-demo/
     gap: .38rem;
     min-width: 0;
   }
+  .demo-match-kicker {
+    margin: 0 0 .45rem;
+    color: #8f3429;
+    font: 700 .69rem/1.2 "Avenir Next", "Helvetica Neue", sans-serif;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+  }
+  .demo-match h3 {
+    margin: 0;
+    color: #231a12;
+    font: 400 clamp(1.4rem, 2.5vw, 2rem)/1.05 Georgia, serif;
+    letter-spacing: -.03em;
+  }
   .demo-match-author {
+    margin: 0;
     font-size: 1rem;
     font-style: italic;
   }
   .demo-match-meta,
   .demo-match-note {
+    margin: 0;
     font-size: .92rem;
+    line-height: 1.5;
   }
   .demo-match-note { color: #6c5b4d; }
   .demo-match-link {
@@ -750,8 +726,11 @@ permalink: /woodwork-demo/
 
   @media (max-width: 900px) {
     .demo-builder {
+      margin-bottom: .85rem;
+    }
+    .demo-builder-form {
       grid-template-columns: 1fr;
-      padding: 1.1rem;
+      gap: .65rem;
     }
     .demo-reader { inset: 0; border: 0; border-radius: 0; }
     .demo-reader-toolbar {
@@ -782,11 +761,13 @@ permalink: /woodwork-demo/
 
   @media (max-width: 600px) {
     .demo-builder {
-      margin-bottom: 1rem;
-      border-radius: 18px;
+      margin-bottom: .75rem;
     }
-    .demo-builder h2,
-    .demo-match h3 { font-size: 1.55rem; }
+    .demo-builder-submit,
+    .demo-builder-reset {
+      width: 100%;
+      justify-content: center;
+    }
     .demo-match {
       grid-template-columns: 88px minmax(0, 1fr);
       gap: .8rem;
@@ -827,8 +808,7 @@ permalink: /woodwork-demo/
   var shuffleBtn = document.getElementById('shuffle');
   var reader = document.getElementById('demo-reader');
   var addBookForm = document.getElementById('add-book-form');
-  var titleInput = document.getElementById('book-title-input');
-  var authorInput = document.getElementById('book-author-input');
+  var queryInput = document.getElementById('book-query-input');
   var addBookSubmit = document.getElementById('add-book-submit');
   var addBookStatus = document.getElementById('add-book-status');
   var clearAddedBooksBtn = document.getElementById('clear-added-books');
@@ -1762,28 +1742,27 @@ permalink: /woodwork-demo/
     })[0].doc;
   }
 
-  async function resolveBook(title, author) {
+  async function resolveBook(query) {
     var params = new URLSearchParams({
       limit: '10',
       fields: 'key,title,author_name,cover_i,edition_key,first_publish_year,number_of_pages_median'
     });
-    params.set('title', title);
-    if (author) params.set('author', author);
+    params.set('q', query);
     var response = await fetch('https://openlibrary.org/search.json?' + params.toString(), {
       headers: { Accept: 'application/json' }
     });
     if (!response.ok) throw new Error('Book lookup is temporarily unavailable.');
     var payload = await response.json();
     var docs = Array.isArray(payload.docs) ? payload.docs : [];
-    var match = chooseMatch(docs, title, author);
-    if (!match) throw new Error('No close match found. Try adding the author or a more exact title.');
+    var match = chooseMatch(docs, query, query);
+    if (!match) throw new Error('Doesnt know. do u want to add this book manually?');
     return {
       id: customBookId({
-        title: normalizeText(match.title) || normalizeText(title),
-        author: normalizeText((match.author_name && match.author_name[0]) || author || '')
+        title: normalizeText(match.title) || normalizeText(query),
+        author: normalizeText((match.author_name && match.author_name[0]) || '')
       }),
-      title: normalizeText(match.title) || normalizeText(title),
-      author: normalizeText((match.author_name && match.author_name[0]) || author || 'Unknown author'),
+      title: normalizeText(match.title) || normalizeText(query),
+      author: normalizeText((match.author_name && match.author_name[0]) || 'Unknown author'),
       pages: Number(match.number_of_pages_median) || 320,
       firstPublishYear: match.first_publish_year || null,
       cover: coverURL(match),
@@ -1978,17 +1957,16 @@ permalink: /woodwork-demo/
 
   addBookForm.addEventListener('submit', async function (event) {
     event.preventDefault();
-    var title = normalizeText(titleInput.value);
-    var author = normalizeText(authorInput.value);
-    if (!title) {
-      announceStatus('Enter a title first.', true);
-      titleInput.focus();
+    var query = normalizeText(queryInput.value);
+    if (!query) {
+      announceStatus('Enter a title or author first.', true);
+      queryInput.focus();
       return;
     }
     addBookSubmit.disabled = true;
     announceStatus('Looking up the closest edition...', false);
     try {
-      var book = await resolveBook(title, author);
+      var book = await resolveBook(query);
       mergeBook(book);
       manualSeed = Math.floor(Math.random() * 2147483647);
       renderResolvedBook(book, {
@@ -1997,9 +1975,8 @@ permalink: /woodwork-demo/
       });
       announceStatus('Added. It is now on the shelf below.', false);
       render();
-      titleInput.value = '';
-      authorInput.value = '';
-      titleInput.focus();
+      queryInput.value = '';
+      queryInput.focus();
     } catch (error) {
       announceStatus((error && error.message) || 'That book could not be added right now.', true);
     } finally {
