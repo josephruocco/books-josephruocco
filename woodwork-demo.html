@@ -430,7 +430,7 @@ permalink: /woodwork-demo/
   .spine .label {
     position: absolute;
     top: 13%;
-    bottom: 19%;
+    bottom: 24%;
     left: 4px;
     right: 4px;
     writing-mode: vertical-rl;
@@ -452,14 +452,14 @@ permalink: /woodwork-demo/
     position: absolute;
     left: 3px;
     right: 3px;
-    bottom: 5.5%;
+    bottom: 7.5%;
     overflow: hidden;
     white-space: nowrap;
     text-align: center;
     text-transform: uppercase;
     font-family: "Avenir Next", "Helvetica Neue", sans-serif;
     font-weight: 700;
-    letter-spacing: .04em;
+    letter-spacing: .02em;
     line-height: 1;
     pointer-events: none;
   }
@@ -1104,14 +1104,14 @@ permalink: /woodwork-demo/
     }
 
     var surname = authorSurname(book);
-    if (surname && w >= 18) {
+    if (surname && w >= 20) {
       var author = document.createElement('span');
       author.className = 'spine-author';
       author.textContent = surname;
       author.style.color = ink;
       author.style.textShadow = light ? '0 1px rgba(255,255,255,.28)' : '0 1px 1px rgba(0,0,0,.8)';
-      var authorFit = (w - 6) / Math.max(1, surname.length * .63);
-      author.style.fontSize = Math.max(7.25, Math.min(10.25 * SCALE, w * .28, authorFit)) + 'px';
+      var authorFit = (w - 5) / Math.max(1, surname.length * .56);
+      author.style.fontSize = Math.max(8.25, Math.min(12 * SCALE, w * .34, authorFit)) + 'px';
       el.appendChild(author);
     }
     el.setAttribute('aria-label', book.title + (book.author ? ', ' + book.author : ''));
@@ -1948,7 +1948,7 @@ permalink: /woodwork-demo/
     });
     Array.prototype.forEach.call(shelf.querySelectorAll('.spine .spine-author, .book-cover .cover-author'), function (author) {
       var size = Number.parseFloat(window.getComputedStyle(author).fontSize) || 8;
-      var floor = author.classList.contains('spine-author') ? 6.5 : 3;
+      var floor = author.classList.contains('spine-author') ? 7.5 : 3;
       while ((author.scrollWidth > author.clientWidth || author.scrollHeight > author.clientHeight) && size > floor) {
         size -= .5;
         author.style.fontSize = size + 'px';
