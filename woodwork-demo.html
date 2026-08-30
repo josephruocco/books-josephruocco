@@ -45,6 +45,44 @@ permalink: /woodwork-demo/
 
       <main class="books-content" id="main-content">
         <div class="shelf-page">
+          <section class="demo-builder" aria-labelledby="demo-builder-title">
+            <div class="demo-builder-copy">
+              <p class="demo-builder-kicker">Make it yours</p>
+              <h2 id="demo-builder-title">Add a book to your shelf</h2>
+              <p class="demo-builder-intro">Type one title, optionally add the author, and WoodWork will pull in the closest match and drop it into the shelf.</p>
+            </div>
+            <form class="demo-builder-form" id="add-book-form">
+              <label class="demo-field">
+                <span>Book title</span>
+                <input id="book-title-input" name="title" type="text" placeholder="The Master and Margarita" autocomplete="off" required>
+              </label>
+              <label class="demo-field demo-field-optional">
+                <span>Author <em>optional</em></span>
+                <input id="book-author-input" name="author" type="text" placeholder="Mikhail Bulgakov" autocomplete="off">
+              </label>
+              <div class="demo-builder-actions">
+                <button type="submit" class="demo-builder-submit" id="add-book-submit">Add to shelf</button>
+                <button type="button" class="demo-builder-reset" id="clear-added-books" hidden>Clear my added books</button>
+              </div>
+              <p class="demo-builder-status" id="add-book-status" role="status" aria-live="polite">The demo shelf is already here. Add one book and it joins immediately.</p>
+            </form>
+            <article class="demo-match" id="resolved-book" hidden aria-live="polite">
+              <div class="demo-match-cover-wrap">
+                <img class="demo-match-cover" id="resolved-book-cover" alt="">
+                <div class="demo-match-cover demo-match-cover-fallback" id="resolved-book-fallback" hidden>
+                  <span id="resolved-book-fallback-title"></span>
+                </div>
+              </div>
+              <div class="demo-match-copy">
+                <p class="demo-match-kicker" id="resolved-book-kicker">Just added</p>
+                <h3 id="resolved-book-title"></h3>
+                <p class="demo-match-author" id="resolved-book-author"></p>
+                <p class="demo-match-meta" id="resolved-book-meta"></p>
+                <p class="demo-match-note" id="resolved-book-note"></p>
+                <a class="demo-match-link" id="resolved-book-link" href="#" target="_blank" rel="noopener" hidden>View source record</a>
+              </div>
+            </article>
+
           <div class="shelf-themes" id="themes" role="group" aria-label="Shelf style">
             <button type="button" data-theme="classic" class="is-on">Classic</button>
             <button type="button" data-theme="oak">Dark Oak</button>
@@ -72,13 +110,18 @@ permalink: /woodwork-demo/
           <p id="demo-reader-author"></p>
           <h2 id="demo-reader-title">Reading Room</h2>
         </div>
-        <a class="demo-reader-source" id="demo-reader-source" href="#" target="_blank" rel="noopener">Open source</a>
+        <div class="demo-reader-actions">
+          <span id="demo-reader-status">Full text</span>
+          <a class="demo-reader-source" id="demo-reader-source" href="#" target="_blank" rel="noopener">Open source</a>
+        </div>
       </header>
-      <div class="demo-reader-stage">
+      <div class="demo-reader-scroll" id="demo-reader-scroll">
         <p class="demo-reader-loading" id="demo-reader-loading" role="status">Opening the book&hellip;</p>
-        <iframe id="demo-reader-frame" title="Public-domain book reader" loading="eager"
-                sandbox="allow-same-origin allow-popups allow-popups-to-escape-sandbox"
-                referrerpolicy="no-referrer"></iframe>
+        <div class="demo-reader-layout" id="demo-reader-layout" hidden>
+          <article class="demo-reader-text" id="demo-reader-text"></article>
+          <aside class="demo-reader-marginalia" id="demo-reader-marginalia" aria-label="Reading notes"></aside>
+        </div>
+        <p class="demo-reader-error" id="demo-reader-error" role="alert" hidden></p>
       </div>
     </section>
 
@@ -86,6 +129,192 @@ permalink: /woodwork-demo/
   .shelf-page { margin: 2em 0 3em; }
   .shelf-heading { margin-bottom: .3em; }
   .shelf-intro { max-width: 34em; margin-bottom: 1.4em; line-height: 1.5; }
+  .demo-builder {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(300px, .9fr);
+    gap: 1.4rem 1.8rem;
+    align-items: start;
+    margin-bottom: 1.4rem;
+    padding: 1.25rem 1.35rem;
+    border: 1px solid rgba(35,26,18,.1);
+    border-radius: 22px;
+    background:
+      radial-gradient(circle at top left, rgba(183,146,88,.13), transparent 28%),
+      linear-gradient(180deg, rgba(255,255,255,.92), rgba(245,239,228,.94));
+    box-shadow: 0 12px 36px rgba(38,24,15,.08);
+  }
+  .demo-builder-kicker,
+  .demo-match-kicker {
+    margin: 0 0 .45rem;
+    color: #8f3429;
+    font: 700 .69rem/1.2 "Avenir Next", "Helvetica Neue", sans-serif;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+  }
+  .demo-builder h2,
+  .demo-match h3 {
+    margin: 0;
+    color: #231a12;
+    font: 400 clamp(1.7rem, 3vw, 2.5rem)/1.02 Georgia, serif;
+    letter-spacing: -.035em;
+  }
+  .demo-builder-intro,
+  .demo-match-author,
+  .demo-match-meta,
+  .demo-match-note {
+    margin: 0;
+    color: #5d5043;
+    line-height: 1.5;
+  }
+  .demo-builder-form {
+    display: grid;
+    gap: .8rem;
+  }
+  .demo-field {
+    display: grid;
+    gap: .35rem;
+  }
+  .demo-field span {
+    color: #30271f;
+    font: 700 .74rem/1.2 "Avenir Next", "Helvetica Neue", sans-serif;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+  }
+  .demo-field span em {
+    color: #7c6b59;
+    font-style: normal;
+    font-weight: 600;
+    letter-spacing: .06em;
+  }
+  .demo-field input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: .9rem 1rem;
+    border: 1px solid rgba(53,43,34,.2);
+    border-radius: 16px;
+    background: rgba(255,255,255,.9);
+    color: #231a12;
+    font: 500 1rem/1.2 "Avenir Next", "Helvetica Neue", sans-serif;
+  }
+  .demo-field input:focus {
+    border-color: #8f3429;
+    outline: 2px solid rgba(143,52,41,.13);
+    outline-offset: 1px;
+  }
+  .demo-builder-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .7rem;
+    margin-top: .15rem;
+  }
+  .demo-builder-submit,
+  .demo-builder-reset,
+  .demo-match-link {
+    width: max-content;
+    box-sizing: border-box;
+    padding: .82rem 1.1rem;
+    border-radius: 999px;
+    font: 700 .76rem/1 "Avenir Next", "Helvetica Neue", sans-serif;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+  .demo-builder-submit {
+    border: 1px solid #231a12;
+    color: #f8f4ec;
+    background: #231a12;
+    cursor: pointer;
+  }
+  .demo-builder-submit:hover,
+  .demo-builder-submit:focus-visible {
+    border-color: #8f3429;
+    background: #8f3429;
+    outline: none;
+  }
+  .demo-builder-submit[disabled] {
+    opacity: .65;
+    cursor: wait;
+  }
+  .demo-builder-reset,
+  .demo-match-link {
+    border: 1px solid rgba(53,43,34,.18);
+    color: #302820;
+    background: transparent;
+    cursor: pointer;
+  }
+  .demo-builder-reset:hover,
+  .demo-builder-reset:focus-visible,
+  .demo-match-link:hover,
+  .demo-match-link:focus-visible {
+    border-color: #8f3429;
+    color: #8f3429;
+    outline: none;
+  }
+  .demo-builder-status {
+    margin: 0;
+    min-height: 1.4em;
+    color: #5d5043;
+    font: italic .95rem/1.45 Georgia, serif;
+  }
+  .demo-match {
+    display: grid;
+    grid-template-columns: 112px minmax(0, 1fr);
+    gap: 1rem;
+    align-items: start;
+    margin-bottom: 1.2rem;
+    padding: 1rem 1.1rem;
+    border: 1px solid rgba(35,26,18,.1);
+    border-radius: 22px;
+    background: rgba(250,247,240,.82);
+  }
+  .demo-match[hidden] { display: none; }
+  .demo-match-cover-wrap {
+    position: relative;
+    width: 112px;
+    aspect-ratio: 2 / 3;
+  }
+  .demo-match-cover,
+  .demo-match-cover-fallback {
+    width: 100%;
+    height: 100%;
+    border-radius: 14px;
+    box-shadow: 0 10px 22px rgba(24,14,8,.16);
+  }
+  .demo-match-cover {
+    display: block;
+    object-fit: cover;
+    background: #ede4d6;
+  }
+  .demo-match-cover-fallback {
+    box-sizing: border-box;
+    display: grid;
+    place-items: center;
+    padding: .9rem;
+    border: 1px solid rgba(53,43,34,.14);
+    background:
+      linear-gradient(145deg, rgba(255,255,255,.14), transparent 52%, rgba(0,0,0,.14)),
+      linear-gradient(180deg, #7d5943, #493326);
+    color: #f8f4ec;
+    font: 600 .88rem/1.1 Georgia, serif;
+    text-align: center;
+  }
+  .demo-match-copy {
+    display: grid;
+    gap: .38rem;
+    min-width: 0;
+  }
+  .demo-match-author {
+    font-size: 1rem;
+    font-style: italic;
+  }
+  .demo-match-meta,
+  .demo-match-note {
+    font-size: .92rem;
+  }
+  .demo-match-note { color: #6c5b4d; }
+  .demo-match-link {
+    margin-top: .25rem;
+  }
 
   /* The web shelf uses the same proportions and materials as the iOS shelf. */
   .shelf-case[data-theme="classic"] {
@@ -269,7 +498,14 @@ permalink: /woodwork-demo/
     cursor: pointer;
   }
   .book-cover:hover, .book-cover:focus-visible { transform: translateY(-7px); outline: none; }
-  .book-cover .cover-author { font: 600 .66em/1.15 Georgia, serif; letter-spacing: .08em; text-transform: uppercase; }
+  .book-cover .cover-author {
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    font: 600 .66em/1.15 Georgia, serif;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
   .book-cover .cover-rule { width: 42%; height: 1px; margin: 8% 0; opacity: .42; background: currentColor; }
   .book-cover .cover-title { font: 400 1em/1.08 Georgia, serif; }
   .book-cover .cover-mark { margin-top: auto; opacity: .62; }
@@ -358,26 +594,206 @@ permalink: /woodwork-demo/
     text-overflow: ellipsis;
     white-space: nowrap;
   }
-  .demo-reader-source { justify-self: end; }
-  .demo-reader-stage { position: relative; flex: 1; min-height: 0; background: #fff; }
-  .demo-reader-stage iframe { width: 100%; height: 100%; border: 0; background: #fff; }
-  .demo-reader-loading {
-    position: absolute;
-    z-index: 2;
-    inset: 0;
-    display: grid;
-    place-items: center;
-    margin: 0;
-    color: #756b5f;
-    background: #f7f3eb;
-    font: italic 1rem/1.5 Georgia, serif;
+  .demo-reader-actions {
+    justify-self: end;
+    display: flex;
+    align-items: center;
+    gap: .7rem;
   }
-  .demo-reader-loading[hidden] { display: none; }
+  .demo-reader-actions > span {
+    color: #756b5f;
+    font: italic .74rem/1.2 Georgia, serif;
+    white-space: nowrap;
+  }
+  .demo-reader-scroll {
+    flex: 1;
+    min-height: 0;
+    overflow: auto;
+    overscroll-behavior: contain;
+    background:
+      repeating-linear-gradient(0deg, rgba(85,64,40,.022) 0 1px, transparent 1px 5px),
+      #f8f4ec;
+  }
+  .demo-reader-loading,
+  .demo-reader-error {
+    width: min(100% - 40px, 900px);
+    margin: 8rem auto;
+    color: #756b5f;
+    font: italic 1rem/1.5 Georgia, serif;
+    text-align: center;
+  }
+  .demo-reader-error { color: #8f3429; }
+  .demo-reader-layout {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 680px) minmax(220px, 280px);
+    justify-content: center;
+    align-items: start;
+    gap: clamp(3rem, 7vw, 7rem);
+    width: min(100% - 50px, 1140px);
+    margin: 0 auto;
+    padding: 5rem 0 8rem;
+  }
+  .demo-reader-layout.no-notes {
+    grid-template-columns: minmax(0, 720px);
+  }
+  .demo-reader-layout.no-notes .demo-reader-marginalia { display: none; }
+  .demo-reader-text {
+    min-width: 0;
+    color: #28231e;
+    font: 1.13rem/1.83 Georgia, "Times New Roman", serif;
+  }
+  .demo-reader-text > .book-opening {
+    margin: 0 0 4.5rem;
+    padding-bottom: 2.1rem;
+    border-bottom: 1px solid rgba(75,58,43,.18);
+  }
+  .demo-reader-text .book-opening-kicker {
+    margin: 0 0 .65rem;
+    color: #8f3429;
+    font: 700 .66rem/1.2 "Avenir Next", sans-serif;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+  }
+  .demo-reader-text .book-opening h1 {
+    margin: 0;
+    color: #29231d;
+    font: 400 clamp(2.8rem, 6vw, 5.5rem)/.98 Georgia, serif;
+    letter-spacing: -.052em;
+  }
+  .demo-reader-text .book-opening-byline {
+    margin: 1rem 0 0;
+    color: #756b5f;
+    font-style: italic;
+  }
+  .demo-reader-text h2 {
+    margin: 4.2rem 0 2rem;
+    color: #29231d;
+    font: 400 clamp(1.8rem, 4vw, 3.2rem)/1.06 Georgia, serif;
+    letter-spacing: -.035em;
+  }
+  .demo-reader-text h3 {
+    margin: 3rem 0 1.2rem;
+    color: #8f3429;
+    font: 700 .72rem/1.25 "Avenir Next", sans-serif;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+  }
+  .demo-reader-text p { margin: 0 0 1.4em; }
+  .demo-reader-text .nind { text-indent: 0; }
+  .demo-reader-text .letra { font-size: 1em; }
+  .demo-reader-text i { font-style: italic; }
+  .demo-reader-text a { color: inherit; text-decoration: none; }
+  .demo-reader-text .source-note {
+    margin-top: 5rem;
+    padding-top: 1.4rem;
+    border-top: 1px solid rgba(75,58,43,.18);
+    color: #756b5f;
+    font: .75rem/1.5 "Avenir Next", sans-serif;
+  }
+  .reading-annotation { cursor: help; }
+  .annotation-vocab {
+    text-decoration: underline dotted rgba(143,52,41,.72) 1.5px;
+    text-underline-offset: .2em;
+  }
+  .annotation-reference { box-shadow: inset 0 -.32em rgba(183,146,88,.27); }
+  .demo-reader-marginalia {
+    position: relative;
+    min-height: 100%;
+    border-left: 1px solid rgba(75,58,43,.15);
+  }
+  .margin-note {
+    position: absolute;
+    left: 1.5rem;
+    width: calc(100% - 1.5rem);
+    box-sizing: border-box;
+    padding: .8rem 0 .9rem;
+    border-top: 1px solid rgba(75,58,43,.2);
+    color: #4d443b;
+    background: rgba(248,244,236,.95);
+  }
+  .margin-note::before {
+    content: "";
+    position: absolute;
+    top: -1px;
+    right: 100%;
+    width: 1.5rem;
+    border-top: 1px solid rgba(75,58,43,.2);
+  }
+  .note-kind {
+    display: block;
+    margin-bottom: .28rem;
+    color: #8f3429;
+    font: 700 .6rem/1.2 "Avenir Next", sans-serif;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+  }
+  .margin-note[data-kind="reference"] .note-kind,
+  .inline-note[data-kind="reference"] .note-kind { color: #7b623a; }
+  .note-title {
+    display: block;
+    margin-bottom: .22rem;
+    color: #29231d;
+    font: 700 .88rem/1.25 Georgia, serif;
+  }
+  .note-body {
+    margin: 0;
+    font: .76rem/1.45 "Avenir Next", "Helvetica Neue", sans-serif;
+  }
+  .inline-note-group { display: none; }
+  .demo-reader-loading[hidden],
+  .demo-reader-error[hidden],
+  .demo-reader-layout[hidden] { display: none; }
   .spine.is-opening,
   .pile .flat.is-opening,
   .book-cover.is-opening { filter: brightness(1.12); }
 
+  @media (max-width: 900px) {
+    .demo-builder {
+      grid-template-columns: 1fr;
+      padding: 1.1rem;
+    }
+    .demo-reader { inset: 0; border: 0; border-radius: 0; }
+    .demo-reader-toolbar {
+      min-height: 68px;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      gap: .8rem;
+      padding: .65rem .8rem;
+    }
+    .demo-reader-layout {
+      display: block;
+      width: min(100% - 38px, 680px);
+      padding: 3.2rem 0 6rem;
+    }
+    .demo-reader-marginalia { display: none; }
+    .inline-note-group {
+      display: grid;
+      gap: .65rem;
+      margin: -.35rem 0 1.65rem;
+      padding: .85rem 1rem;
+      border-left: 3px solid #b79258;
+      background: rgba(183,146,88,.1);
+    }
+    .inline-note + .inline-note {
+      padding-top: .65rem;
+      border-top: 1px solid rgba(75,58,43,.16);
+    }
+  }
+
   @media (max-width: 600px) {
+    .demo-builder {
+      margin-bottom: 1rem;
+      border-radius: 18px;
+    }
+    .demo-builder h2,
+    .demo-match h3 { font-size: 1.55rem; }
+    .demo-match {
+      grid-template-columns: 88px minmax(0, 1fr);
+      gap: .8rem;
+      padding: .9rem;
+      border-radius: 18px;
+    }
+    .demo-match-cover-wrap { width: 88px; }
     .shelf-case { border-radius: 18px; }
     .shelf-case[data-theme="oak"], .shelf-case[data-theme="builtin"] { border-radius: 22px; }
     .book-cover { padding: 7% 5%; }
@@ -391,7 +807,11 @@ permalink: /woodwork-demo/
     .demo-reader-close { width: 42px; overflow: hidden; white-space: nowrap; }
     .demo-reader-close span { margin-right: 1rem; }
     .demo-reader-source { padding: .56rem .68rem; font-size: .7rem; }
+    .demo-reader-actions > span { display: none; }
     .demo-reader-heading h2 { font-size: 1rem; }
+    .demo-reader-text { font-size: 1.04rem; line-height: 1.72; }
+    .demo-reader-text > .book-opening { margin-bottom: 3rem; }
+    .demo-reader-text .book-opening h1 { font-size: clamp(2.7rem, 14vw, 4.5rem); }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -406,13 +826,50 @@ permalink: /woodwork-demo/
   var caption = document.getElementById('caption');
   var shuffleBtn = document.getElementById('shuffle');
   var reader = document.getElementById('demo-reader');
+  var addBookForm = document.getElementById('add-book-form');
+  var titleInput = document.getElementById('book-title-input');
+  var authorInput = document.getElementById('book-author-input');
+  var addBookSubmit = document.getElementById('add-book-submit');
+  var addBookStatus = document.getElementById('add-book-status');
+  var clearAddedBooksBtn = document.getElementById('clear-added-books');
+  var resolvedBook = document.getElementById('resolved-book');
+  var resolvedBookKicker = document.getElementById('resolved-book-kicker');
+  var resolvedBookCover = document.getElementById('resolved-book-cover');
+  var resolvedBookFallback = document.getElementById('resolved-book-fallback');
+  var resolvedBookFallbackTitle = document.getElementById('resolved-book-fallback-title');
+  var resolvedBookTitle = document.getElementById('resolved-book-title');
+  var resolvedBookAuthor = document.getElementById('resolved-book-author');
+  var resolvedBookMeta = document.getElementById('resolved-book-meta');
+  var resolvedBookNote = document.getElementById('resolved-book-note');
+  var resolvedBookLink = document.getElementById('resolved-book-link');
   var readerClose = document.getElementById('demo-reader-close');
   var readerTitle = document.getElementById('demo-reader-title');
   var readerAuthor = document.getElementById('demo-reader-author');
   var readerSource = document.getElementById('demo-reader-source');
-  var readerFrame = document.getElementById('demo-reader-frame');
+  var readerStatus = document.getElementById('demo-reader-status');
+  var readerScroll = document.getElementById('demo-reader-scroll');
+  var readerLayout = document.getElementById('demo-reader-layout');
+  var readerText = document.getElementById('demo-reader-text');
+  var readerMarginalia = document.getElementById('demo-reader-marginalia');
   var readerLoading = document.getElementById('demo-reader-loading');
+  var readerError = document.getElementById('demo-reader-error');
   var readerOrigin = null;
+  var readerRequest = 0;
+  var textCache = new Map();
+  var CUSTOM_STORAGE_KEY = 'woodworkDemoCustomBooks:v1';
+  var CUSTOM_BOOK_LIMIT = 24;
+  var spotlightIds = [];
+
+  var ANNOTATED_EDITIONS = {
+    'Pride and Prejudice': {
+      path: '/assets/reading-room/pp_ch01/',
+      chapter: 'Chapter I'
+    },
+    'Moby-Dick': {
+      path: '/assets/reading-room/md_ch42/',
+      chapter: 'Chapter 42 · The Whiteness of the Whale'
+    }
+  };
 
   var LIBRARY = [{% for b in site.data.public_domain_shelf %}{% assign book_source = site.data.public_domain_sources[b.title] %}
     {"id": {{ b.title | jsonify }},
@@ -824,9 +1281,11 @@ permalink: /woodwork-demo/
   var active = null;
   function closeReader() {
     if (reader.hidden) return;
+    readerRequest += 1;
     reader.hidden = true;
     document.body.classList.remove('demo-reader-open');
-    readerFrame.src = 'about:blank';
+    readerText.innerHTML = '';
+    readerMarginalia.innerHTML = '';
     if (readerOrigin) {
       readerOrigin.classList.remove('is-opening');
       readerOrigin.focus({preventScroll: true});
@@ -834,24 +1293,359 @@ permalink: /woodwork-demo/
     readerOrigin = null;
   }
 
-  function openReader(book, origin) {
+  async function openReader(book, origin) {
     if (!book.source) return;
+    var request = ++readerRequest;
+    var annotated = ANNOTATED_EDITIONS[book.title];
     readerOrigin = origin;
     origin.classList.add('is-opening');
     readerTitle.textContent = book.title;
     readerAuthor.textContent = book.author || 'Public-domain edition';
+    readerStatus.textContent = annotated ? annotated.chapter + ' · annotated' : 'Full public-domain text';
     readerSource.href = book.source;
+    readerScroll.scrollTop = 0;
+    readerLayout.hidden = true;
+    readerLayout.classList.toggle('no-notes', !annotated);
+    readerText.innerHTML = '';
+    readerMarginalia.innerHTML = '';
     readerLoading.hidden = false;
-    readerFrame.title = book.title + ' by ' + (book.author || 'Unknown author');
-    readerFrame.src = book.source;
+    readerError.hidden = true;
     reader.hidden = false;
     document.body.classList.add('demo-reader-open');
     readerClose.focus();
+
+    try {
+      if (annotated) {
+        var annotatedResponses = await Promise.all([
+          fetch(annotated.path + 'chapter.html'),
+          fetch(annotated.path + 'catalog.json')
+        ]);
+        if (!annotatedResponses[0].ok || !annotatedResponses[1].ok) {
+          throw new Error('The annotated edition could not be loaded.');
+        }
+        var chapterHTML = await annotatedResponses[0].text();
+        var catalog = await annotatedResponses[1].json();
+        if (request !== readerRequest) return;
+        mountAnnotatedChapter(chapterHTML, catalog.annotations || [], book);
+      } else {
+        var cleanText = await loadCleanText(book);
+        if (request !== readerRequest) return;
+        mountCleanText(cleanText, book);
+      }
+      readerLoading.hidden = true;
+      readerLayout.hidden = false;
+      requestAnimationFrame(positionMarginalia);
+    } catch (loadError) {
+      if (request !== readerRequest) return;
+      readerLoading.hidden = true;
+      readerError.hidden = false;
+      readerError.textContent = (loadError && loadError.message) || 'The book could not be opened.';
+    }
   }
 
-  readerFrame.addEventListener('load', function () {
-    if (readerFrame.src !== 'about:blank') readerLoading.hidden = true;
-  });
+  function cleanTextURL(source) {
+    var textSource = source.replace(/pg(\d+)-images\.html$/i, 'pg$1.txt');
+    return 'https://r.jina.ai/http://' + textSource.replace(/^https?:\/\//i, '');
+  }
+
+  async function loadCleanText(book) {
+    if (textCache.has(book.id)) return textCache.get(book.id);
+    var response = await fetch(cleanTextURL(book.source), { headers: { Accept: 'text/plain' } });
+    if (!response.ok) throw new Error('The clean edition is temporarily unavailable. Use “Open source” instead.');
+    var text = await response.text();
+    if (!text.trim()) throw new Error('This edition did not return readable text. Use “Open source” instead.');
+    textCache.set(book.id, text);
+    return text;
+  }
+
+  function openingBlock(book) {
+    var opening = document.createElement('header');
+    var kicker = document.createElement('p');
+    var title = document.createElement('h1');
+    var byline = document.createElement('p');
+    opening.className = 'book-opening';
+    kicker.className = 'book-opening-kicker';
+    byline.className = 'book-opening-byline';
+    kicker.textContent = 'WoodWork edition';
+    title.textContent = book.title;
+    byline.textContent = book.author || 'Unknown author';
+    opening.appendChild(kicker);
+    opening.appendChild(title);
+    opening.appendChild(byline);
+    return opening;
+  }
+
+  function cleanGutenbergPayload(raw) {
+    var text = String(raw || '').replace(/\r/g, '');
+    var markdownStart = text.indexOf('Markdown Content:');
+    if (markdownStart >= 0) text = text.slice(markdownStart + 'Markdown Content:'.length);
+
+    var start = text.search(/\*{3}\s*START OF (?:THIS|THE) PROJECT GUTENBERG EBOOK[^\n]*\*{3}/i);
+    if (start >= 0) text = text.slice(text.indexOf('\n', start) + 1);
+    var end = text.search(/\*{3}\s*END OF (?:THIS|THE) PROJECT GUTENBERG EBOOK[^\n]*\*{3}/i);
+    if (end >= 0) text = text.slice(0, end);
+
+    var chapterOne = /\n\s*(?:chapter|book)\s+(?:i|1)[.\s]/ig;
+    var chapterMatches = [];
+    var chapterMatch;
+    while ((chapterMatch = chapterOne.exec(text))) chapterMatches.push(chapterMatch.index);
+    if (chapterMatches.length > 1) text = text.slice(chapterMatches[1] + 1);
+
+    return text
+      .replace(/!\[[^\]]*\]\([^\n)]*\)/g, '')
+      .replace(/\[([^\]]+)\]\([^\n)]*\)/g, '$1')
+      .replace(/^\s*\[[^\]]*\]\s*$/gm, '')
+      .replace(/^\s*\{?\d+\}?\s*$/gm, '')
+      .replace(/^\s*\* \* \*\s*$/gm, '')
+      .replace(/[_*]{1,3}/g, '')
+      .replace(/\n{3,}/g, '\n\n')
+      .trim();
+  }
+
+  function isSectionHeading(text) {
+    var value = text.replace(/^#+\s*/, '').trim();
+    return /^(chapter|book|part|canto|act|scene|section)\b/i.test(value) ||
+      (/^[A-Z0-9][A-Z0-9\s.,'’:“”\-—]+$/.test(value) && value.length <= 90);
+  }
+
+  function appendTextBlock(container, lines) {
+    var value = lines.join(' ').replace(/\s+/g, ' ').trim();
+    if (!value || /^https?:\/\//i.test(value)) return;
+    var element;
+    if (isSectionHeading(value)) {
+      element = document.createElement(/^#+\s*/.test(value) ? 'h2' : 'h3');
+      value = value.replace(/^#+\s*/, '');
+    } else {
+      element = document.createElement('p');
+    }
+    element.textContent = value;
+    container.appendChild(element);
+  }
+
+  function mountCleanText(raw, book) {
+    readerText.innerHTML = '';
+    readerMarginalia.innerHTML = '';
+    readerText.appendChild(openingBlock(book));
+
+    var payload = cleanGutenbergPayload(raw);
+    var lines = payload.split('\n');
+    var paragraph = [];
+    lines.forEach(function (line) {
+      var value = line.trim();
+      if (!value) {
+        appendTextBlock(readerText, paragraph);
+        paragraph = [];
+        return;
+      }
+      if (/^#{1,4}\s+/.test(value) || (isSectionHeading(value) && paragraph.length)) {
+        appendTextBlock(readerText, paragraph);
+        paragraph = [];
+        appendTextBlock(readerText, [value]);
+        return;
+      }
+      paragraph.push(value);
+    });
+    appendTextBlock(readerText, paragraph);
+
+    var sourceNote = document.createElement('p');
+    sourceNote.className = 'source-note';
+    sourceNote.textContent = 'Public-domain text supplied by Project Gutenberg. Formatting normalized for WoodWork.';
+    readerText.appendChild(sourceNote);
+  }
+
+  function mountAnnotatedChapter(html, annotations, book) {
+    var documentCopy = new DOMParser().parseFromString(html, 'text/html');
+    var chapter = documentCopy.querySelector('#text');
+    if (!chapter) throw new Error('This annotated chapter has no readable text.');
+    chapter.querySelectorAll('script, style, img, .figcenter, .pagenum, #mood-orb-root').forEach(function (node) {
+      node.remove();
+    });
+    chapter.querySelectorAll('div[style*="height"]').forEach(function (node) { node.remove(); });
+    readerText.innerHTML = '';
+    readerText.appendChild(openingBlock(book));
+    Array.prototype.slice.call(chapter.childNodes).forEach(function (node) {
+      readerText.appendChild(document.importNode(node, true));
+    });
+    var matches = applyAnnotations(readerText, annotations);
+    addInlineNotes(matches);
+    renderMarginalia(matches);
+  }
+
+  function normalizeCharacters(value) {
+    return String(value || '')
+      .replace(/[“”]/g, '"')
+      .replace(/[‘’]/g, "'")
+      .replace(/[—–]/g, '-');
+  }
+
+  function isGarbage(annotation) {
+    var surface = normalizeCharacters(annotation && annotation.surface).trim();
+    return !surface || surface.length <= 2 || /^[A-Z]{2,4}$/.test(surface) ||
+      (surface.indexOf('-') >= 0 && annotation.kind === 'reference') ||
+      Number(annotation.confidence || 0) < .68;
+  }
+
+  function escapeRegex(value) {
+    return String(value).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  }
+
+  function textNodes(root) {
+    var walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+      acceptNode: function (node) {
+        if (!node.nodeValue || !node.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
+        var parent = node.parentElement;
+        if (!parent || parent.closest('script, style, .inline-note-group, .book-opening')) return NodeFilter.FILTER_REJECT;
+        return NodeFilter.FILTER_ACCEPT;
+      }
+    });
+    var nodes = [];
+    var node;
+    while ((node = walker.nextNode())) nodes.push(node);
+    return nodes;
+  }
+
+  function applyAnnotations(root, annotations) {
+    var nodes = textNodes(root);
+    var reserved = new Map();
+    var selections = [];
+    var seen = new Set();
+    var candidates = annotations.filter(function (annotation) {
+      return annotation && !isGarbage(annotation);
+    }).sort(function (a, b) {
+      var lengthDifference = normalizeCharacters(b.surface).length - normalizeCharacters(a.surface).length;
+      return lengthDifference || Number(b.confidence || 0) - Number(a.confidence || 0);
+    });
+
+    candidates.forEach(function (annotation) {
+      var surface = normalizeCharacters(annotation.surface).trim();
+      var key = (annotation.kind || 'annotation') + ':' + surface.toLowerCase();
+      if (seen.has(key)) return;
+      var expression = new RegExp(escapeRegex(surface).replace(/\s+/g, '\\s+'), 'i');
+      for (var i = 0; i < nodes.length; i++) {
+        var node = nodes[i];
+        var match = expression.exec(normalizeCharacters(node.nodeValue));
+        if (!match) continue;
+        var start = match.index;
+        var end = start + match[0].length;
+        var ranges = reserved.get(node) || [];
+        if (ranges.some(function (range) { return start < range.end && end > range.start; })) continue;
+        ranges.push({start: start, end: end});
+        reserved.set(node, ranges);
+        selections.push({node: node, start: start, end: end, annotation: annotation});
+        seen.add(key);
+        break;
+      }
+    });
+
+    var grouped = new Map();
+    selections.forEach(function (selection) {
+      var group = grouped.get(selection.node) || [];
+      group.push(selection);
+      grouped.set(selection.node, group);
+    });
+
+    var mounted = [];
+    grouped.forEach(function (group, node) {
+      group.sort(function (a, b) { return a.start - b.start; });
+      var fragment = document.createDocumentFragment();
+      var cursor = 0;
+      group.forEach(function (selection) {
+        if (selection.start > cursor) fragment.appendChild(document.createTextNode(node.nodeValue.slice(cursor, selection.start)));
+        var span = document.createElement('span');
+        span.className = 'reading-annotation annotation-' + (selection.annotation.kind || 'annotation');
+        span.textContent = node.nodeValue.slice(selection.start, selection.end);
+        fragment.appendChild(span);
+        mounted.push({span: span, annotation: selection.annotation});
+        cursor = selection.end;
+      });
+      if (cursor < node.nodeValue.length) fragment.appendChild(document.createTextNode(node.nodeValue.slice(cursor)));
+      node.parentNode.replaceChild(fragment, node);
+    });
+    return mounted;
+  }
+
+  function noteData(annotation) {
+    var payload = annotation.payload || {};
+    var dictionary = payload.dictionary || {};
+    var gloss = payload.gloss || {};
+    return {
+      kind: annotation.kind || 'note',
+      title: dictionary.headword || gloss.title || payload.wikiTitle || annotation.surface || 'Note',
+      body: dictionary.definition || gloss.text || payload.summary || 'No annotation content.'
+    };
+  }
+
+  function noteContent(note) {
+    var fragment = document.createDocumentFragment();
+    var kind = document.createElement('span');
+    var title = document.createElement('strong');
+    var body = document.createElement('p');
+    kind.className = 'note-kind';
+    kind.textContent = note.kind;
+    title.className = 'note-title';
+    title.textContent = note.title;
+    body.className = 'note-body';
+    body.textContent = note.body;
+    fragment.appendChild(kind);
+    fragment.appendChild(title);
+    fragment.appendChild(body);
+    return fragment;
+  }
+
+  function renderMarginalia(matches) {
+    readerMarginalia.innerHTML = '';
+    matches.forEach(function (match) {
+      var note = noteData(match.annotation);
+      var element = document.createElement('section');
+      element.className = 'margin-note';
+      element.dataset.kind = note.kind;
+      element._target = match.span;
+      element.appendChild(noteContent(note));
+      readerMarginalia.appendChild(element);
+    });
+  }
+
+  function positionMarginalia() {
+    if (readerLayout.hidden || readerLayout.classList.contains('no-notes') || window.innerWidth <= 900) return;
+    var textRect = readerText.getBoundingClientRect();
+    var notes = Array.prototype.slice.call(readerMarginalia.querySelectorAll('.margin-note'));
+    var previousBottom = 0;
+    readerMarginalia.style.height = readerText.scrollHeight + 'px';
+    notes.sort(function (a, b) {
+      return a._target.getBoundingClientRect().top - b._target.getBoundingClientRect().top;
+    }).forEach(function (note) {
+      var targetTop = note._target.getBoundingClientRect().top - textRect.top;
+      var top = Math.max(targetTop, previousBottom + 10);
+      note.style.top = top + 'px';
+      previousBottom = top + note.offsetHeight;
+    });
+    readerMarginalia.style.height = Math.max(readerText.scrollHeight, previousBottom) + 'px';
+  }
+
+  function addInlineNotes(matches) {
+    var groups = new Map();
+    matches.forEach(function (match) {
+      var paragraph = match.span.closest('p');
+      if (!paragraph) return;
+      var group = groups.get(paragraph) || [];
+      group.push(noteData(match.annotation));
+      groups.set(paragraph, group);
+    });
+    groups.forEach(function (notes, paragraph) {
+      var container = document.createElement('aside');
+      container.className = 'inline-note-group';
+      container.setAttribute('aria-label', 'Notes for this paragraph');
+      notes.forEach(function (note) {
+        var element = document.createElement('section');
+        element.className = 'inline-note';
+        element.dataset.kind = note.kind;
+        element.appendChild(noteContent(note));
+        container.appendChild(element);
+      });
+      paragraph.insertAdjacentElement('afterend', container);
+    });
+  }
+
   readerClose.addEventListener('click', closeReader);
   reader.addEventListener('click', function (event) {
     if (event.target === reader) closeReader();
@@ -859,17 +1653,22 @@ permalink: /woodwork-demo/
   document.addEventListener('keydown', function (event) {
     if (event.key === 'Escape' && !reader.hidden) closeReader();
   });
+  readerScroll.addEventListener('scroll', function () {
+    if (window.innerWidth > 900) requestAnimationFrame(positionMarginalia);
+  }, {passive: true});
 
   function wire(el, book) {
     function describe() {
       if (active) active.classList.remove('is-active');
       el.classList.add('is-active');
       active = el;
-      caption.textContent = book.title + (book.author ? ' — ' + book.author : '') + ' · ' + book.pages + ' pages · open book';
+      caption.textContent = book.title + (book.author ? ' — ' + book.author : '') + ' · ' + book.pages + ' pages' +
+        (book.source ? ' · open book' : ' · added to your shelf') +
+        (ANNOTATED_EDITIONS[book.title] ? ' · annotations available' : '');
     }
     function open() {
       describe();
-      openReader(book, el);
+      if (book.source) openReader(book, el);
     }
     el.addEventListener('mouseenter', describe);
     el.addEventListener('focus', describe);
@@ -880,7 +1679,183 @@ permalink: /woodwork-demo/
   }
 
   var library = [];
+  var customBooks = [];
   var manualSeed = null;
+
+  function normalizeText(value) {
+    return String(value || '').trim().replace(/\s+/g, ' ');
+  }
+
+  function slugFor(value) {
+    return normalizeText(value).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+  }
+
+  function customBookId(book) {
+    var titlePart = slugFor(book.title) || 'book';
+    var authorPart = slugFor(book.author || 'unknown');
+    return 'custom:' + titlePart + ':' + authorPart;
+  }
+
+  function safeLocalStorageGet(key) {
+    try { return localStorage.getItem(key); } catch (e) { return null; }
+  }
+
+  function safeLocalStorageSet(key, value) {
+    try { localStorage.setItem(key, value); } catch (e) {}
+  }
+
+  function loadCustomBooks() {
+    var raw = safeLocalStorageGet(CUSTOM_STORAGE_KEY);
+    if (!raw) return [];
+    try {
+      var parsed = JSON.parse(raw);
+      if (!Array.isArray(parsed)) return [];
+      return parsed.filter(function (book) {
+        return book && book.id && book.title && book.pages;
+      });
+    } catch (e) {
+      return [];
+    }
+  }
+
+  function persistCustomBooks() {
+    safeLocalStorageSet(CUSTOM_STORAGE_KEY, JSON.stringify(customBooks.slice(0, CUSTOM_BOOK_LIMIT)));
+    clearAddedBooksBtn.hidden = !customBooks.length;
+  }
+
+  function rebuildLibrary() {
+    library = customBooks.concat(LIBRARY).filter(function (b) { return b.title && b.pages; });
+  }
+
+  function coverURL(doc) {
+    if (doc.cover_i) return 'https://covers.openlibrary.org/b/id/' + doc.cover_i + '-L.jpg?default=false';
+    if (Array.isArray(doc.edition_key) && doc.edition_key.length) {
+      return 'https://covers.openlibrary.org/b/olid/' + doc.edition_key[0] + '-L.jpg?default=false';
+    }
+    return '';
+  }
+
+  function sourceRecordURL(doc) {
+    return doc.key ? 'https://openlibrary.org' + doc.key : '';
+  }
+
+  function chooseMatch(docs, requestedTitle, requestedAuthor) {
+    if (!docs.length) return null;
+    var wantedTitle = normalizeText(requestedTitle).toLowerCase();
+    var wantedAuthor = normalizeText(requestedAuthor).toLowerCase();
+    return docs.map(function (doc, index) {
+      var title = normalizeText(doc.title).toLowerCase();
+      var author = normalizeText((doc.author_name && doc.author_name[0]) || '').toLowerCase();
+      var score = 0;
+      if (title === wantedTitle) score += 14;
+      if (title.indexOf(wantedTitle) === 0) score += 9;
+      if (title.indexOf(wantedTitle) >= 0) score += 5;
+      if (wantedAuthor && author === wantedAuthor) score += 10;
+      if (wantedAuthor && author.indexOf(wantedAuthor) >= 0) score += 5;
+      if (doc.cover_i) score += 3;
+      if (doc.number_of_pages_median) score += 2;
+      if (typeof doc.first_publish_year === 'number') score += 1;
+      score -= index * .2;
+      return { doc: doc, score: score };
+    }).sort(function (a, b) {
+      return b.score - a.score;
+    })[0].doc;
+  }
+
+  async function resolveBook(title, author) {
+    var params = new URLSearchParams({
+      limit: '10',
+      fields: 'key,title,author_name,cover_i,edition_key,first_publish_year,number_of_pages_median'
+    });
+    params.set('title', title);
+    if (author) params.set('author', author);
+    var response = await fetch('https://openlibrary.org/search.json?' + params.toString(), {
+      headers: { Accept: 'application/json' }
+    });
+    if (!response.ok) throw new Error('Book lookup is temporarily unavailable.');
+    var payload = await response.json();
+    var docs = Array.isArray(payload.docs) ? payload.docs : [];
+    var match = chooseMatch(docs, title, author);
+    if (!match) throw new Error('No close match found. Try adding the author or a more exact title.');
+    return {
+      id: customBookId({
+        title: normalizeText(match.title) || normalizeText(title),
+        author: normalizeText((match.author_name && match.author_name[0]) || author || '')
+      }),
+      title: normalizeText(match.title) || normalizeText(title),
+      author: normalizeText((match.author_name && match.author_name[0]) || author || 'Unknown author'),
+      pages: Number(match.number_of_pages_median) || 320,
+      firstPublishYear: match.first_publish_year || null,
+      cover: coverURL(match),
+      recordURL: sourceRecordURL(match),
+      source: null
+    };
+  }
+
+  function renderResolvedBook(book, options) {
+    options = options || {};
+    resolvedBook.hidden = false;
+    resolvedBookKicker.textContent = options.kicker || 'Just added';
+    resolvedBookTitle.textContent = book.title;
+    resolvedBookAuthor.textContent = book.author || 'Unknown author';
+    var meta = [];
+    if (book.firstPublishYear) meta.push('First published ' + book.firstPublishYear);
+    if (book.pages) meta.push('about ' + book.pages + ' pages');
+    resolvedBookMeta.textContent = meta.join(' · ');
+    resolvedBookNote.textContent = options.note || 'WoodWork resolved this match from Open Library and pinned it into the current shelf.';
+    resolvedBookFallbackTitle.textContent = coreTitle(book) || book.title;
+    if (book.cover) {
+      resolvedBookCover.src = book.cover;
+      resolvedBookCover.alt = 'Cover for ' + book.title;
+      resolvedBookCover.hidden = false;
+      resolvedBookFallback.hidden = true;
+    } else {
+      resolvedBookCover.removeAttribute('src');
+      resolvedBookCover.alt = '';
+      resolvedBookCover.hidden = true;
+      resolvedBookFallback.hidden = false;
+    }
+    if (book.recordURL) {
+      resolvedBookLink.href = book.recordURL;
+      resolvedBookLink.hidden = false;
+    } else {
+      resolvedBookLink.hidden = true;
+    }
+  }
+
+  resolvedBookCover.addEventListener('error', function () {
+    resolvedBookCover.hidden = true;
+    resolvedBookFallback.hidden = false;
+  });
+
+  function announceStatus(message, isError) {
+    addBookStatus.textContent = message;
+    addBookStatus.style.color = isError ? '#8f3429' : '#5d5043';
+  }
+
+  function pinBook(bookId) {
+    spotlightIds = [bookId];
+  }
+
+  function mergeBook(book) {
+    customBooks = customBooks.filter(function (entry) { return entry.id !== book.id; });
+    customBooks.unshift(book);
+    if (customBooks.length > CUSTOM_BOOK_LIMIT) customBooks = customBooks.slice(0, CUSTOM_BOOK_LIMIT);
+    persistCustomBooks();
+    rebuildLibrary();
+    pinBook(book.id);
+  }
+
+  function prioritizedPool(seed) {
+    var rand = rngFrom(seed);
+    var spotlight = [];
+    var remainder = [];
+    library.forEach(function (book) {
+      if (spotlightIds.indexOf(book.id) >= 0) spotlight.push(book);
+      else remainder.push(book);
+    });
+    return spotlight.concat(shuffled(remainder, rand));
+  }
 
   function fitRenderedType() {
     Array.prototype.forEach.call(shelf.querySelectorAll('.spine .label'), function (label) {
@@ -898,6 +1873,13 @@ permalink: /woodwork-demo/
         flat.style.fontSize = size + 'px';
       }
     });
+    Array.prototype.forEach.call(shelf.querySelectorAll('.spine .spine-author, .book-cover .cover-author'), function (author) {
+      var size = Number.parseFloat(window.getComputedStyle(author).fontSize) || 8;
+      while ((author.scrollWidth > author.clientWidth || author.scrollHeight > author.clientHeight) && size > 3) {
+        size -= .5;
+        author.style.fontSize = size + 'px';
+      }
+    });
   }
 
   function render() {
@@ -913,7 +1895,7 @@ permalink: /woodwork-demo/
     var seed = manualSeed !== null ? manualSeed : Math.floor(Date.now() / 3600000);
     var variant = LAYOUTS[((seed % LAYOUTS.length) + LAYOUTS.length) % LAYOUTS.length];
     shelf.setAttribute('data-layout', variant);
-    var pool = shuffled(library, rngFrom(seed));
+    var pool = prioritizedPool(seed);
     var metrics = shelfMetrics(theme, width, height);
     var framed = theme === 'oak' || theme === 'builtin';
     var used = {};
@@ -989,17 +1971,70 @@ permalink: /woodwork-demo/
   });
 
   shuffleBtn.addEventListener('click', function () {
+    spotlightIds = [];
     manualSeed = Math.floor(Math.random() * 2147483647);
+    render();
+  });
+
+  addBookForm.addEventListener('submit', async function (event) {
+    event.preventDefault();
+    var title = normalizeText(titleInput.value);
+    var author = normalizeText(authorInput.value);
+    if (!title) {
+      announceStatus('Enter a title first.', true);
+      titleInput.focus();
+      return;
+    }
+    addBookSubmit.disabled = true;
+    announceStatus('Looking up the closest edition...', false);
+    try {
+      var book = await resolveBook(title, author);
+      mergeBook(book);
+      manualSeed = Math.floor(Math.random() * 2147483647);
+      renderResolvedBook(book, {
+        kicker: 'Just added',
+        note: 'This match was added to your live shelf and pinned into the current shuffle.'
+      });
+      announceStatus('Added. It is now on the shelf below.', false);
+      render();
+      titleInput.value = '';
+      authorInput.value = '';
+      titleInput.focus();
+    } catch (error) {
+      announceStatus((error && error.message) || 'That book could not be added right now.', true);
+    } finally {
+      addBookSubmit.disabled = false;
+    }
+  });
+
+  clearAddedBooksBtn.addEventListener('click', function () {
+    customBooks = [];
+    spotlightIds = [];
+    persistCustomBooks();
+    rebuildLibrary();
+    resolvedBook.hidden = true;
+    announceStatus('Removed your added books. The page is back to the public-domain demo shelf.', false);
     render();
   });
 
   var resizeTimer;
   window.addEventListener('resize', function () {
     clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(render, 150);
+    resizeTimer = setTimeout(function () {
+      if (reader.hidden) render();
+      else positionMarginalia();
+    }, 150);
   });
 
-  library = LIBRARY.filter(function (b) { return b.title && b.pages; });
+  customBooks = loadCustomBooks();
+  rebuildLibrary();
+  if (customBooks.length) {
+    renderResolvedBook(customBooks[0], {
+      kicker: 'Your shelf',
+      note: 'Your most recent addition is saved in this browser so the demo still feels like yours.'
+    });
+  }
+  persistCustomBooks();
   caption.textContent = library.length + ' books on the list. Reshuffles every hour.';
   render();
 })();
