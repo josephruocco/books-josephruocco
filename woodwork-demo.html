@@ -318,7 +318,7 @@ permalink: /woodwork-demo/
   .shelf-list-book-author {
     margin-top: .24rem;
     color: #625548;
-    font: 400 .95rem/1.25 "Avenir Next", "Helvetica Neue", sans-serif;
+    font: 500 1.08rem/1.28 "Avenir Next", "Helvetica Neue", sans-serif;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -826,7 +826,7 @@ permalink: /woodwork-demo/
     }
     .shelf-list-book-author,
     .shelf-list-book-pages {
-      font-size: .86rem;
+      font-size: .98rem;
     }
     .shelf-case { border-radius: 18px; }
     .shelf-case[data-theme="oak"], .shelf-case[data-theme="builtin"] { border-radius: 22px; }
@@ -1111,7 +1111,7 @@ permalink: /woodwork-demo/
       author.style.color = ink;
       author.style.textShadow = light ? '0 1px rgba(255,255,255,.28)' : '0 1px 1px rgba(0,0,0,.8)';
       var authorFit = (w - 6) / Math.max(1, surname.length * .63);
-      author.style.fontSize = Math.max(6, Math.min(8.6 * SCALE, w * .22, authorFit)) + 'px';
+      author.style.fontSize = Math.max(7.25, Math.min(10.25 * SCALE, w * .28, authorFit)) + 'px';
       el.appendChild(author);
     }
     el.setAttribute('aria-label', book.title + (book.author ? ', ' + book.author : ''));
@@ -1948,7 +1948,7 @@ permalink: /woodwork-demo/
     });
     Array.prototype.forEach.call(shelf.querySelectorAll('.spine .spine-author, .book-cover .cover-author'), function (author) {
       var size = Number.parseFloat(window.getComputedStyle(author).fontSize) || 8;
-      var floor = author.classList.contains('spine-author') ? 5.5 : 3;
+      var floor = author.classList.contains('spine-author') ? 6.5 : 3;
       while ((author.scrollWidth > author.clientWidth || author.scrollHeight > author.clientHeight) && size > floor) {
         size -= .5;
         author.style.fontSize = size + 'px';
@@ -2083,7 +2083,7 @@ permalink: /woodwork-demo/
     persistCustomBooks();
     rebuildLibrary();
     resolvedBook.hidden = true;
-    announceStatus('Removed your added books. The page is back to the public-domain demo shelf.', false);
+    announceStatus('', false);
     renderShelfListing();
     render();
   });
