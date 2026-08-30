@@ -79,6 +79,17 @@ permalink: /woodwork-demo/
           <div class="shelf-bar">
             <span class="shelf-caption" id="caption">Reshuffles every hour.</span>
           </div>
+          <section class="shelf-listing" aria-labelledby="shelf-listing-title">
+            <h2 class="shelf-listing-title" id="shelf-listing-title">Shelf List</h2>
+            <section class="shelf-list-group" id="added-books-group" hidden aria-labelledby="added-books-title">
+              <h3 class="shelf-list-group-title" id="added-books-title">Added by You</h3>
+              <div class="shelf-list" id="added-books-list"></div>
+            </section>
+            <section class="shelf-list-group" aria-labelledby="demo-books-title">
+              <h3 class="shelf-list-group-title" id="demo-books-title">Demo Shelf:</h3>
+              <div class="shelf-list" id="demo-books-list"></div>
+            </section>
+          </section>
         </div>
       </main>
 
@@ -241,8 +252,81 @@ permalink: /woodwork-demo/
   .demo-match-message {
     margin: 0;
     color: #30271f;
-    font: 600 .96rem/1.4 "Avenir Next", "Helvetica Neue", sans-serif;
+    font: italic 600 .96rem/1.4 "Avenir Next", "Helvetica Neue", sans-serif;
     line-height: 1.5;
+  }
+  .shelf-listing {
+    margin-top: 1.35rem;
+    padding: 1.15rem;
+    border: 1px solid rgba(35,26,18,.08);
+    border-radius: 22px;
+    background: rgba(251,248,242,.9);
+  }
+  .shelf-listing-title {
+    margin: 0 0 .95rem;
+    color: #231a12;
+    font: 400 1.45rem/1.05 Georgia, serif;
+    letter-spacing: -.03em;
+  }
+  .shelf-list-group + .shelf-list-group {
+    margin-top: 1.1rem;
+  }
+  .shelf-list-group-title {
+    margin: 0 0 .55rem;
+    color: #30271f;
+    font: 700 .86rem/1.2 "Avenir Next", "Helvetica Neue", sans-serif;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+  .shelf-list {
+    overflow: hidden;
+    border: 1px solid rgba(35,26,18,.08);
+    border-radius: 18px;
+    background: rgba(255,255,255,.84);
+  }
+  .shelf-list-item {
+    display: grid;
+    grid-template-columns: 14px minmax(0, 1fr) auto;
+    gap: .85rem;
+    align-items: center;
+    padding: .92rem 1rem;
+  }
+  .shelf-list-item + .shelf-list-item {
+    border-top: 1px solid rgba(35,26,18,.08);
+  }
+  .shelf-list-swatch {
+    width: 14px;
+    height: 62px;
+    border-radius: 3px;
+    box-shadow: inset 0 0 0 1px rgba(0,0,0,.08);
+  }
+  .shelf-list-copy {
+    min-width: 0;
+  }
+  .shelf-list-book-title,
+  .shelf-list-book-author,
+  .shelf-list-book-pages {
+    margin: 0;
+  }
+  .shelf-list-book-title {
+    color: #18130f;
+    font: 500 1.05rem/1.2 "Avenir Next", "Helvetica Neue", sans-serif;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .shelf-list-book-author {
+    margin-top: .24rem;
+    color: #625548;
+    font: 400 .95rem/1.25 "Avenir Next", "Helvetica Neue", sans-serif;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .shelf-list-book-pages {
+    color: #625548;
+    font: 500 .9rem/1 "Avenir Next", "Helvetica Neue", sans-serif;
+    white-space: nowrap;
   }
 
   /* The web shelf uses the same proportions and materials as the iOS shelf. */
@@ -723,6 +807,27 @@ permalink: /woodwork-demo/
     }
     .demo-match { grid-template-columns: 48px minmax(0, 1fr); gap: .7rem; padding: .55rem .7rem; }
     .demo-match-cover-wrap { width: 48px; }
+    .shelf-listing {
+      margin-top: 1rem;
+      padding: .9rem;
+      border-radius: 18px;
+    }
+    .shelf-list-item {
+      grid-template-columns: 12px minmax(0, 1fr) auto;
+      gap: .7rem;
+      padding: .78rem .85rem;
+    }
+    .shelf-list-swatch {
+      width: 12px;
+      height: 54px;
+    }
+    .shelf-list-book-title {
+      font-size: .98rem;
+    }
+    .shelf-list-book-author,
+    .shelf-list-book-pages {
+      font-size: .86rem;
+    }
     .shelf-case { border-radius: 18px; }
     .shelf-case[data-theme="oak"], .shelf-case[data-theme="builtin"] { border-radius: 22px; }
     .book-cover { padding: 7% 5%; }
@@ -763,6 +868,9 @@ permalink: /woodwork-demo/
   var resolvedBook = document.getElementById('resolved-book');
   var resolvedBookCover = document.getElementById('resolved-book-cover');
   var resolvedBookMessage = document.getElementById('resolved-book-message');
+  var addedBooksGroup = document.getElementById('added-books-group');
+  var addedBooksList = document.getElementById('added-books-list');
+  var demoBooksList = document.getElementById('demo-books-list');
   var readerClose = document.getElementById('demo-reader-close');
   var readerTitle = document.getElementById('demo-reader-title');
   var readerAuthor = document.getElementById('demo-reader-author');
@@ -777,6 +885,7 @@ permalink: /woodwork-demo/
   var readerOrigin = null;
   var readerRequest = 0;
   var textCache = new Map();
+  var resolvedBookTimer = null;
   var CUSTOM_STORAGE_KEY = 'woodworkDemoCustomBooks:v1';
   var CUSTOM_BOOK_LIMIT = 24;
   var spotlightIds = [];
@@ -1712,12 +1821,16 @@ permalink: /woodwork-demo/
   }
 
   function renderResolvedBook(book) {
+    clearTimeout(resolvedBookTimer);
     resolvedBook.hidden = false;
-    resolvedBookMessage.textContent = "we've added " + book.title + " to your library";
+    resolvedBookMessage.textContent = "We've added " + book.title + " to your library";
     if (book.cover) {
       resolvedBookCover.src = book.cover;
       resolvedBookCover.alt = 'Cover for ' + book.title;
       resolvedBookCover.hidden = false;
+      resolvedBookTimer = setTimeout(function () {
+        resolvedBook.hidden = true;
+      }, 1000);
     } else {
       resolvedBookCover.removeAttribute('src');
       resolvedBookCover.alt = '';
@@ -1726,6 +1839,7 @@ permalink: /woodwork-demo/
   }
 
   resolvedBookCover.addEventListener('error', function () {
+    clearTimeout(resolvedBookTimer);
     resolvedBook.hidden = true;
   });
 
@@ -1753,6 +1867,7 @@ permalink: /woodwork-demo/
     persistCustomBooks();
     rebuildLibrary();
     pinBook(book.id);
+    renderShelfListing();
   }
 
   function prioritizedPool(seed) {
@@ -1764,6 +1879,55 @@ permalink: /woodwork-demo/
       else remainder.push(book);
     });
     return spotlight.concat(shuffled(remainder, rand));
+  }
+
+  function pageCountLabel(book) {
+    return (book.pages || 0) + 'p';
+  }
+
+  function swatchColor(book) {
+    return rgb(clothOf(book));
+  }
+
+  function listItem(book) {
+    var item = document.createElement('article');
+    var swatch = document.createElement('div');
+    var copy = document.createElement('div');
+    var title = document.createElement('p');
+    var author = document.createElement('p');
+    var pages = document.createElement('p');
+
+    item.className = 'shelf-list-item';
+    swatch.className = 'shelf-list-swatch';
+    copy.className = 'shelf-list-copy';
+    title.className = 'shelf-list-book-title';
+    author.className = 'shelf-list-book-author';
+    pages.className = 'shelf-list-book-pages';
+
+    swatch.style.background = swatchColor(book);
+    title.textContent = book.title || '';
+    author.textContent = book.author || 'Unknown author';
+    pages.textContent = pageCountLabel(book);
+
+    copy.appendChild(title);
+    copy.appendChild(author);
+    item.appendChild(swatch);
+    item.appendChild(copy);
+    item.appendChild(pages);
+    return item;
+  }
+
+  function fillList(target, books) {
+    target.innerHTML = '';
+    books.forEach(function (book) {
+      target.appendChild(listItem(book));
+    });
+  }
+
+  function renderShelfListing() {
+    addedBooksGroup.hidden = !customBooks.length;
+    fillList(addedBooksList, customBooks);
+    fillList(demoBooksList, LIBRARY);
   }
 
   function fitRenderedType() {
@@ -1915,10 +2079,12 @@ permalink: /woodwork-demo/
   clearAddedBooksBtn.addEventListener('click', function () {
     customBooks = [];
     spotlightIds = [];
+    clearTimeout(resolvedBookTimer);
     persistCustomBooks();
     rebuildLibrary();
     resolvedBook.hidden = true;
     announceStatus('Removed your added books. The page is back to the public-domain demo shelf.', false);
+    renderShelfListing();
     render();
   });
 
@@ -1938,6 +2104,7 @@ permalink: /woodwork-demo/
     renderResolvedBook(customBooks[0]);
   }
   persistCustomBooks();
+  renderShelfListing();
   caption.textContent = library.length + ' books on the list. Reshuffles every hour.';
   render();
 })();
