@@ -55,22 +55,14 @@ permalink: /woodwork-demo/
                 <button type="submit" class="demo-builder-submit" id="add-book-submit">Add to shelf</button>
                 <button type="button" class="demo-builder-reset" id="clear-added-books" hidden>Clear my added books</button>
               </div>
-              <p class="demo-builder-status" id="add-book-status" role="status" aria-live="polite">The demo shelf is already here. Add one book and it joins immediately.</p>
+              <p class="demo-builder-status" id="add-book-status" role="status" aria-live="polite"></p>
             </form>
             <article class="demo-match" id="resolved-book" hidden aria-live="polite">
               <div class="demo-match-cover-wrap">
                 <img class="demo-match-cover" id="resolved-book-cover" alt="">
-                <div class="demo-match-cover demo-match-cover-fallback" id="resolved-book-fallback" hidden>
-                  <span id="resolved-book-fallback-title"></span>
-                </div>
               </div>
               <div class="demo-match-copy">
-                <p class="demo-match-kicker" id="resolved-book-kicker">Just added</p>
-                <h3 id="resolved-book-title"></h3>
-                <p class="demo-match-author" id="resolved-book-author"></p>
-                <p class="demo-match-meta" id="resolved-book-meta"></p>
-                <p class="demo-match-note" id="resolved-book-note"></p>
-                <a class="demo-match-link" id="resolved-book-link" href="#" target="_blank" rel="noopener" hidden>View source record</a>
+                <p class="demo-match-message" id="resolved-book-message"></p>
               </div>
             </article>
 
@@ -218,78 +210,39 @@ permalink: /woodwork-demo/
   }
   .demo-match {
     display: grid;
-    grid-template-columns: 112px minmax(0, 1fr);
-    gap: 1rem;
-    align-items: start;
-    margin-bottom: 1.2rem;
-    padding: 1rem 1.1rem;
+    grid-template-columns: 56px minmax(0, 1fr);
+    gap: .85rem;
+    align-items: center;
+    width: 100%;
+    margin: 0 0 1rem;
+    padding: .6rem .8rem;
     border: 1px solid rgba(35,26,18,.1);
-    border-radius: 22px;
+    border-radius: 14px;
     background: rgba(250,247,240,.82);
   }
   .demo-match[hidden] { display: none; }
   .demo-match-cover-wrap {
     position: relative;
-    width: 112px;
+    width: 56px;
     aspect-ratio: 2 / 3;
   }
-  .demo-match-cover,
-  .demo-match-cover-fallback {
+  .demo-match-cover {
     width: 100%;
     height: 100%;
-    border-radius: 14px;
-    box-shadow: 0 10px 22px rgba(24,14,8,.16);
-  }
-  .demo-match-cover {
+    border-radius: 8px;
+    box-shadow: 0 5px 14px rgba(24,14,8,.12);
     display: block;
     object-fit: cover;
     background: #ede4d6;
   }
-  .demo-match-cover-fallback {
-    box-sizing: border-box;
-    display: grid;
-    place-items: center;
-    padding: .9rem;
-    border: 1px solid rgba(53,43,34,.14);
-    background:
-      linear-gradient(145deg, rgba(255,255,255,.14), transparent 52%, rgba(0,0,0,.14)),
-      linear-gradient(180deg, #7d5943, #493326);
-    color: #f8f4ec;
-    font: 600 .88rem/1.1 Georgia, serif;
-    text-align: center;
-  }
   .demo-match-copy {
-    display: grid;
-    gap: .38rem;
     min-width: 0;
   }
-  .demo-match-kicker {
-    margin: 0 0 .45rem;
-    color: #8f3429;
-    font: 700 .69rem/1.2 "Avenir Next", "Helvetica Neue", sans-serif;
-    letter-spacing: .14em;
-    text-transform: uppercase;
-  }
-  .demo-match h3 {
+  .demo-match-message {
     margin: 0;
-    color: #231a12;
-    font: 400 clamp(1.4rem, 2.5vw, 2rem)/1.05 Georgia, serif;
-    letter-spacing: -.03em;
-  }
-  .demo-match-author {
-    margin: 0;
-    font-size: 1rem;
-    font-style: italic;
-  }
-  .demo-match-meta,
-  .demo-match-note {
-    margin: 0;
-    font-size: .92rem;
+    color: #30271f;
+    font: 600 .96rem/1.4 "Avenir Next", "Helvetica Neue", sans-serif;
     line-height: 1.5;
-  }
-  .demo-match-note { color: #6c5b4d; }
-  .demo-match-link {
-    margin-top: .25rem;
   }
 
   /* The web shelf uses the same proportions and materials as the iOS shelf. */
@@ -768,13 +721,8 @@ permalink: /woodwork-demo/
       width: 100%;
       justify-content: center;
     }
-    .demo-match {
-      grid-template-columns: 88px minmax(0, 1fr);
-      gap: .8rem;
-      padding: .9rem;
-      border-radius: 18px;
-    }
-    .demo-match-cover-wrap { width: 88px; }
+    .demo-match { grid-template-columns: 48px minmax(0, 1fr); gap: .7rem; padding: .55rem .7rem; }
+    .demo-match-cover-wrap { width: 48px; }
     .shelf-case { border-radius: 18px; }
     .shelf-case[data-theme="oak"], .shelf-case[data-theme="builtin"] { border-radius: 22px; }
     .book-cover { padding: 7% 5%; }
@@ -813,15 +761,8 @@ permalink: /woodwork-demo/
   var addBookStatus = document.getElementById('add-book-status');
   var clearAddedBooksBtn = document.getElementById('clear-added-books');
   var resolvedBook = document.getElementById('resolved-book');
-  var resolvedBookKicker = document.getElementById('resolved-book-kicker');
   var resolvedBookCover = document.getElementById('resolved-book-cover');
-  var resolvedBookFallback = document.getElementById('resolved-book-fallback');
-  var resolvedBookFallbackTitle = document.getElementById('resolved-book-fallback-title');
-  var resolvedBookTitle = document.getElementById('resolved-book-title');
-  var resolvedBookAuthor = document.getElementById('resolved-book-author');
-  var resolvedBookMeta = document.getElementById('resolved-book-meta');
-  var resolvedBookNote = document.getElementById('resolved-book-note');
-  var resolvedBookLink = document.getElementById('resolved-book-link');
+  var resolvedBookMessage = document.getElementById('resolved-book-message');
   var readerClose = document.getElementById('demo-reader-close');
   var readerTitle = document.getElementById('demo-reader-title');
   var readerAuthor = document.getElementById('demo-reader-author');
@@ -1766,45 +1707,26 @@ permalink: /woodwork-demo/
       pages: Number(match.number_of_pages_median) || 320,
       firstPublishYear: match.first_publish_year || null,
       cover: coverURL(match),
-      recordURL: sourceRecordURL(match),
       source: null
     };
   }
 
-  function renderResolvedBook(book, options) {
-    options = options || {};
+  function renderResolvedBook(book) {
     resolvedBook.hidden = false;
-    resolvedBookKicker.textContent = options.kicker || 'Just added';
-    resolvedBookTitle.textContent = book.title;
-    resolvedBookAuthor.textContent = book.author || 'Unknown author';
-    var meta = [];
-    if (book.firstPublishYear) meta.push('First published ' + book.firstPublishYear);
-    if (book.pages) meta.push('about ' + book.pages + ' pages');
-    resolvedBookMeta.textContent = meta.join(' · ');
-    resolvedBookNote.textContent = options.note || 'WoodWork resolved this match from Open Library and pinned it into the current shelf.';
-    resolvedBookFallbackTitle.textContent = coreTitle(book) || book.title;
+    resolvedBookMessage.textContent = "Success, we've added " + book.title + " to your library";
     if (book.cover) {
       resolvedBookCover.src = book.cover;
       resolvedBookCover.alt = 'Cover for ' + book.title;
       resolvedBookCover.hidden = false;
-      resolvedBookFallback.hidden = true;
     } else {
       resolvedBookCover.removeAttribute('src');
       resolvedBookCover.alt = '';
-      resolvedBookCover.hidden = true;
-      resolvedBookFallback.hidden = false;
-    }
-    if (book.recordURL) {
-      resolvedBookLink.href = book.recordURL;
-      resolvedBookLink.hidden = false;
-    } else {
-      resolvedBookLink.hidden = true;
+      resolvedBook.hidden = true;
     }
   }
 
   resolvedBookCover.addEventListener('error', function () {
-    resolvedBookCover.hidden = true;
-    resolvedBookFallback.hidden = false;
+    resolvedBook.hidden = true;
   });
 
   function announceStatus(message, isError) {
@@ -1814,6 +1736,14 @@ permalink: /woodwork-demo/
 
   function pinBook(bookId) {
     spotlightIds = [bookId];
+  }
+
+  function starterQuery() {
+    if (!LIBRARY.length) return '';
+    var seed = Math.floor(Date.now() / 3600000);
+    var book = LIBRARY[Math.abs(seed) % LIBRARY.length];
+    if (!book) return '';
+    return (seed % 2 === 0 ? book.title : (book.author || book.title)) || '';
   }
 
   function mergeBook(book) {
@@ -1969,10 +1899,7 @@ permalink: /woodwork-demo/
       var book = await resolveBook(query);
       mergeBook(book);
       manualSeed = Math.floor(Math.random() * 2147483647);
-      renderResolvedBook(book, {
-        kicker: 'Just added',
-        note: 'This match was added to your live shelf and pinned into the current shuffle.'
-      });
+      renderResolvedBook(book);
       announceStatus('Added. It is now on the shelf below.', false);
       render();
       queryInput.value = '';
@@ -2005,11 +1932,9 @@ permalink: /woodwork-demo/
 
   customBooks = loadCustomBooks();
   rebuildLibrary();
+  if (!queryInput.value) queryInput.value = starterQuery();
   if (customBooks.length) {
-    renderResolvedBook(customBooks[0], {
-      kicker: 'Your shelf',
-      note: 'Your most recent addition is saved in this browser so the demo still feels like yours.'
-    });
+    renderResolvedBook(customBooks[0]);
   }
   persistCustomBooks();
   caption.textContent = library.length + ' books on the list. Reshuffles every hour.';
