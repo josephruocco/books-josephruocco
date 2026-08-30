@@ -1002,7 +1002,7 @@ permalink: /woodwork-demo/
       author.style.color = ink;
       author.style.textShadow = light ? '0 1px rgba(255,255,255,.28)' : '0 1px 1px rgba(0,0,0,.8)';
       var authorFit = (w - 6) / Math.max(1, surname.length * .63);
-      author.style.fontSize = Math.max(4.5, Math.min(7 * SCALE, w * .16, authorFit)) + 'px';
+      author.style.fontSize = Math.max(6, Math.min(8.6 * SCALE, w * .22, authorFit)) + 'px';
       el.appendChild(author);
     }
     el.setAttribute('aria-label', book.title + (book.author ? ', ' + book.author : ''));
@@ -1784,7 +1784,8 @@ permalink: /woodwork-demo/
     });
     Array.prototype.forEach.call(shelf.querySelectorAll('.spine .spine-author, .book-cover .cover-author'), function (author) {
       var size = Number.parseFloat(window.getComputedStyle(author).fontSize) || 8;
-      while ((author.scrollWidth > author.clientWidth || author.scrollHeight > author.clientHeight) && size > 3) {
+      var floor = author.classList.contains('spine-author') ? 5.5 : 3;
+      while ((author.scrollWidth > author.clientWidth || author.scrollHeight > author.clientHeight) && size > floor) {
         size -= .5;
         author.style.fontSize = size + 'px';
       }
