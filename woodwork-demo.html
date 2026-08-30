@@ -1099,7 +1099,7 @@ permalink: /woodwork-demo/
       var titleLength = Math.max(1, labelTitle.length);
       var titleArea = height * .66 * Math.max(8, w - 8);
       var fittedSize = Math.sqrt(titleArea / (titleLength * 1.25));
-      label.style.fontSize = Math.max(6, Math.min(13 * SCALE, w * .34, fittedSize)) + 'px';
+      label.style.fontSize = Math.max(7, Math.min(15 * SCALE, w * .4, fittedSize)) + 'px';
       el.appendChild(label);
     }
 
@@ -1933,7 +1933,7 @@ permalink: /woodwork-demo/
   function fitRenderedType() {
     Array.prototype.forEach.call(shelf.querySelectorAll('.spine .label'), function (label) {
       var size = Number.parseFloat(label.style.fontSize) || 8;
-      while ((label.scrollHeight > label.clientHeight || label.scrollWidth > label.clientWidth) && size > 3) {
+      while ((label.scrollHeight > label.clientHeight || label.scrollWidth > label.clientWidth) && size > 4.5) {
         size -= .5;
         label.style.fontSize = size + 'px';
       }
