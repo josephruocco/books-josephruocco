@@ -291,6 +291,16 @@ permalink: /woodwork-demo/
     align-items: center;
     padding: .92rem 1rem;
   }
+  .shelf-list-item.is-link {
+    color: inherit;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .shelf-list-item.is-link:hover,
+  .shelf-list-item.is-link:focus-visible {
+    background: rgba(183,146,88,.09);
+    outline: none;
+  }
   .shelf-list-item + .shelf-list-item {
     border-top: 1px solid rgba(35,26,18,.08);
   }
@@ -1890,14 +1900,14 @@ permalink: /woodwork-demo/
   }
 
   function listItem(book) {
-    var item = document.createElement('article');
+    var item = document.createElement(book.source ? 'a' : 'article');
     var swatch = document.createElement('div');
     var copy = document.createElement('div');
     var title = document.createElement('p');
     var author = document.createElement('p');
     var pages = document.createElement('p');
 
-    item.className = 'shelf-list-item';
+    item.className = 'shelf-list-item' + (book.source ? ' is-link' : '');
     swatch.className = 'shelf-list-swatch';
     copy.className = 'shelf-list-copy';
     title.className = 'shelf-list-book-title';
@@ -1908,6 +1918,14 @@ permalink: /woodwork-demo/
     title.textContent = book.title || '';
     author.textContent = book.author || 'Unknown author';
     pages.textContent = pageCountLabel(book);
+
+    if (book.source) {
+      item.href = book.source;
+      item.addEventListener('click', function (event) {
+        event.preventDefault();
+        openReader(book, item);
+      });
+    }
 
     copy.appendChild(title);
     copy.appendChild(author);
