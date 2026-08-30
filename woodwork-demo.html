@@ -1859,7 +1859,9 @@ permalink: /woodwork-demo/
   }
 
   function pinBook(bookId) {
-    spotlightIds = [bookId];
+    var pinned = customBooks.map(function (book) { return book.id; }).filter(Boolean);
+    if (bookId && pinned.indexOf(bookId) < 0) pinned.unshift(bookId);
+    spotlightIds = pinned;
   }
 
   function starterQuery() {
@@ -2063,7 +2065,7 @@ permalink: /woodwork-demo/
   });
 
   shuffleBtn.addEventListener('click', function () {
-    spotlightIds = [];
+    pinBook();
     manualSeed = Math.floor(Math.random() * 2147483647);
     render();
   });
@@ -2117,6 +2119,7 @@ permalink: /woodwork-demo/
 
   customBooks = loadCustomBooks();
   rebuildLibrary();
+  pinBook();
   if (!queryInput.value) queryInput.value = starterQuery();
   if (customBooks.length) {
     renderResolvedBook(customBooks[0]);
