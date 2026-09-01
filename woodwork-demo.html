@@ -38,8 +38,11 @@ permalink: /
       <section class="books-title-card" aria-labelledby="shelf-page-title">
         <div class="books-title-card-inner">
           <h1 id="shelf-page-title">WoodWork</h1>
-          <p>A visual bookshelf of public-domain classics, reshuffled every hour.</p>
-          <button type="button" class="shelf-shuffle" id="shuffle">Pull a new handful</button>
+          <p>A bookshelf to maximize serendipity. Drag to reorder, click to reshuffle.</p>
+          <div class="shelf-actions">
+            <button type="button" class="shelf-shuffle" id="shuffle">Shuffle</button>
+            <button type="button" class="shelf-shuffle" id="open-random-book">Open a random book</button>
+          </div>
         </div>
       </section>
 
@@ -48,12 +51,12 @@ permalink: /
           <section class="demo-builder" aria-labelledby="demo-builder-title">
             <form class="demo-builder-form" id="add-book-form">
               <div class="demo-field">
-                <label for="book-query-input" id="demo-builder-title">Search by title or author</label>
+                <label for="book-query-input" id="demo-builder-title">Add by Title or Author</label>
                 <input id="book-query-input" name="query" type="text" placeholder="The Master and Margarita or Mikhail Bulgakov" autocomplete="off" aria-autocomplete="list" aria-controls="book-suggestions" aria-expanded="false" required>
                 <div class="demo-suggestions" id="book-suggestions" role="listbox" hidden></div>
               </div>
               <div class="demo-builder-actions">
-                <button type="submit" class="demo-builder-submit" id="add-book-submit">Add to shelf</button>
+                <button type="submit" class="demo-builder-submit" id="add-book-submit">Confirm</button>
                 <button type="button" class="demo-builder-reset" id="clear-added-books" hidden>Clear my added books</button>
               </div>
               <p class="demo-builder-status" id="add-book-status" role="status" aria-live="polite"></p>
@@ -484,24 +487,6 @@ permalink: /
     outline: 3px solid #d6b36c;
     outline-offset: 3px;
   }
-  .spine.is-readable::after,
-  .pile .flat.is-readable::after,
-  .book-cover.is-readable::after {
-    content: "↗";
-    position: absolute;
-    z-index: 4;
-    top: 3px;
-    right: 3px;
-    display: grid;
-    place-items: center;
-    width: 15px;
-    height: 15px;
-    border-radius: 50%;
-    color: #241a12;
-    background: rgba(255,250,239,.82);
-    font: 700 9px/1 sans-serif;
-    pointer-events: none;
-  }
   .shelf-case[data-theme="artsy"] .spine {
     background-image: repeating-linear-gradient(0deg, rgba(255,255,255,.1) 0 1px, transparent 1px 4px) !important;
     box-shadow: 1px 0 2px rgba(75,58,40,.26);
@@ -616,7 +601,7 @@ permalink: /
     background: none; color: inherit; cursor: pointer;
   }
   .shelf-shuffle:hover { background: rgba(0,0,0,.06); }
-  .books-title-card .shelf-shuffle { margin-top: 1rem; }
+  .shelf-actions { display: flex; flex-wrap: wrap; gap: .65rem; margin-top: 1rem; }
   .shelf-caption { font-size: .9em; line-height: 1.4; }
   .shelf-caption a { text-decoration: underline; }
 
@@ -943,6 +928,7 @@ permalink: /
   var shelf = document.getElementById('shelf');
   var caption = document.getElementById('caption');
   var shuffleBtn = document.getElementById('shuffle');
+  var openRandomBookBtn = document.getElementById('open-random-book');
   var reader = document.getElementById('demo-reader');
   var addBookForm = document.getElementById('add-book-form');
   var queryInput = document.getElementById('book-query-input');
@@ -983,6 +969,7 @@ permalink: /
   var suggestionDocs = [];
   var selectedSuggestionIndex = -1;
   var selectedSuggestionDoc = null;
+  var canDragBooks = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
   var ANNOTATED_EDITIONS = {
     'Pride and Prejudice': {
@@ -1804,8 +1791,8 @@ permalink: /
 
   function wire(el, book) {
     el.dataset.bookId = book.id;
-    el.draggable = true;
-    setupBookDrag(el, book);
+    el.draggable = canDragBooks;
+    if (canDragBooks) setupBookDrag(el, book);
     if (book.source) {
       el.classList.add('is-readable');
       el.title = 'Open ' + book.title;
@@ -2364,8 +2351,18 @@ permalink: /
 
   shuffleBtn.addEventListener('click', function () {
     pinBook();
+    shelfOrder = [];
+    persistShelfOrder();
     manualSeed = Math.floor(Math.random() * 2147483647);
     render();
+  });
+
+  openRandomBookBtn.addEventListener('click', function () {
+    var readable = Array.prototype.slice.call(shelf.querySelectorAll('.is-readable[data-book-id]'));
+    if (!readable.length) return;
+    var origin = readable[Math.floor(Math.random() * readable.length)];
+    var book = library.find(function (entry) { return entry.id === origin.dataset.bookId; });
+    if (book) openReader(book, origin);
   });
 
   queryInput.addEventListener('input', function () {
