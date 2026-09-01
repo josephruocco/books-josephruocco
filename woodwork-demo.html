@@ -1520,11 +1520,21 @@ permalink: /
     var end = text.search(/\*{3}\s*END OF (?:THIS|THE) PROJECT GUTENBERG EBOOK[^\n]*\*{3}/i);
     if (end >= 0) text = text.slice(0, end);
 
-    var chapterOne = /\n\s*(?:chapter|book)\s+(?:i|1)[.\s]/ig;
-    var chapterMatches = [];
-    var chapterMatch;
-    while ((chapterMatch = chapterOne.exec(text))) chapterMatches.push(chapterMatch.index);
-    if (chapterMatches.length > 1) text = text.slice(chapterMatches[1] + 1);
+    var partOne = /^[ \t]*(?:#+[ \t]*)?part[ \t]+(?:one|i|1)[ \t]*$/igm;
+    var partMatches = [];
+    var partMatch;
+    while ((partMatch = partOne.exec(text))) partMatches.push(partMatch.index);
+
+    if (partMatches.length) {
+      // Gutenberg contents often repeat "Part One" before the actual text.
+      text = text.slice(partMatches.length > 1 ? partMatches[1] : partMatches[0]);
+    } else {
+      var chapterOne = /\n\s*(?:chapter|book)\s+(?:i|1)[.\s]/ig;
+      var chapterMatches = [];
+      var chapterMatch;
+      while ((chapterMatch = chapterOne.exec(text))) chapterMatches.push(chapterMatch.index);
+      if (chapterMatches.length > 1) text = text.slice(chapterMatches[1] + 1);
+    }
 
     return text
       .replace(/!\[[^\]]*\]\([^\n)]*\)/g, '')
