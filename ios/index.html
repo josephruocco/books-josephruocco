@@ -1,0 +1,106 @@
+---
+title: WoodWork for iOS
+permalink: /ios/
+---
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="WoodWork turns your ebook library into a visual bookshelf on iPhone.">
+    <title>WoodWork for iOS</title>
+    <link rel="icon" type="image/png" href="/assets/images/favicon.png">
+    <link href="/assets/css/books-unified.css" rel="stylesheet">
+  </head>
+  <body class="books-page">
+    <div class="books-page">
+      <header class="books-masthead">
+        <div class="books-masthead-inner">
+          <a class="books-site-title" href="/">WoodWork</a>
+          <nav class="books-nav" aria-label="Primary">
+            <a href="/">Demo</a>
+            <a href="/ios/" class="active">iOS</a>
+          </nav>
+        </div>
+      </header>
+
+      <main class="ios-page">
+        <section class="ios-hero">
+          <p class="ios-kicker">WoodWork for iPhone</p>
+          <h1>Pull forgotten books out of the woodwork.</h1>
+          <p class="ios-lede">Turn your Apple Books and Kindle library into a living bookshelf widget that quietly reshuffles throughout the day.</p>
+          <div class="ios-download" aria-label="iOS release status">
+            <strong>TestFlight coming soon</strong>
+            <span>The download link will appear here when the first public build is ready.</span>
+          </div>
+          <a class="ios-demo-link" href="/">Try the browser demo</a>
+        </section>
+
+        <section class="ios-features" aria-label="WoodWork features">
+          <article><span>01</span><h2>Your library</h2><p>Import books from your Mac and see the exact titles currently surfaced by each widget.</p></article>
+          <article><span>02</span><h2>Four shelf moods</h2><p>Choose Classic, Dark Oak, White Built-In, or Artsy for each shelf.</p></article>
+          <article><span>03</span><h2>Always changing</h2><p>Multiple widgets show different books and layouts, then sync their shelves back to the app.</p></article>
+        </section>
+      </main>
+    </div>
+
+    <style>
+      .ios-page {
+        width: min(1180px, calc(100% - 40px));
+        margin: 0 auto;
+        padding: clamp(4rem, 10vw, 9rem) 0 6rem;
+        color: #211a14;
+      }
+      .ios-hero { max-width: 880px; }
+      .ios-kicker {
+        margin: 0 0 1rem;
+        color: #756044;
+        font: 700 .78rem/1.2 "Avenir Next", "Helvetica Neue", sans-serif;
+        letter-spacing: .14em;
+        text-transform: uppercase;
+      }
+      .ios-hero h1 {
+        max-width: 12ch;
+        margin: 0;
+        font: 400 clamp(3.6rem, 9vw, 8.5rem)/.88 Georgia, serif;
+        letter-spacing: -.065em;
+      }
+      .ios-lede {
+        max-width: 660px;
+        margin: 2rem 0;
+        color: #62584f;
+        font: 500 clamp(1.15rem, 2vw, 1.55rem)/1.5 "Avenir Next", "Helvetica Neue", sans-serif;
+      }
+      .ios-download {
+        display: grid;
+        gap: .25rem;
+        width: fit-content;
+        padding: 1rem 1.25rem;
+        border-radius: 14px;
+        color: #f7f1e6;
+        background: #211a14;
+        font-family: "Avenir Next", "Helvetica Neue", sans-serif;
+      }
+      .ios-download span { max-width: 34rem; color: #d8cdbf; font-size: .9rem; }
+      .ios-demo-link { display: inline-block; margin-top: 1.25rem; color: inherit; }
+      .ios-features {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1px;
+        margin-top: clamp(5rem, 11vw, 10rem);
+        border: 1px solid #ded6cb;
+        background: #ded6cb;
+      }
+      .ios-features article { padding: 2rem; background: #faf7f1; }
+      .ios-features span { color: #9a7952; font: 700 .72rem/1 sans-serif; letter-spacing: .12em; }
+      .ios-features h2 { margin: 2.5rem 0 .65rem; font: 400 1.6rem/1.1 Georgia, serif; }
+      .ios-features p { margin: 0; color: #675d53; font: .98rem/1.5 "Avenir Next", sans-serif; }
+      @media (max-width: 700px) {
+        .ios-page { width: min(100% - 28px, 1180px); padding-top: 4rem; }
+        .ios-features { grid-template-columns: 1fr; }
+      }
+    </style>
+  </body>
+</html>
