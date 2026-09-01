@@ -48,9 +48,10 @@ permalink: /ios/
 
     <style>
       .ios-page {
-        width: min(1180px, calc(100% - 40px));
+        width: 100%;
+        max-width: var(--jr-max);
         margin: 0 auto;
-        padding: clamp(4rem, 10vw, 9rem) 0 6rem;
+        padding: clamp(4rem, 10vw, 9rem) var(--jr-pad) 6rem;
         color: #211a14;
       }
       .ios-hero { max-width: 880px; }
@@ -98,7 +99,7 @@ permalink: /ios/
       .ios-features h2 { margin: 2.5rem 0 .65rem; font: 400 1.6rem/1.1 Georgia, serif; }
       .ios-features p { margin: 0; color: #675d53; font: .98rem/1.5 "Avenir Next", sans-serif; }
       @media (max-width: 700px) {
-        .ios-page { width: min(100% - 28px, 1180px); padding-top: 4rem; }
+        .ios-page { padding-top: 4rem; }
         .ios-features { grid-template-columns: 1fr; }
       }
     </style>
