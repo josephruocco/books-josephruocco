@@ -37,11 +37,7 @@ permalink: /
       <section class="books-title-card" aria-labelledby="shelf-page-title">
         <div class="books-title-card-inner">
           <h1 id="shelf-page-title">WoodWork</h1>
-          <p>
-            <span class="subtitle-desktop">A bookshelf to maximize serendipity.</span>
-            <span class="subtitle-mobile">Serendipity, shelved.</span>
-            <span class="desktop-shelf-instructions"> Drag to reorder, click to reshuffle.</span>
-          </p>
+          <p>A bookshelf to maximize serendipity.<span class="desktop-shelf-instructions"> Drag to reorder, click to reshuffle.</span></p>
           <div class="shelf-actions">
             <button type="button" class="shelf-shuffle" id="shuffle">Shuffle</button>
             <button type="button" class="shelf-shuffle" id="open-random-book">Open a random book</button>
@@ -606,8 +602,7 @@ permalink: /
   }
   .shelf-shuffle:hover { background: rgba(0,0,0,.06); }
   .shelf-actions { display: flex; flex-wrap: wrap; gap: .65rem; margin-top: 1rem; }
-  .mobile-ios-link,
-  .subtitle-mobile { display: none; }
+  .mobile-ios-link { display: none; }
   .shelf-caption { font-size: .9em; line-height: 1.4; }
   .shelf-caption a { text-decoration: underline; }
 
@@ -870,8 +865,6 @@ permalink: /
   }
 
   @media (max-width: 700px) {
-    .subtitle-desktop { display: none; }
-    .subtitle-mobile { display: inline; }
     .desktop-shelf-instructions { display: none; }
     .mobile-ios-link {
       display: inline-block;
