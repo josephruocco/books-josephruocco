@@ -491,15 +491,7 @@ body.books-page .books-section p {
 }
 
 @media (max-width: 700px) {
-  body.books-page .books-masthead-inner {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: .45rem;
-  }
-
-  body.books-page .books-nav {
-    gap: .85rem;
-  }
+  body.books-page .books-masthead { display: none; }
 
   body.books-page .books-title-card-inner {
     padding-top: 2rem;

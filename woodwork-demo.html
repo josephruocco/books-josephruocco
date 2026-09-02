@@ -37,11 +37,16 @@ permalink: /
       <section class="books-title-card" aria-labelledby="shelf-page-title">
         <div class="books-title-card-inner">
           <h1 id="shelf-page-title">WoodWork</h1>
-          <p>A bookshelf to maximize serendipity. Drag to reorder, click to reshuffle.</p>
+          <p>
+            <span class="subtitle-desktop">A bookshelf to maximize serendipity.</span>
+            <span class="subtitle-mobile">Serendipity, shelved.</span>
+            <span class="desktop-shelf-instructions"> Drag to reorder, click to reshuffle.</span>
+          </p>
           <div class="shelf-actions">
             <button type="button" class="shelf-shuffle" id="shuffle">Shuffle</button>
             <button type="button" class="shelf-shuffle" id="open-random-book">Open a random book</button>
           </div>
+          <a class="mobile-ios-link" href="/ios/">Download for iOS</a>
         </div>
       </section>
 
@@ -51,7 +56,7 @@ permalink: /
             <form class="demo-builder-form" id="add-book-form">
               <div class="demo-field">
                 <label for="book-query-input" id="demo-builder-title">Add by Title or Author</label>
-                <input id="book-query-input" name="query" type="text" placeholder="The Master and Margarita or Mikhail Bulgakov" autocomplete="off" aria-autocomplete="list" aria-controls="book-suggestions" aria-expanded="false" required>
+                <input id="book-query-input" name="query" type="text" placeholder="" autocomplete="off" aria-autocomplete="list" aria-controls="book-suggestions" aria-expanded="false" required>
                 <div class="demo-suggestions" id="book-suggestions" role="listbox" hidden></div>
               </div>
               <div class="demo-builder-actions">
@@ -601,6 +606,8 @@ permalink: /
   }
   .shelf-shuffle:hover { background: rgba(0,0,0,.06); }
   .shelf-actions { display: flex; flex-wrap: wrap; gap: .65rem; margin-top: 1rem; }
+  .mobile-ios-link,
+  .subtitle-mobile { display: none; }
   .shelf-caption { font-size: .9em; line-height: 1.4; }
   .shelf-caption a { text-decoration: underline; }
 
@@ -862,7 +869,16 @@ permalink: /
     }
   }
 
-  @media (max-width: 600px) {
+  @media (max-width: 700px) {
+    .subtitle-desktop { display: none; }
+    .subtitle-mobile { display: inline; }
+    .desktop-shelf-instructions { display: none; }
+    .mobile-ios-link {
+      display: inline-block;
+      margin-top: .9rem;
+      color: inherit;
+      font-size: .9rem;
+    }
     .demo-builder {
       margin-bottom: .75rem;
     }
@@ -2124,12 +2140,10 @@ permalink: /
     spotlightIds = pinned;
   }
 
-  function starterQuery() {
+  function randomTitleSuggestion() {
     if (!LIBRARY.length) return '';
-    var seed = Math.floor(Date.now() / 3600000);
-    var book = LIBRARY[Math.abs(seed) % LIBRARY.length];
-    if (!book) return '';
-    return (seed % 2 === 0 ? book.title : (book.author || book.title)) || '';
+    var book = LIBRARY[Math.floor(Math.random() * LIBRARY.length)];
+    return book ? book.title : '';
   }
 
   function mergeBook(book) {
@@ -2450,6 +2464,7 @@ permalink: /
   rebuildLibrary();
   pinBook();
   queryInput.value = '';
+  queryInput.placeholder = randomTitleSuggestion();
   resolvedBook.hidden = true;
   persistCustomBooks();
   renderShelfListing();
