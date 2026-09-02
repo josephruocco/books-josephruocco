@@ -9,7 +9,7 @@ permalink: /
     <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-    <title>WoodWork — A Visual Bookshelf</title>
+    <title>WoodWork, A Visual Bookshelf</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
@@ -1520,15 +1520,25 @@ permalink: /
     var partMatch;
     while ((partMatch = partOne.exec(text))) partMatches.push(partMatch.index);
 
+    // A repeated "Part One" / "Chapter I" usually means the first one was a
+    // contents entry — but only if the repeat is still near the front. Some
+    // editions (The Red and the Black) print the contents at the END, and
+    // slicing there threw the whole book away and left just the list.
+    var frontMatter = text.length * 0.25;
+    function skipContents(matches, offset) {
+      if (!matches.length) return;
+      var target = matches.length > 1 && matches[1] < frontMatter ? matches[1] : matches[0];
+      if (target < frontMatter) text = text.slice(target + offset);
+    }
+
     if (partMatches.length) {
-      // Gutenberg contents often repeat "Part One" before the actual text.
-      text = text.slice(partMatches.length > 1 ? partMatches[1] : partMatches[0]);
+      skipContents(partMatches, 0);
     } else {
       var chapterOne = /\n\s*(?:chapter|book)\s+(?:i|1)[.\s]/ig;
       var chapterMatches = [];
       var chapterMatch;
       while ((chapterMatch = chapterOne.exec(text))) chapterMatches.push(chapterMatch.index);
-      if (chapterMatches.length > 1) text = text.slice(chapterMatches[1] + 1);
+      skipContents(chapterMatches, 1);
     }
 
     return text
