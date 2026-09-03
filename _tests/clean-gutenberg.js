@@ -29,4 +29,21 @@ assert.ok(back.length > body.length, 'trailing contents ate the book');
 // Boilerplate is gone either way.
 [front, back].forEach((t) => assert.ok(!t.includes('License boilerplate'), 'license left in'));
 
-console.log('ok — cleanGutenbergPayload handles contents at the front and at the end');
+// A long preface must not push the real Chapter I out of reach (The Art of War
+// buries it 26% in).
+const preface = ('This edition is prefaced at considerable length.\n\n').repeat(200);
+const buried = cleanGutenbergPayload(wrap(contents + preface + 'CHAPTER I\n\nA SMALL TOWN\n\n' + body));
+assert.ok(buried.startsWith('CHAPTER I'), 'a long preface defeated the contents skip');
+
+// Project Gutenberg Australia (the Woolf titles) has no START/END markers —
+// its site navigation must not become the first line of the novel.
+const au = cleanGutenbergPayload(
+  'Markdown Content:\n![Image 1](http://gutenberg.net.au/pga.jpg)**[Project Gutenberg Australia]' +
+  '(http://gutenberg.net.au/)**\n\n_a treasure-trove of literature_\n\n' +
+  '[View our licence and header](http://gutenberg.net.au/licence.html)\n\n' +
+  '## THE WINDOW\n\n## [](http://gutenberg.net.au/x.html)1\n\n' + body);
+assert.ok(!au.includes('treasure-trove'), 'site chrome left in');
+assert.ok(!au.includes('gutenberg.net.au'), 'raw anchor URL left in');
+assert.ok(au.startsWith('## THE WINDOW'), 'book does not start at the text');
+
+console.log('ok — cleanGutenbergPayload handles contents front/back, long prefaces, and PG Australia');

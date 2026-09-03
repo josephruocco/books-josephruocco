@@ -1515,6 +1515,14 @@ permalink: /
     var end = text.search(/\*{3}\s*END OF (?:THIS|THE) PROJECT GUTENBERG EBOOK[^\n]*\*{3}/i);
     if (end >= 0) text = text.slice(0, end);
 
+    // Project Gutenberg Australia (the Woolf titles) has no START marker, so its
+    // site navigation was becoming the opening lines of the novel. Its header
+    // block always ends with the licence link.
+    if (start < 0) {
+      var licence = text.search(/View our licence and header/i);
+      if (licence >= 0) text = text.slice(text.indexOf('\n', licence) + 1);
+    }
+
     var partOne = /^[ \t]*(?:#+[ \t]*)?part[ \t]+(?:one|i|1)[ \t]*$/igm;
     var partMatches = [];
     var partMatch;
@@ -1524,7 +1532,10 @@ permalink: /
     // contents entry — but only if the repeat is still near the front. Some
     // editions (The Red and the Black) print the contents at the END, and
     // slicing there threw the whole book away and left just the list.
-    var frontMatter = text.length * 0.25;
+    // Half the book is a generous front-matter allowance (The Art of War buries
+    // its real Chapter I behind a preface, 26% in) and still nowhere near the
+    // trailing contents lists, which sit past the 99% mark.
+    var frontMatter = text.length * 0.5;
     function skipContents(matches, offset) {
       if (!matches.length) return;
       var target = matches.length > 1 && matches[1] < frontMatter ? matches[1] : matches[0];
@@ -1543,9 +1554,9 @@ permalink: /
 
     return text
       .replace(/!\[[^\]]*\]\([^\n)]*\)/g, '')
-      .replace(/\[([^\]]+)\]\([^\n)]*\)/g, '$1')
+      .replace(/\[([^\]]*)\]\([^\n)]*\)/g, '$1')
       .replace(/^\s*\[[^\]]*\]\s*$/gm, '')
-      .replace(/^\s*\{?\d+\}?\s*$/gm, '')
+      .replace(/^\s*\{?\d+\}?\.?\s*$/gm, '')
       .replace(/^\s*\* \* \*\s*$/gm, '')
       .replace(/[_*]{1,3}/g, '')
       .replace(/\n{3,}/g, '\n\n')

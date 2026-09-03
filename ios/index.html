@@ -39,6 +39,20 @@ permalink: /ios/
                 Download for Mac
                 <span class="ios-button-note">0.6 MB &middot; macOS 14+</span>
               </a>
+
+              <dl class="ios-privacy">
+                <dt>What it reads</dt>
+                <dd>The Apple Books and Kindle databases already on your Mac. Nothing
+                else, and only when you point it at them.</dd>
+                <dt>What leaves your Mac</dt>
+                <dd>Title and author, sent to <a href="https://openlibrary.org">Open
+                Library</a> to look up page counts. That is the only server the app
+                ever contacts.</dd>
+                <dt>Where your library goes</dt>
+                <dd>Your own iCloud, which is how your iPhone picks it up. There is no
+                WoodWork account, no server of ours, and no analytics.</dd>
+              </dl>
+              <p class="ios-fineprint">Sandboxed, signed, and notarized by Apple.</p>
             </div>
 
             <p class="ios-status">
@@ -123,6 +137,33 @@ permalink: /ios/
       }
       .ios-button:hover { transform: translateY(-1px); opacity: .92; }
       .ios-button-note { font-weight: 400; font-size: .75rem; opacity: .6; }
+      .ios-privacy {
+        display: grid;
+        gap: .15rem;
+        margin: 1.1rem 0 0;
+        padding-top: 1.1rem;
+        border-top: 1px solid rgba(247, 241, 230, .14);
+      }
+      .ios-privacy dt {
+        color: #f7f1e6;
+        font-size: .7rem;
+        font-weight: 600;
+        letter-spacing: .09em;
+        text-transform: uppercase;
+      }
+      .ios-privacy dd {
+        margin: 0 0 .7rem;
+        color: #cfc4b4;
+        font-size: .85rem;
+        line-height: 1.5;
+      }
+      .ios-privacy dd:last-of-type { margin-bottom: 0; }
+      .ios-privacy a { color: #f7f1e6; }
+      .ios-fineprint {
+        margin: .9rem 0 0 !important;
+        color: #8d8172 !important;
+        font-size: .75rem !important;
+      }
       .ios-status {
         display: flex;
         gap: .6rem;
